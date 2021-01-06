@@ -8,6 +8,7 @@ router.get('/',(req,res)=> {
     res.send("Users");
 });
 
+//Create a user
 router.post('/', async (req,res)=> {
 
     try {
@@ -32,6 +33,16 @@ router.post('/', async (req,res)=> {
     }
 
     
+});
+
+//Update a user
+router.put('/',verify ,(req,res) => {
+    res.send('Only logged users can do this');
+});
+
+//Delete a user
+router.delete('/:product_id',verify ,(req,res) => {
+    res.send('Only logged users can do this');
 });
 
 router.post('/login', async(req,res) => {
