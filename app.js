@@ -6,14 +6,11 @@ const bodyParser = require('body-parser');
 require('dotenv/config');
 
 //MiddleWare
-const userRoutes = require('./routes/users');
-app.use(bodyParser.json());
-app.use('/user', userRoutes);
+const indexRouter = require('./routes/index');
 
-//Routes
-app.get('/', (req,res)=>{
-    res.send("home");
-    })
+app.use(bodyParser.json());
+
+app.use('/',indexRouter);
     
 //Connect to DB
 mongoose.connect(process.env.DB_CONNECTION,
