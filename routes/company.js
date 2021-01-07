@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const Company = require('../models/Company');
 
-const verify = require('./verifyToken');
+const verify = require('../middleware/verifyToken');
 
 router.get('/:company_id', async (req,res)=> {
     const company =  await Company.findOne({_id: req.params.company_id});

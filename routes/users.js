@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
 
-const verify = require('./verifyToken');
+const verify = require('../middleware/verifyToken');
 
 router.get('/:user_id', async(req,res)=> {
     const user =  await User.findOne({_id: req.params.user_id});
@@ -40,7 +40,7 @@ router.post('/', async (req,res)=> {
 //Update a user
 router.put('/:user_id',(req,res) => {
     User.findByIdAndUpdate({_id: req.params.user_id},req.body).then(function(){
-        User.findOne({_id: req.params.user_id}).then(function(company){
+        User.findOne({_id: req.params.user_id}).then(function(user){
             res.send(user);
         });
     });
