@@ -4,11 +4,13 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
 
-router.get('/',(req,res)=> {
-    res.send("Users");
+const verify = require('./verifyToken');
+
+router.get('/:user_id', async(req,res)=> {
+    const user =  await User.findOne({_id: req.params.user_id});
+    res.send(user);
 });
 
-//Create a user
 router.post('/', async (req,res)=> {
 
     try {
@@ -36,14 +38,21 @@ router.post('/', async (req,res)=> {
 });
 
 //Update a user
-router.put('/',verify ,(req,res) => {
-    res.send('Only logged users can do this');
+router.put('/:user_id',(req,res) => {
+    User.findByIdAndUpdate({_id: req.params.user_id},req.body).then(function(){
+        User.findOne({_id: req.params.user_id}).then(function(company){
+            res.send(user);
+        });
+    });
 });
 
 //Delete a user
-router.delete('/:product_id',verify ,(req,res) => {
-    res.send('Only logged users can do this');
-});
+router.delete('/:user_id',(req,res) => {
+    User.findByIdAndRemove({_id: req.params.user_id},req.body).then(function(user){
+            res.send(user);
+        });
+    });
+
 
 router.post('/login', async(req,res) => {
     const user = await User.findOne({username: req.body.username});

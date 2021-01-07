@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const ProductSchema = mongoose.Schema({
     company_id: String,
-    price: Number,
+    name: String,
+    price: String,
     is_available: Boolean,
     img: {
         data: Buffer,
