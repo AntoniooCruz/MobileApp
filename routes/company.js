@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const Company = require('../models/Company');
-
+const { companySchema } = require('../schemas/company');
 const verify = require('../middleware/verifyToken');
 
 router.get('/:company_id', async (req,res)=> {
@@ -13,6 +13,11 @@ router.get('/:company_id', async (req,res)=> {
 
 //Create a company
 router.post('/', async (req,res)=> {
+    const result = companySchema.validate(req.body);
+    if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+    return;
+    }
     try {
         const hashed_password = await bcrypt.hash(req.body.password,10);
         const company = new Company({
@@ -40,6 +45,19 @@ router.post('/', async (req,res)=> {
 
 //Update a company
 router.put('/:company_id',(req,res) => {
+    const result = companySchema.validate(req.body);
+    if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+    return;
+    }
+    Company.findOne({_id: req.params.company_id}, function (err, user) {
+        if(err) {
+            res.status(500).send(err.message);
+        } else if(!user){
+            res.status(404).send("Company not found");
+        }
+    });
+
     Company.findByIdAndUpdate({_id: req.params.company_id},req.body).then(function(){
         Company.findOne({_id: req.params.company_id}).then(function(company){
             res.send(company);

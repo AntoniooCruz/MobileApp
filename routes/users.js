@@ -3,8 +3,10 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
-
+const Joi = require('joi');
 const verify = require('../middleware/verifyToken');
+const { userSchema } = require('../schemas/users');
+
 
 router.get('/:user_id', async(req,res)=> {
     const user =  await User.findOne({_id: req.params.user_id});
@@ -12,6 +14,11 @@ router.get('/:user_id', async(req,res)=> {
 });
 
 router.post('/', async (req,res)=> {
+    const result = userSchema.validate(req.body);
+    if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+    return;
+    }
 
     try {
         const hashed_password = await bcrypt.hash(req.body.password,10);
@@ -39,11 +46,28 @@ router.post('/', async (req,res)=> {
 
 //Update a user
 router.put('/:user_id',(req,res) => {
+
+    const result = userSchema.validate(req.body);
+    if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+    return;
+    }
+
+    User.findOne({_id: req.params.user_id}, function (err, user) {
+        if(err) {
+            res.status(500).send(err.message);
+        } else if(!user){
+            res.status(404).send("User not found");
+        }
+    });
+
     User.findByIdAndUpdate({_id: req.params.user_id},req.body).then(function(){
         User.findOne({_id: req.params.user_id}).then(function(user){
             res.send(user);
         });
     });
+
+
 });
 
 //Delete a user
