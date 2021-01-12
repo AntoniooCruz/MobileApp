@@ -1,0 +1,18 @@
+[
+    {
+        "_id": 0,
+        "name": "Ruben",
+        "username": "Rubeeenom",
+        "phone_number": 123456789,
+        "password": "12345678",
+        "img": {}
+    },
+    {
+        "_id": 1,
+        "name": "jlas",
+        "username": "fssRubeeenom",
+        "phone_number": 223456789,
+        "password": "12345678",
+        "img": {}
+    }
+]
