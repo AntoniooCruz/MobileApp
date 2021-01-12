@@ -32,7 +32,7 @@ export default class Login extends Component
     {
         e.preventDefault()
 
-        axios.post(`${SERVER_HOST}/users/login${this.state.username}/${this.state.password}`)
+        axios.post(`${SERVER_HOST}/users/login`,this.state.username,this.state.password)
         .then(res => 
         {   
             if(res.data)
