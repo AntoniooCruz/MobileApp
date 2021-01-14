@@ -32,7 +32,7 @@ export default class Main extends Component
         return (      
             <div>
                 <ReactBootStrap.Navbar bg="light" expand="lg">
-                    <ReactBootStrap.Navbar.Brand href="#home">Main Menu</ReactBootStrap.Navbar.Brand>
+                    <ReactBootStrap.Navbar.Brand>Main Menu</ReactBootStrap.Navbar.Brand>
                     <ReactBootStrap.Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <ReactBootStrap.Navbar.Collapse id="basic-navbar-nav">
                         <ReactBootStrap.Nav className="mr-auto">
