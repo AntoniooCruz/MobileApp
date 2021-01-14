@@ -8,21 +8,24 @@ import CompanyTable from "./CompanyTable"
 import {SERVER_HOST} from "../config/global_constants"
 
 
-export default class DisplayAllCompanies extends Component 
+export default class DisplayAllProducts extends Component 
 {
     constructor(props) 
     {
         super(props)
         
         this.state = {
-            companies:[]
+            products:[]
         }
     }
     
     
     componentDidMount() 
     {
-        axios.get(`companies.json`)//axios.get(`${SERVER_HOST}/company/`)
+        /*
+        get id of the company
+        */
+        axios.get(`${SERVER_HOST}/product/company/${company_id}`)
         .then(res => 
         {
             if(res.data)
@@ -34,7 +37,7 @@ export default class DisplayAllCompanies extends Component
                 else
                 {           
                     console.log("Records read")   
-                    this.setState({companies: res.data}) 
+                    this.setState({products: res.data}) 
                 }   
             }
             else
@@ -52,7 +55,7 @@ export default class DisplayAllCompanies extends Component
                 <div className="form-container">
                     
                     <div className="table-container">
-                        <CompanyTable companies={this.state.companies} /> 
+                        <ProductTable products={this.state.products} /> 
                     </div>
                 </div> 
             </div>    

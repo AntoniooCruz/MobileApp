@@ -12,7 +12,7 @@ export default class CompanyTableRow extends Component
                 <td>{this.props.company.name}</td>
                 <td>{this.props.company.phone_number}</td>
                 <td>         
-                    <Link className="green-button" to={"/SeeMore/" + this.props.company._id}>
+                    <Link className="green-button" to={"/SeeProducts/" + this.props.company._id}>
                         <FontAwesomeIcon icon={faShoppingBasket}/>
                     </Link>
                 </td>

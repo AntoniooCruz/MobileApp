@@ -3,26 +3,29 @@ import {Link} from "react-router-dom"
 
 import axios from "axios"
 
-import CompanyTable from "./CompanyTable"
+import OrderCompanyTable from "./OrderCompanyTable"
 
 import {SERVER_HOST} from "../config/global_constants"
 
 
-export default class DisplayAllCompanies extends Component 
+export default class DisplayAllOrdersCompany extends Component 
 {
     constructor(props) 
     {
         super(props)
         
         this.state = {
-            companies:[]
+            orders:[]
         }
     }
     
     
     componentDidMount() 
     {
-        axios.get(`companies.json`)//axios.get(`${SERVER_HOST}/company/`)
+        /*
+        company_id = ???
+        */
+        axios.get(`orders.json`)//axios.get(`${SERVER_HOST}/order/company/${company_id}`)
         .then(res => 
         {
             if(res.data)
@@ -33,8 +36,8 @@ export default class DisplayAllCompanies extends Component
                 }
                 else
                 {           
-                    console.log("Records read")   
-                    this.setState({companies: res.data}) 
+                    console.log("Records read")
+                    this.setState({orders: res.data}) 
                 }   
             }
             else
@@ -50,9 +53,8 @@ export default class DisplayAllCompanies extends Component
         return (      
             <div>
                 <div className="form-container">
-                    
                     <div className="table-container">
-                        <CompanyTable companies={this.state.companies} /> 
+                        <OrderCompanyTable orders={this.state.orders} /> 
                     </div>
                 </div> 
             </div>    
