@@ -11,6 +11,7 @@ import "./css/sidemenu.css"
 import Login from "./components/Login.js"
 import SignIn from "./components/SignIn.js"
 import Main from "./components/Main.js"
+import MainCompany from "./components/MainCompany.js"
 import SignInCompany from "./components/SignInCompany.js"
 
 export default class App extends Component 
@@ -25,6 +26,7 @@ export default class App extends Component
                     <Route exact path="/SignIn" component={SignIn} />
                     <Route exact path="/SignInCompany" component={SignInCompany} />
                     <Route exact path="/Main" component={Main} />
+                    <Route exact path="/MainCompany" component={MainCompany} />
                     <Route path="*" component={Login}/>                            
                 </Switch>
             </BrowserRouter>
