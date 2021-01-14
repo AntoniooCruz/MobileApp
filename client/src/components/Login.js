@@ -30,9 +30,12 @@ export default class Login extends Component
 
     handleSubmit = (e) => 
     {
-        e.preventDefault()
+//        e.preventDefault()
 
-        axios.post(`${SERVER_HOST}/users/login`,this.state.username,this.state.password)
+
+        console.log("klsjsls")
+
+        //axios.post(`${SERVER_HOST}/users/login`,this.state.username,this.state.password)
         .then(res => 
         {   
             if(res.data)
@@ -95,7 +98,7 @@ export default class Login extends Component
                     />
                 </div>
                     
-                <Link className="blue-button" to={"/Home"}>Log In</Link>       
+                <Link className="blue-button" onClick={this.handleSubmit()}>Log In</Link>       
                         
                 <Link className="light-blue-button" to={"/SignIn"}>Sign In</Link>
 

@@ -22,7 +22,9 @@ export default class SignIn extends Component
             name:"",
             phone_number:"",
             password:"",
-            passwordConfirmation:""
+            passwordConfirmation:"",
+
+            alreadyRegistered:false
         }
     }
 
@@ -92,15 +94,21 @@ export default class SignIn extends Component
         };
     }
 
+    isRegistered(){
+        return  this.state.isRegistered;
+    }
+
 
 
     handleSubmit = (e) =>
     {
-        e.preventDefault();
         this.state.submited = true;
         this.validate();
 
-        if(this.isAllValid()){
+        const formInputsState = this.validate();
+        const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
+
+        if(inputsAreAllValid){
 
             const userObject = {
                 name: this.state.name,
@@ -116,35 +124,36 @@ export default class SignIn extends Component
                 {
                     if (res.data.errorMessage)
                     {
-                        console.log(res.data.errorMessage)    
-                    }
-                    else
+                        console.log(res.status) 
+                        //If there´s error 400, then this.setState({alreadyRegistered:true})
+                    }else
                     {   
                         sessionStorage.name = res.data.name
                         sessionStorage.accessLevel = res.data.accessLevel
-                    
-                        this.setState({isRegistered:true})
                     } 
                 }
                 else
                 {
                     console.log("Record not added")
                 }
-            }) 
+            })
+        }else{
+            e.preventDefault();
         }
     }
 
     
     render() 
     {     
-        const formInputsState = this.validate();
-        const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
+        //const formInputsState = this.validate();
+        //const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
         let usernameCheck = "";
         let nameCheck = "";
         let passwordCheck = "";
         let passwordConfirmationCheck = "";
         let phone_numberCheck = "";
+        let usernameErrorMessage = "";
 
 
         if(this.validateUsername()){
@@ -167,13 +176,17 @@ export default class SignIn extends Component
             phone_numberCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
+        if(this.isRegistered()){
+            usernameErrorMessage = <label className="label-form-error">Invalid username</label>
+        }
+
         return (
             <div> 
                 <img className="img-logo" src="logo.png" alt=""/>
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
                 
-                    {this.state.isRegistered ? <Redirect to="/DisplayAllCompanies"/> : null} 
+                    {/*{this.state.isRegistered ? <Redirect to="/DisplayAllCompanies"/> : null} }*/}
 
                     <h3 className="form-tittle">User Sign In</h3>
                     
@@ -201,6 +214,7 @@ export default class SignIn extends Component
                             value = {this.state.username}
                             onChange = {this.handleChange}
                         />
+                        {usernameErrorMessage}
                     </div>
                     
                     <div className="form-group">
@@ -242,7 +256,7 @@ export default class SignIn extends Component
                     </div>
                     
 
-                    <LinkInClass value="Sign In" className="blue-button" onClick={this.handleSubmit()} />
+                    <LinkInClass value="Sign In" className="blue-button" onClick={this.handleSubmit} />
                     <Link className="dark-blue-button" to={"/Login"}>Cancel</Link> 
                     <Link className="light-blue-button" to={"/SignInCompany"}>Sign in as a Company</Link> 
                     
