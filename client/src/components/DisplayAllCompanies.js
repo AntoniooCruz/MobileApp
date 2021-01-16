@@ -50,7 +50,7 @@ export default class DisplayAllCompanies extends Component
         return (      
             <div>
                 <div className="form-container">
-                    
+                    <h3>Companies</h3>
                     <div className="table-container">
                         <CompanyTable companies={this.state.companies} /> 
                     </div>
