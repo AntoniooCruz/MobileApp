@@ -23,7 +23,7 @@ export default class OrderCompanyTableRow extends Component
 
     componentDidMount() 
     {     
-        axios.get(`${SERVER_HOST}/user/${this.state.client_id}`)
+        axios.get(`${SERVER_HOST}/api/user/${this.state.client_id}`)
         .then(res => 
         {
             if(res.data)
@@ -44,7 +44,7 @@ export default class OrderCompanyTableRow extends Component
             }
         })  
 
-        axios.get(`${SERVER_HOST}/product/${this.state.product_id}`)
+        axios.get(`${SERVER_HOST}/api/product/${this.state.product_id}`)
         .then(res => 
         {
             if(res.data)

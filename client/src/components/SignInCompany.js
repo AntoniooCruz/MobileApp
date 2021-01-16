@@ -114,6 +114,9 @@ export default class SignInCompany extends Component
         
     }
 
+    /*
+        Revisar
+    */
 
     handleSubmit = (e) =>
     {
@@ -134,7 +137,7 @@ export default class SignInCompany extends Component
                 img: formData
             }
 
-            axios.post(`companies.json`,companyObject)//axios.post(`${SERVER_HOST}/company`, companyObject)
+            axios.post(`companies.json`,companyObject)//axios.post(`${SERVER_HOST}/api/company`, companyObject)
             .then(res => 
             {   
                 if(res.data)

@@ -5,6 +5,7 @@ import {faShoppingBasket} from '@fortawesome/free-solid-svg-icons';
 
 export default class ProductTableRow extends Component 
 {    
+
     render() 
     {
         return (

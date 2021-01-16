@@ -2,33 +2,40 @@ import React, {Component} from "react"
 import {Link} from "react-router-dom"
 
 import axios from "axios"
+import {SERVER_HOST} from "../config/global_constants"
 
 import DisplayAllCompanies from "./DisplayAllCompanies"
 
-import {SERVER_HOST} from "../config/global_constants"
 
 import * as ReactBootStrap from "react-bootstrap";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faHome,faIdCard,faShippingFast,faBoxes} from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "react-bootstrap"
+import PersonalProfile from "./PersonalProfile"
 
 export default class Main extends Component 
 {
-    constructor(props) 
-    {
-        super(props)
-    }
-    
-    
-    componentDidMount() 
-    {
-        
-    }
-
   
     render() 
     {   
+
+
+        let opAux = window.location.href.split('#',2)
+
+        let option = "" 
+
+        switch(opAux[1]){
+            case "home":
+                option = <DisplayAllCompanies/>
+                break;
+            case "personalProfile": 
+                option = <PersonalProfile/>
+                break;
+            default:
+                option = <DisplayAllCompanies/>
+        }
+
         return (      
             <div>
                 <ReactBootStrap.Navbar bg="light" expand="lg">
@@ -59,7 +66,7 @@ export default class Main extends Component
                     </ReactBootStrap.Navbar.Collapse>
                 </ReactBootStrap.Navbar>
 
-                <DisplayAllCompanies/>
+                {option}
             </div>    
         )
     }

@@ -25,7 +25,7 @@ export default class DisplayAllOrdersCompany extends Component
         /*
         company_id = ???
         */
-        axios.get(`orders.json`)//axios.get(`${SERVER_HOST}/order/company/${company_id}`)
+        axios.get(`orders.json`)//axios.get(`${SERVER_HOST}/api/order/company/${company_id}`)
         .then(res => 
         {
             if(res.data)

@@ -22,10 +22,8 @@ export default class DisplayAllProducts extends Component
     
     componentDidMount() 
     {
-        /*
-        get id of the company
-        */
-        axios.get(`${SERVER_HOST}/product/company/${company_id}`)
+        const company_id = this.props.company_id
+        axios.get(`${SERVER_HOST}/api/product/company/${company_id}`)
         .then(res => 
         {
             if(res.data)
@@ -53,7 +51,6 @@ export default class DisplayAllProducts extends Component
         return (      
             <div>
                 <div className="form-container">
-                    
                     <div className="table-container">
                         <ProductTable products={this.state.products} /> 
                     </div>

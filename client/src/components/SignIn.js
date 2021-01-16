@@ -102,6 +102,8 @@ export default class SignIn extends Component
 
     handleSubmit = (e) =>
     {
+        e.preventDefault();
+
         this.state.submited = true;
         this.validate();
 
@@ -117,19 +119,26 @@ export default class SignIn extends Component
                 password: this.state.password
             }
 
-            axios.post(`${SERVER_HOST}/user`, userObject)
+            axios.post(`${SERVER_HOST}/api/user`, userObject)
             .then(res => 
             {   
                 if(res.data)
                 {
                     if (res.data.errorMessage)
                     {
-                        console.log(res.status) 
+                        console.log(res.errorMessage) 
                         //If there´s error 400, then this.setState({alreadyRegistered:true})
                     }else
                     {   
-                        sessionStorage.name = res.data.name
-                        sessionStorage.accessLevel = res.data.accessLevel
+                        console.log("User registered and logged in")
+
+                        localStorage.user_id = res.data.id
+                        localStorage.username = res.data.username
+                        localStorage.accessLevel = res.data.accessLevel                    
+                        localStorage.token = res.data.token
+                        
+                        this.setState({alreadyRegistered:true})
+
                     } 
                 }
                 else
@@ -137,9 +146,9 @@ export default class SignIn extends Component
                     console.log("Record not added")
                 }
             })
-        }else{
-            e.preventDefault();
         }
+
+        console.log("aaaaaa")
     }
 
     
@@ -153,7 +162,6 @@ export default class SignIn extends Component
         let passwordCheck = "";
         let passwordConfirmationCheck = "";
         let phone_numberCheck = "";
-        let usernameErrorMessage = "";
 
 
         if(this.validateUsername()){
@@ -176,17 +184,12 @@ export default class SignIn extends Component
             phone_numberCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
-        if(this.isRegistered()){
-            usernameErrorMessage = <label className="label-form-error">Invalid username</label>
-        }
-
         return (
             <div> 
+                {this.state.alreadyRegistered ? <Redirect to="/Main"/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
-                
-                    {/*{this.state.isRegistered ? <Redirect to="/DisplayAllCompanies"/> : null} }*/}
 
                     <h3 className="form-tittle">User Sign In</h3>
                     
@@ -214,7 +217,6 @@ export default class SignIn extends Component
                             value = {this.state.username}
                             onChange = {this.handleChange}
                         />
-                        {usernameErrorMessage}
                     </div>
                     
                     <div className="form-group">
@@ -254,13 +256,11 @@ export default class SignIn extends Component
                             onChange = {this.handleChange}
                         />
                     </div>
-                    
 
                     <LinkInClass value="Sign In" className="blue-button" onClick={this.handleSubmit} />
                     <Link className="dark-blue-button" to={"/Login"}>Cancel</Link> 
                     <Link className="light-blue-button" to={"/SignInCompany"}>Sign in as a Company</Link> 
                     
-                      
                 </form>
 
                 <br/><br/>

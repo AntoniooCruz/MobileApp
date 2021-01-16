@@ -18,37 +18,43 @@ export default class PersonalProfile extends Component
         super(props)
         
         this.state = {
-           user = null
+            id: "",
+            name:"",
+            username:"",
+            password:"",
+            phone_number:null
         }
     }
 
 
     componentDidMount() 
     {     
-        this.inputToFocus.focus()     
-        /*
-            Where´s the id? we have to create the user_id?
-        */
-        axios.get(`${SERVER_HOST}/user/${user_id}`)
+        this.inputToFocus.focus() 
+        axios.get(`${SERVER_HOST}/api/user/${localStorage.user_id}`)
         .then(res => 
-        {
-            if(res.data)
             {
-                if (res.data.errorMessage)
+                if(res.data)
                 {
-                    console.log(res.data.errorMessage)    
+                    if (res.data.errorMessage)
+                    {
+                        console.log(res.data.errorMessage)    
+                    }
+                    else
+                    {           
+                        console.log("Records read")   
+                        this.setState({id: res.data.id}) 
+                        this.setState({username: res.data.username}) 
+                        this.setState({name: res.data.name}) 
+                        this.setState({phone_number: res.data.phone_number}) 
+                        this.setState({password: res.data.password}) 
+                    }   
                 }
                 else
-                {           
-                    console.log("Records read")   
-                    this.setState({user: res.data}) 
-                }   
+                {
+                    console.log("Record not found")
+                }
             }
-            else
-            {
-                console.log("Record not found")
-            }
-        })
+        )
     }
 
     handleChange = (e) => 
@@ -56,6 +62,12 @@ export default class PersonalProfile extends Component
         this.setState({[e.target.name]: e.target.value})
     }
 
+    validateUsername(){
+        if(this.state.username.length > 3){
+            return true;
+        }
+        return false;
+    }
     validateConfirmPassword()
     {    
         return (this.state.password === this.state.passwordConfirmation); 
@@ -99,47 +111,43 @@ export default class PersonalProfile extends Component
         };
     }
 
-    isRegistered(){
-        return  this.state.isRegistered;
-    }
-
 
 
     handleSubmit = (e) =>
     {
-        this.state.submited = true;
         this.validate();
 
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
+        const userModel = {
+            id: this.state.id,
+            username: this.state.username,
+            name: this.name,
+            password: this.password,
+            phone_number: this.phone_number
+        }
+
         if(inputsAreAllValid){
 
-            const userObject = {
-                name: this.state.name,
-                username: this.state.username,
-                phone_number: parseInt(this.state.phone_number, 10),
-                password: this.state.password
-            }
-
-            axios.get(`${SERVER_HOST}/user`, userID)
+            axios.put(`${SERVER_HOST}/api/user`, userModel)
             .then(res => 
             {  
                 if(res.data)
                 {
                     if (res.data.errorMessage)
                     {
-                        console.log("hola")    
+                        console.log(res.data.errorMessage)    
                     }
                     else
                     {           
-                        console.log("Records read")   
-                        this.setState({companies: res.data}) 
+                        console.log("Record update")
+                        localStorage.username = res.data.username
                     }   
                 }
                 else
                 {
-                    console.log("Record not found")
+                    console.log("Error")
                 }
             }) 
         }else{
@@ -190,8 +198,6 @@ export default class PersonalProfile extends Component
                 <img className="img-logo" src="logo.png" alt=""/>
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
-                
-                    {/*{this.state.isRegistered ? <Redirect to="/DisplayAllCompanies"/> : null} }*/}
 
                     <h3 className="form-tittle">User Sign In</h3>
                     
@@ -210,7 +216,7 @@ export default class PersonalProfile extends Component
                     </div>
 
                     <div className="form-group">
-                        <label className="label-form">Username</label>  
+                        <label className="label-form">Username{usernameCheck}</label>  
                         <input  className = "form-control"
                             name = "username"              
                             type = "username"
@@ -259,11 +265,8 @@ export default class PersonalProfile extends Component
                             onChange = {this.handleChange}
                         />
                     </div>
-                    
 
                     <LinkInClass value="Change" className="blue-button" onClick={this.handleSubmit()} />
-                    <Link className="dark-blue-button" to={"/Main"}>Cancel</Link>  {/* va al main de displayallcompanies */}
-                    
                       
                 </form>
 

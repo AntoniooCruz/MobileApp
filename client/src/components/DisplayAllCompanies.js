@@ -22,7 +22,7 @@ export default class DisplayAllCompanies extends Component
     
     componentDidMount() 
     {
-        axios.get(`companies.json`)//axios.get(`${SERVER_HOST}/company/`)
+        axios.get(`companies.json`)//axios.get(`${SERVER_HOST}/api/company/`)
         .then(res => 
         {
             if(res.data)

@@ -25,46 +25,45 @@ export default class Login extends Component
     {
         this.setState({[e.target.name]: e.target.value})
 
-        console.log(this.state.username)
     }
 
     handleSubmit = (e) => 
     {
-//        e.preventDefault()
-
-
-        console.log("klsjsls")
-
-        //axios.post(`${SERVER_HOST}/users/login`,this.state.username,this.state.password)
+        axios.post(`${SERVER_HOST}/api/users/login`,this.state.username,this.state.password)
         .then(res => 
-        {   
+        {     
             if(res.data)
             {
                 if (res.data.errorMessage)
                 {
                     console.log(res.data.errorMessage)    
                 }
-                else
-                {   
+                else // user successfully logged in
+                { 
                     console.log("User logged in")
                     
-                    sessionStorage.name = res.data.name
-                    sessionStorage.accessLevel = res.data.accessLevel
+                    localStorage.user_id = res.data.id
+                    localStorage.username = res.data.username
+                    localStorage.accessLevel = res.data.accessLevel  
+                    localStorage.token = res.data.token
                     
                     this.setState({isLoggedIn:true})
-                } 
+                }        
             }
             else
             {
-                console.log("Record not added")
+                console.log("Login failed")
             }
-        })
+        })                
     }
- 
+
    render() 
     {     
         return (
             <div> 
+                
+                {this.state.isLoggedIn ? <Redirect to="/Main"/> : null}
+
                 <img className="img-logo" src="logo.png" alt=""/>
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
@@ -94,7 +93,6 @@ export default class Login extends Component
                         title = "Password must be at least ten-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*)"
                         value = {this.state.password}
                         onChange = {this.handleChange}
-                        ref = {input => this.inputToFocus = input}
                     />
                 </div>
                     
