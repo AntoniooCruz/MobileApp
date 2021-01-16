@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import {Link} from "react-router-dom"
 
 import axios from "axios"
-import {SERVER_HOST} from "../config/global_constants"
+import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS} from "../config/global_constants"
 
 import DisplayAllCompanies from "./DisplayAllCompanies"
 
@@ -13,6 +13,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faHome,faIdCard,faShippingFast,faBoxes} from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "react-bootstrap"
 import PersonalProfile from "./PersonalProfile"
+import Orders from "./Orders.js"
 
 export default class Main extends Component 
 {
@@ -31,6 +32,12 @@ export default class Main extends Component
                 break;
             case "personalProfile": 
                 option = <PersonalProfile/>
+                break;
+            case "orders/pending": 
+                option = <Orders option={OP_PENDING_ORDERS}/>
+                break;
+            case "orders/all": 
+                option = <Orders option={OP_ALL_ORDERS}/>
                 break;
             default:
                 option = <DisplayAllCompanies/>
@@ -52,12 +59,12 @@ export default class Main extends Component
                                 <FontAwesomeIcon icon={faIdCard}/>
                             </ReactBootStrap.Nav.Link>
                             <ReactBootStrap.NavDropdown title="Orders" id="basic-nav-dropdown">
-                                <ReactBootStrap.NavDropdown.Item href="#action/3.1">
+                                <ReactBootStrap.NavDropdown.Item href="#orders/pending">
                                     Pending Orders &nbsp;
                                     <FontAwesomeIcon icon={faShippingFast}/>
                                 </ReactBootStrap.NavDropdown.Item>
                                 <ReactBootStrap.NavDropdown.Divider />
-                                <ReactBootStrap.NavDropdown.Item href="#action/3.2">
+                                <ReactBootStrap.NavDropdown.Item href="#orders/all">
                                     All Orders &nbsp;
                                     <FontAwesomeIcon icon={faBoxes}/>
                                 </ReactBootStrap.NavDropdown.Item>
