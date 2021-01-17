@@ -96,7 +96,7 @@ export default class Login extends Component
                     />
                 </div>
                     
-                <Link className="blue-button" onClick={this.handleSubmit()}>Log In</Link>       
+                <Link className="blue-button" onClick={this.handleSubmit}>Log In</Link>       
                         
                 <Link className="light-blue-button" to={"/SignIn"}>Sign In</Link>
 
