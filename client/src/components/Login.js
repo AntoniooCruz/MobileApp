@@ -52,7 +52,8 @@ export default class Login extends Component
                     localStorage.accessLevel = res.data.accessLevel  
                     localStorage.token = res.data.token
                     
-                    this.setState({isLoggedIn:true})                }        
+                    this.setState({isLoggedIn:true})
+                }        
             }
             else
             {
