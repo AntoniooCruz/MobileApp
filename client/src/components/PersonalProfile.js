@@ -22,7 +22,7 @@ export default class PersonalProfile extends Component
             name:"",
             username:"",
             password:"",
-            phone_number:null
+            phone_number:""
         }
     }
 

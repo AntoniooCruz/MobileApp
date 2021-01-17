@@ -132,7 +132,7 @@ export default class SignInCompany extends Component
             const companyObject = {
                 name: this.state.name,
                 username: this.state.username,
-                phone_number: parseInt(this.state.phone_number, 10),
+                phone_number: this.state.phone_number,
                 password: this.state.password,
                 img: formData
             }
