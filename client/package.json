@@ -2,6 +2,7 @@
   "name": "mongodb_multiple",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://localhost:4000/",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
@@ -40,6 +41,5 @@
   "main": "index.js",
   "devDependencies": {},
   "author": "Derek O Reilly",
-  "license": "ISC",
-  "proxy": "https://localhost:4000/"
+  "license": "ISC"
 }

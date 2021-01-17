@@ -1,13 +1,14 @@
 const express = require('express');
-
+const PORT = process.env.PORT || 4000;
 const app = express();
+const cors = require('cors');;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 require('dotenv/config');
 
 //MiddleWare
 const indexRouter = require('./routes/index');
-
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/',indexRouter);
@@ -18,4 +19,4 @@ mongoose.connect(process.env.DB_CONNECTION,
     () => console.log("Connected to DB")
     );
 //Listening server
-app.listen(4000);
+app.listen(PORT);
