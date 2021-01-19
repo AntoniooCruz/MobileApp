@@ -1,8 +1,8 @@
 import React, {Component} from "react"
-import {Link} from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 
 import axios from "axios"
-import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS} from "../config/global_constants"
+import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS,ACCESS_LEVEL_GUEST} from "../config/global_constants"
 
 import DisplayAllCompanies from "./DisplayAllCompanies"
 
@@ -10,10 +10,11 @@ import DisplayAllCompanies from "./DisplayAllCompanies"
 import * as ReactBootStrap from "react-bootstrap";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faHome,faIdCard,faShippingFast,faBoxes} from '@fortawesome/free-solid-svg-icons';
+import {faHome,faIdCard,faShippingFast,faBoxes, faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "react-bootstrap"
 import PersonalProfile from "./PersonalProfile"
 import Orders from "./Orders.js"
+import Login from "./Login.js"
 
 export default class Main extends Component 
 {
@@ -39,6 +40,13 @@ export default class Main extends Component
             case "orders/all": 
                 option = <Orders option={OP_ALL_ORDERS}/>
                 break;
+            case "logout": 
+                localStorage._id = ""
+                localStorage.username = "GUEST"
+                localStorage.accessLevel = ACCESS_LEVEL_GUEST
+                localStorage.token = null
+                option = <Redirect to="/Login"/>
+                break
             default:
                 option = <DisplayAllCompanies/>
         }
@@ -69,6 +77,10 @@ export default class Main extends Component
                                     <FontAwesomeIcon icon={faBoxes}/>
                                 </ReactBootStrap.NavDropdown.Item>
                             </ReactBootStrap.NavDropdown>
+                            <ReactBootStrap.Nav.Link href="#logout">
+                                Log Out &nbsp;
+                                <FontAwesomeIcon icon={faSignOutAlt}/>
+                            </ReactBootStrap.Nav.Link>
                         </ReactBootStrap.Nav>
                     </ReactBootStrap.Navbar.Collapse>
                 </ReactBootStrap.Navbar>

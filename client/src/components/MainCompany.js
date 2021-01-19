@@ -1,17 +1,20 @@
 import React, {Component} from "react"
-import {Link} from "react-router-dom"
+import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
 import DisplayAllCompanies from "./DisplayAllCompanies"
 
-import {SERVER_HOST} from "../config/global_constants"
+import {SERVER_HOST,OP_PENDING_ORDERS, OP_ALL_ORDERS, ACCESS_LEVEL_GUEST} from "../config/global_constants"
 
 import * as ReactBootStrap from "react-bootstrap";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faSpinner,faIdCard,faShippingFast,faBoxes,faHome} from '@fortawesome/free-solid-svg-icons';
+import {faSpinner,faIdCard,faSignOutAlt,faBoxes,faHome} from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "react-bootstrap"
+
+import OrdersCompany from "./OrdersCompany.js"
+import PersonalProfileCompany from "./PersonalProfileCompany.js"
 
 export default class MainCompany extends Component 
 {
@@ -19,20 +22,41 @@ export default class MainCompany extends Component
     {
         super(props)
     }
-    
-    
-    componentDidMount() 
-    {
-        
-    }
 
   
     render() 
     {   
+
+        let opAux = window.location.href.split('#',2)
+
+        let option = "" 
+
+        switch(opAux[1]){
+            case "pendingOrders": 
+                option = <OrdersCompany option={OP_PENDING_ORDERS}/>
+                break;
+
+            case "allOrders": 
+                option = <OrdersCompany option={OP_ALL_ORDERS}/>
+                break;
+            case "personalProfile": 
+                option = <PersonalProfileCompany/>
+                break;
+            case "logout": 
+                localStorage._id = ""
+                localStorage.username = "GUEST"
+                localStorage.accessLevel = ACCESS_LEVEL_GUEST
+                localStorage.token = null
+                option = <Redirect to="/Login"/>
+                break
+            default:
+                option = <OrdersCompany/>
+        }
+
         return (      
             <div>
                 <ReactBootStrap.Navbar bg="light" expand="lg">
-                    <ReactBootStrap.Navbar.Brand>Main Menu</ReactBootStrap.Navbar.Brand>
+                    <ReactBootStrap.Navbar.Brand>Main Menu Company</ReactBootStrap.Navbar.Brand>
                     <ReactBootStrap.Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <ReactBootStrap.Navbar.Collapse id="basic-navbar-nav">
                         <ReactBootStrap.Nav className="mr-auto">
@@ -48,11 +72,15 @@ export default class MainCompany extends Component
                                 Personal Profile &nbsp;
                                 <FontAwesomeIcon icon={faIdCard}/>
                             </ReactBootStrap.Nav.Link>
+                            <ReactBootStrap.Nav.Link href="#logout">
+                                Log Out &nbsp;
+                                <FontAwesomeIcon icon={faSignOutAlt}/>
+                            </ReactBootStrap.Nav.Link>
                         </ReactBootStrap.Nav>
                     </ReactBootStrap.Navbar.Collapse>
                 </ReactBootStrap.Navbar>
-
-                <DisplayAllCompanies/>
+                
+                {option}
             </div>    
         )
     }

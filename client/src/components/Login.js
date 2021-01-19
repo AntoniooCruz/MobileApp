@@ -1,11 +1,9 @@
 import React, {Component} from "react"
 import {Redirect, Link} from "react-router-dom"
-import Form from "react-bootstrap/Form"
 
 import axios from "axios"
 
-import LinkInClass from "../components/LinkInClass"
-import {ACCESS_LEVEL_GUEST, SERVER_HOST} from "../config/global_constants"
+import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
 
 
 export default class Login extends Component 
@@ -17,7 +15,7 @@ export default class Login extends Component
         this.state = {
             username:"",
             password:"",
-            isLoggedIn:false
+            isLoggedIn: localStorage.accessLevel == ACCESS_LEVEL_GUEST ? false: true
         }
     }
 
@@ -47,9 +45,9 @@ export default class Login extends Component
                 { 
                     console.log("User logged in")
                     
-                    localStorage.user_id = res.data.id
+                    localStorage._id = res.data.id
                     localStorage.username = res.data.username
-                    localStorage.accessLevel = res.data.accessLevel  
+                    localStorage.accessLevel = ACCESS_LEVEL_NORMAL_USER //res.data.accessLevel  
                     localStorage.token = res.data.token
                     
                     this.setState({isLoggedIn:true})
