@@ -17,7 +17,7 @@
     margin-right: auto;
     border-radius: 0%;
     background: #e1f0fc;
-    width: 300px;
+    width: 500px;
 
 }
 
@@ -218,6 +218,16 @@ color:pink;
     margin-right: auto;
     padding: 10px 10px;
 }
+
+
+.red-icon{
+    color: red;
+}
+
+.green-icon{
+    color: green;
+}
+
 
 
 

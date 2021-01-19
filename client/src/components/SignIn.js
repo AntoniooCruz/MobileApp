@@ -1,6 +1,5 @@
 import React, {Component} from "react"
 import {Redirect, Link} from "react-router-dom"
-import Form from "react-bootstrap/Form"
 
 import axios from "axios"
 
@@ -80,11 +79,6 @@ export default class SignIn extends Component
     }
 
     validate(){
-        const username = this.state.username;
-        const name = this.state.name;
-        const phone_number = this.state.phone_number;
-        const password = this.state.password;
-
         return{
             username: this.validateUsername(),
             name: this.validatePassword(),
@@ -132,7 +126,7 @@ export default class SignIn extends Component
                     {   
                         console.log("User registered and logged in")
 
-                        localStorage.user_id = res.data.id
+                        localStorage._id = res.data.id
                         localStorage.username = res.data.username
                         localStorage.accessLevel = res.data.accessLevel                    
                         localStorage.token = res.data.token

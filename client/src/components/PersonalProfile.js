@@ -8,7 +8,7 @@ import {SERVER_HOST} from "../config/global_constants"
 
 import LinkInClass from "../components/LinkInClass"
 
-import {faCheck} from '@fortawesome/free-solid-svg-icons';
+import {faCheck, faLessThan} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 export default class PersonalProfile extends Component 
@@ -22,7 +22,11 @@ export default class PersonalProfile extends Component
             name:"",
             username:"",
             password:"",
-            phone_number:""
+            phone_number:"",
+            newPassword: "",
+            newPasswordConfirmation:"",
+
+            passwordChange:false
         }
     }
 
@@ -30,7 +34,7 @@ export default class PersonalProfile extends Component
     componentDidMount() 
     {     
         this.inputToFocus.focus() 
-        axios.get(`${SERVER_HOST}/api/user/${localStorage.user_id}`)
+        axios.get(`${SERVER_HOST}/api/user/${localStorage._id}`)
         .then(res => 
             {
                 if(res.data)
@@ -70,7 +74,7 @@ export default class PersonalProfile extends Component
     }
     validateConfirmPassword()
     {    
-        return (this.state.password === this.state.passwordConfirmation); 
+        return (this.state.newPassword === this.state.newPasswordConfirmation || !this.state.passwordChange); 
     }
 
     validateName()
@@ -82,7 +86,7 @@ export default class PersonalProfile extends Component
     }
 
     validatePassword(){
-        if(this.state.password.length>=8){
+        if(this.state.newPassword.length>=8){
             return true;
         }
         return false;
@@ -99,8 +103,8 @@ export default class PersonalProfile extends Component
         const username = this.state.username;
         const name = this.state.name;
         const phone_number = this.state.phone_number;
-        const password = this.state.password;
-        const passwordConfirmation = this.state.passwordConfirmation;
+        const newPassword = this.state.newPassword;
+        const newPasswordConfirmation = this.state.newPasswordConfirmation;
 
         return{
             username: this.validateUsername(),
@@ -109,6 +113,10 @@ export default class PersonalProfile extends Component
             password: this.validatePassword(),
             passwordConfirmation: this.validateConfirmPassword()
         };
+    }
+
+    handleChangePassword = () => {
+        this.setState({passwordChange: !this.state.passwordChange})
     }
 
 
@@ -120,12 +128,20 @@ export default class PersonalProfile extends Component
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
+        let passwordAux = "";
+
+        if(this.state.passwordChange){
+            passwordAux = this.state.newPassword;
+        }else{
+            passwordAux = this.state.password;
+        }
+
         const userModel = {
             id: this.state.id,
             username: this.state.username,
-            name: this.name,
-            password: this.password,
-            phone_number: this.phone_number
+            name: this.state.name,
+            password: passwordAux,
+            phone_number: this.state.phone_number
         }
 
         if(inputsAreAllValid){
@@ -150,8 +166,6 @@ export default class PersonalProfile extends Component
                     console.log("Error")
                 }
             }) 
-        }else{
-            e.preventDefault();
         }
     }
 
@@ -163,11 +177,10 @@ export default class PersonalProfile extends Component
 
         let usernameCheck = "";
         let nameCheck = "";
-        let passwordCheck = "";
-        let passwordConfirmationCheck = "";
+        let newPasswordCheck = "";
+        let newPasswordConfirmationCheck = "";
         let phone_numberCheck = "";
         let usernameErrorMessage = "";
-
 
         if(this.validateUsername()){
             usernameCheck = <FontAwesomeIcon icon={faCheck}/>
@@ -178,20 +191,20 @@ export default class PersonalProfile extends Component
         }
 
         if(this.validatePassword()){
-            passwordCheck = <FontAwesomeIcon icon={faCheck}/>
+            newPasswordCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
         if(this.validateConfirmPassword()){
-            passwordConfirmationCheck = <FontAwesomeIcon icon={faCheck}/>
+            newPasswordConfirmationCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
         if(this.validatePhone_number()){
             phone_numberCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
-        if(this.isRegistered()){
+        /*if(this.isRegistered()){
             usernameErrorMessage = <label className="label-form-error">Invalid username</label>
-        }
+        }*/
 
         return (
             <div> 
@@ -199,7 +212,7 @@ export default class PersonalProfile extends Component
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
 
-                    <h3 className="form-tittle">User Sign In</h3>
+                    <h3 className="form-tittle">Personal Profile</h3>
                     
                     <div className="form-group">
                         <label className="label-form">Name {nameCheck}</label>
@@ -240,33 +253,43 @@ export default class PersonalProfile extends Component
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label  className="label-form">Password {passwordCheck}</label> 
-                        <input  className = "form-control"
-                            name = "password"           
-                            type = "password"
-                            placeholder = "•••••••••••"
-                            autoComplete="password"
-                            title = "Password must be at least ten-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*)"
-                            value = {this.state.password}
-                            onChange = {this.handleChange}
-                        />
-                    </div>  
-                       
+                    <LinkInClass value= {this.state.passwordChange ? "No Change Password" : "Change Password"} className="light-blue-button" onClick={this.handleChangePassword} />
 
-                    <div className="form-group">
-                        <label className="label-form">Password Again {passwordConfirmationCheck}</label> 
-                        <input className = "form-control"  
-                            name = "passwordConfirmation"    
-                            type = "password"
-                            placeholder = "•••••••••••"
-                            autoComplete="passwordConfirmation"
-                            value = {this.state.passwordConfirmation}
-                            onChange = {this.handleChange}
-                        />
-                    </div>
+                    {this.state.passwordChange ?  
 
-                    <LinkInClass value="Change" className="blue-button" onClick={this.handleSubmit()} />
+                        <div>
+                            <div className="form-group">
+                                <label  className="label-form">Password {newPasswordCheck}</label> 
+                                <input  className = "form-control"
+                                    name = "newPassword"           
+                                    type = "password"
+                                    placeholder = "•••••••••••"
+                                    autoComplete="newPassword"
+                                    title = "Password must be at least ten-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*)"
+                                    value = {this.state.newPassword}
+                                    onChange = {this.handleChange}
+                                />
+                            </div>  
+                            
+
+                            <div className="form-group">
+                                <label className="label-form">Password Again {newPasswordConfirmationCheck}</label> 
+                                <input className = "form-control"  
+                                    name = "newPasswordConfirmation"    
+                                    type = "password"
+                                    placeholder = "•••••••••••"
+                                    autoComplete="newPasswordConfirmation"
+                                    value = {this.state.newPasswordConfirmation}
+                                    onChange = {this.handleChange}
+                                />
+                            </div>
+                        </div>
+
+                    : null
+
+                    }
+
+                    <LinkInClass value="Update" className="blue-button" onClick={this.handleSubmit} />
                       
                 </form>
 

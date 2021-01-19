@@ -18,11 +18,10 @@ export default class Orders extends Component
             orders:[]
         }
     }
-    
-    
+
     componentDidMount() 
     {
-        const user_id = localStorage.user_id
+        const user_id = localStorage._id
         axios.get(`${SERVER_HOST}/api/order/user/${user_id}`)
         .then(res => 
         {
