@@ -13,6 +13,7 @@ import SignIn from "./components/SignIn.js"
 import Main from "./components/Main.js"
 import MainCompany from "./components/MainCompany.js"
 import SignInCompany from "./components/SignInCompany.js"
+import DisplayAllProducts from "./components/DisplayAllProducts.js"
 import PrivateRoute from "./components/PrivateRoute"
 
 
@@ -21,7 +22,7 @@ import {ACCESS_LEVEL_GUEST} from "./config/global_constants"
 
 if (typeof localStorage.accessLevel === "undefined")
 {
-    localStorage.user_id = ""
+    localStorage._id = ""
     localStorage.username = "GUEST"
     localStorage.accessLevel = ACCESS_LEVEL_GUEST
     localStorage.token = null
@@ -40,6 +41,7 @@ export default class App extends Component
                     <Route exact path="/SignInCompany" component={SignInCompany} />
                     <PrivateRoute exact path="/Main" component={Main}/>
                     <PrivateRoute exact path="/MainCompany" component={MainCompany} />
+                    <PrivateRoute exact path="/DisplayAllProducts/:id" component={DisplayAllProducts}/>
                     <Route path="*" component={Login}/>                            
                 </Switch>
             </BrowserRouter>

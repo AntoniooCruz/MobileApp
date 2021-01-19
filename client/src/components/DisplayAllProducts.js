@@ -3,7 +3,7 @@ import {Link} from "react-router-dom"
 
 import axios from "axios"
 
-import CompanyTable from "./CompanyTable"
+import ProductTable from "./ProductTable"
 
 import {SERVER_HOST} from "../config/global_constants"
 
@@ -22,7 +22,7 @@ export default class DisplayAllProducts extends Component
     
     componentDidMount() 
     {
-        const company_id = this.props.company_id
+        const company_id = this.props.match.params.id
         axios.get(`${SERVER_HOST}/api/product/company/${company_id}`)
         .then(res => 
         {
