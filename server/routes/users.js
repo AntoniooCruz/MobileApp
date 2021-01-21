@@ -7,6 +7,7 @@ const Company = require('../models/Company');
 const Joi = require('joi');
 const verify = require('../middleware/verifyToken');
 const { userSchema } = require('../schemas/users');
+const verifyToken = require('../middleware/verifyToken');
 
 
 router.get('/:user_id', async(req,res)=> {
@@ -79,7 +80,7 @@ router.put('/:user_id',(req,res) => {
 });
 
 //Delete a user
-router.delete('/:user_id',(req,res) => {
+router.delete('/:user_id',verifyToken,(req,res) => {
     User.findByIdAndRemove({_id: req.params.user_id},req.body).then(function(user){
             res.send(user);
         });
