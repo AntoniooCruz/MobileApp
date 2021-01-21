@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
+const Company = require('../models/Company');
 const Joi = require('joi');
 const verify = require('../middleware/verifyToken');
 const { userSchema } = require('../schemas/users');
@@ -80,17 +81,32 @@ router.delete('/:user_id',(req,res) => {
 
 router.post('/login', async(req,res) => {
     const user = await User.findOne({username: req.body.username});
-    if(!user) return res.status(400).send('User not found');
+    const company = await Company.findOne({username: req.body.username});
 
-    const valid_password = await bcrypt.compare(req.body.password, user.password);
-    if(!valid_password) return res.status(400).send('Invalid Password');
-    
-    const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-    res.header('auth-token', token).json({
+    if(!user && !company) return res.status(400).send('User not found');
+    if(user){
+        const valid_password = await bcrypt.compare(req.body.password, user.password);
+        if(!valid_password) return res.status(400).send('Invalid Password');
+        const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
+        res.header('auth-token', token).json({
         id: user._id,
         username: user.username,
-        token: token
+        token: token,
+        acess_level: 1
     });
+    }
+    if(company){
+        const valid_password = await bcrypt.compare(req.body.password, company.password);
+        if(!valid_password) return res.status(400).send('Invalid Password');
+        const token = jwt.sign({_id: company._id}, process.env.TOKEN_SECRET);
+        res.header('auth-token', token).json({
+        id: company._id,
+        username: company.username,
+        token: token,
+        acess_level: 2
+    });
+    }
+    
    
 });
 

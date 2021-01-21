@@ -23,7 +23,6 @@ router.get('/:order_id', async(req,res)=> {
 
 //Make an order
 router.post('/' ,(req,res) => {
-
     const result = orderSchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
