@@ -3,8 +3,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const Company = require('../models/Company');
+const User = require('../models/User');
 const { companySchema } = require('../schemas/company');
 const verify = require('../middleware/verifyToken');
+const multer  = require('multer');
+const upload = multer({dest: `${process.env.UPLOADED_FILES_FOLDER}`});
 
 router.get('/:company_id', async (req,res)=> {
     const company =  await Company.findOne({_id: req.params.company_id});
@@ -12,21 +15,42 @@ router.get('/:company_id', async (req,res)=> {
 });
 
 //Create a company
+<<<<<<< HEAD
 
 router.post('/', async (req,res)=> {
+=======
+router.post('/', upload.single("profilePhoto"), async (req,res)=> {
+>>>>>>> 1452d23d08fd43e13c8df28e6d69bf083d9dda45
     const result = companySchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
     return;
     }
+    const userFind = await User.findOne({username: req.body.username});
+    const companyFind = await Company.findOne({username: req.body.username});
+    if(userFind || companyFind){
+        res.status(401).send("Username already exists");
+        return;
+    }  
+
+    if(!req.file)
+    {
+        res.json({errorMessage:`No file was selected to be uploaded`})
+    } else if(req.file.mimetype !== "image/png" && req.file.mimetype !== "image/jpg" && req.file.mimetype !== "image/jpeg")
+    { 
+        fs.unlink(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, (error) => {res.json({errorMessage:`Only .png, .jpg and .jpeg format accepted`})})                
+    }
+
     try {
         const hashed_password = await bcrypt.hash(req.body.password,10);
+        
+
         const company = new Company({
             username: req.body.username,
             password: hashed_password,
             name: req.body.name,
             phone_number: req.body.phone_number,
-            img: null
+            img: req.file.filename
         })
 
         company.save()
@@ -45,7 +69,7 @@ router.post('/', async (req,res)=> {
 });
 
 //Update a company
-router.put('/:company_id',(req,res) => {
+router.put('/:company_id',verify,(req,res) => {
     const result = companySchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
@@ -59,6 +83,8 @@ router.put('/:company_id',(req,res) => {
         }
     });
 
+    
+
     Company.findByIdAndUpdate({_id: req.params.company_id},req.body).then(function(){
         Company.findOne({_id: req.params.company_id}).then(function(company){
             res.send(company);
@@ -67,7 +93,7 @@ router.put('/:company_id',(req,res) => {
 });
 
 //Delete a company
-router.delete('/:company_id',(req,res) => {
+router.delete('/:company_id',verify,(req,res) => {
     Company.findByIdAndRemove({_id: req.params.company_id},req.body).then(function(company){
             res.send(company);
         });
