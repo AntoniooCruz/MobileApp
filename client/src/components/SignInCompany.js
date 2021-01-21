@@ -1,6 +1,5 @@
 import React, {Component} from "react"
 import {Redirect, Link} from "react-router-dom"
-import Form from "react-bootstrap/Form"
 
 import axios from "axios"
 
@@ -22,10 +21,9 @@ export default class SignInCompany extends Component
             username:"",
             name:"",
             phone_number:"",
-            selectedFile:null,
             password:"",
             passwordConfirmation:"",
-
+            selectedFile:null,
             alreadyRegistered:false
         }
     }
@@ -41,12 +39,10 @@ export default class SignInCompany extends Component
         this.setState({[e.target.name]: e.target.value})
     }
 
-    fileSelectedHandler = (e) => 
+    /*handleFileChange = (e) => 
     {
-       this.setState({
-            selectedFile: e.target.files[0]
-       })
-    }
+        this.setState({selectedFile: e.target.files[0]})
+    }*/
 
     validateConfirmPassword()
     {    
@@ -85,19 +81,12 @@ export default class SignInCompany extends Component
         return false;
     }
 
-    validateSelectedFile(){
-        if(this.state.selectedFile!=null){
-            return true;
-        }
-        return false;
-    }
-
     validate(){
-        const username = this.state.username;
+        /*const username = this.state.username;
         const name = this.state.name;
         const phone_number = this.state.phone_number;
         const password = this.state.password;
-        const selectedFile = this.state.selectedFile;
+        const selectedFile = this.state.selectedFile;*/
 
         return{
             username: this.validateUsername(),
@@ -105,7 +94,7 @@ export default class SignInCompany extends Component
             phone_number: this.validatePhone_number(),
             password: this.validatePassword(),
             passwordConfirmation: this.validateConfirmPassword(),
-            selectedFile: this.validateSelectedFile()
+            //selectedFile: this.validateSelectedFile()
         };
     }
 
@@ -115,12 +104,11 @@ export default class SignInCompany extends Component
     {
         e.preventDefault();
 
-        this.state.submited = true;
-        this.validate();
-
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
+        let formData = new FormData()
+        formData.append("logoPhoto",this.state.selectedFile)
         if(inputsAreAllValid){
 
             const userObject = {
@@ -128,10 +116,10 @@ export default class SignInCompany extends Component
                 username: this.state.username,
                 phone_number: this.state.phone_number,
                 password: this.state.password,
-                img: this.selectedFile
+                img: formData
             }
 
-            axios.post(`${SERVER_HOST}/api/user`, userObject)
+            axios.post(`${SERVER_HOST}/api/user`, userObject,{headers: {"Content-type": "multipart/form-data"}})
             .then(res => 
             {   
                 if(res.data)
@@ -200,7 +188,7 @@ export default class SignInCompany extends Component
         }
 
         return (
-            <div> 
+            <div>
                 {this.state.alreadyRegistered ? <Redirect to="/MainCompany"/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 
@@ -245,16 +233,19 @@ export default class SignInCompany extends Component
                             onChange = {this.handleChange}
                         />
                     </div>
-
+           
+                {/*
                     <div className="form-group">
                         <label className="label-form">Company Logo</label> 
                             <input className="form-control"
                                 name = "selectedFile"           
                                 type = "file"
                                 autoComplete="selectedFile"
-                                onChange = {this.fileSelectedHandler}
+                                onChange = {this.handleFileChange}
                             />
                     </div>
+
+                */ }
 
                     <div className="form-group">
                         <label  className="label-form">Password {passwordCheck}</label> 
@@ -289,6 +280,8 @@ export default class SignInCompany extends Component
                 </form>
 
                 <br/><br/>
+
+            
             </div>
         )
     }

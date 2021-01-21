@@ -1,6 +1,5 @@
 import React, {Component} from "react"
 import { OP_ALL_ORDERS } from "../config/global_constants"
-import CompanyTableRow from "./CompanyTableRow"
 import OrdersTableRow from "./OrdersTableRow.js"
 
 
@@ -12,7 +11,7 @@ export default class OrdersTable extends Component
 
         let statusColumn = null
 
-        if(this.props.option == OP_ALL_ORDERS){
+        if(this.props.option === OP_ALL_ORDERS){
             statusColumn = <th>Status</th>
         }
 

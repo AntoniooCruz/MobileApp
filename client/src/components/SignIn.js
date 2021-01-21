@@ -98,7 +98,6 @@ export default class SignIn extends Component
     {
         e.preventDefault();
 
-        this.state.submited = true;
         this.validate();
 
         const formInputsState = this.validate();
@@ -141,11 +140,16 @@ export default class SignIn extends Component
                 }
             })
         }
-
-        console.log("aaaaaa")
     }
 
-    
+    oneKeyPressFunction = (e) =>
+    {
+
+        if(e.charCode == 13){
+            this.handleSubmit()
+        }
+    }
+
     render() 
     {     
         //const formInputsState = this.validate();
@@ -248,6 +252,7 @@ export default class SignIn extends Component
                             autoComplete="passwordConfirmation"
                             value = {this.state.passwordConfirmation}
                             onChange = {this.handleChange}
+                            onKeyPress = {this.oneKeyPressFunction}
                         />
                     </div>
 

@@ -3,7 +3,7 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
+import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
 
 
 export default class Login extends Component 
@@ -15,8 +15,13 @@ export default class Login extends Component
         this.state = {
             username:"",
             password:"",
-            isLoggedIn: localStorage.accessLevel == ACCESS_LEVEL_GUEST ? false: true
+            isLoggedIn: false
         }
+    }
+    
+    componentDidMount()
+    {
+        //this.setState({isLoggedIn:(localStorage.accessLevel === ACCESS_LEVEL_GUEST) ? false: true})
     }
 
     handleChange = (e) => 
@@ -60,6 +65,16 @@ export default class Login extends Component
         })                
     }
 
+    oneKeyPressFunction = (e) =>
+    {
+
+        if(e.charCode === 13){
+            this.handleSubmit()
+        }
+    }
+
+    
+
    render() 
     {     
         return (
@@ -71,44 +86,42 @@ export default class Login extends Component
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
                 
-                <h3 className="form-tittle">Login</h3>
+                    <h3 className="form-tittle">Login</h3>
 
-                <div className="form-group">
-                    <label className="label-form">Username</label>  
-                    <input  className = "form-control"
-                        name = "username"              
-                        type = "username"
-                        placeholder = "CharlesSmith"
-                        autoComplete="username"
-                        value = {this.state.username}
-                        onChange = {this.handleChange}
-                        ref = {input => this.inputToFocus = input}
-                    />
-                </div>
-                    
-                <div className="form-group">
-                    <label className="label-form">Password</label>  
-                    <input  className = "form-control"
-                        name = "password"           
-                        type = "password"
-                        placeholder = "•••••••••••"
-                        autoComplete="password"
-                        title = "Password must be at least ten-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*)"
-                        value = {this.state.password}
-                        onChange = {this.handleChange}
-                    />
-                </div>
-                    
-                <Link className="blue-button" onClick={this.handleSubmit}>Log In</Link>       
+                    <div className="form-group">
+                        <label className="label-form">Username</label>  
+                        <input  className = "form-control"
+                            name = "username"              
+                            type = "username"
+                            placeholder = "CharlesSmith"
+                            autoComplete="username"
+                            value = {this.state.username}
+                            onChange = {this.handleChange}
+                            ref = {input => this.inputToFocus = input}
+                        />
+                    </div>
                         
-                <Link className="light-blue-button" to={"/SignIn"}>Sign In</Link>
+                    <div className="form-group">
+                        <label className="label-form">Password</label>  
+                        <input  className = "form-control"
+                            name = "password"           
+                            type = "password"
+                            placeholder = "•••••••••••"
+                            autoComplete="password"
+                            title = "Password must be at least ten-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*)"
+                            value = {this.state.password}
+                            onChange = {this.handleChange}
+                            onKeyPress = {this.oneKeyPressFunction}
+                        />
+                    </div>
+                        
+                    <Link className="blue-button" onClick={this.handleSubmit}>Log In</Link>       
+                            
+                    {/*<Link className="light-blue-button" to={"/SignIn"}>Sign In</Link>*/}
 
-            </form>
-            <br></br>
-        </div>
-
-        
-        
-    )
+                </form>
+                <br></br>
+            </div>
+        )
     }
 }
