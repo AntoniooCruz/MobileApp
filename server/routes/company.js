@@ -15,12 +15,7 @@ router.get('/:company_id', async (req,res)=> {
 });
 
 //Create a company
-<<<<<<< HEAD
-
-router.post('/', async (req,res)=> {
-=======
 router.post('/', upload.single("profilePhoto"), async (req,res)=> {
->>>>>>> 1452d23d08fd43e13c8df28e6d69bf083d9dda45
     const result = companySchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
