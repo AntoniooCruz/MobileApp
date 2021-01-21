@@ -3,7 +3,7 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
+import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_COMPANY, ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
 
 
 export default class Login extends Component 
@@ -52,8 +52,10 @@ export default class Login extends Component
                     
                     localStorage._id = res.data.id
                     localStorage.username = res.data.username
-                    localStorage.accessLevel = ACCESS_LEVEL_NORMAL_USER //res.data.accessLevel  
+                    localStorage.accessLevel = ACCESS_LEVEL_COMPANY//res.data.acess_level
                     localStorage.token = res.data.token
+
+                    console.log(localStorage.accessLevel)
                     
                     this.setState({isLoggedIn:true})
                 }        
@@ -77,10 +79,30 @@ export default class Login extends Component
 
    render() 
     {     
+
+        let redirectAction = null
+        if(this.state.isLoggedIn){
+            switch(localStorage.accessLevel){
+                case ACCESS_LEVEL_NORMAL_USER:
+                    redirectAction = <Redirect to="/Main"/>
+                    break
+                case ACCESS_LEVEL_COMPANY:
+                    redirectAction = <Redirect to="/MainCompany"/>
+                    break
+                /*case ACCESS_LEVEL_ADMIN:
+                    redirectAction = <Redirect to "/MainAdmin"/>
+                    break*/
+                case ACCESS_LEVEL_GUEST:
+                default:
+                    console.log("bb")
+                    redirectAction = null         
+            }
+        }
+        
         return (
             <div> 
                 
-                {this.state.isLoggedIn ? <Redirect to="/Main"/> : null}
+                {this.state.isLoggedIn ? redirectAction : null}
 
                 <img className="img-logo" src="logo.png" alt=""/>
 
@@ -117,7 +139,7 @@ export default class Login extends Component
                         
                     <Link className="blue-button" onClick={this.handleSubmit}>Log In</Link>       
                             
-                    {/*<Link className="light-blue-button" to={"/SignIn"}>Sign In</Link>*/}
+                    <Link className="light-blue-button" to={"/SignIn"}>Sign In</Link>
 
                 </form>
                 <br></br>

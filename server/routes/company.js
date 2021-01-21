@@ -12,6 +12,7 @@ router.get('/:company_id', async (req,res)=> {
 });
 
 //Create a company
+
 router.post('/', async (req,res)=> {
     const result = companySchema.validate(req.body);
     if (result.error) {

@@ -39,10 +39,11 @@ export default class SignInCompany extends Component
         this.setState({[e.target.name]: e.target.value})
     }
 
-    /*handleFileChange = (e) => 
+    handleFileChange = (e) => 
     {
         this.setState({selectedFile: e.target.files[0]})
-    }*/
+        console.log(e.target.files[0])
+    }
 
     validateConfirmPassword()
     {    
@@ -93,8 +94,7 @@ export default class SignInCompany extends Component
             name: this.validatePassword(),
             phone_number: this.validatePhone_number(),
             password: this.validatePassword(),
-            passwordConfirmation: this.validateConfirmPassword(),
-            //selectedFile: this.validateSelectedFile()
+            passwordConfirmation: this.validateConfirmPassword()
         };
     }
 
@@ -111,15 +111,15 @@ export default class SignInCompany extends Component
         formData.append("logoPhoto",this.state.selectedFile)
         if(inputsAreAllValid){
 
-            const userObject = {
+            const companyObject = {
                 name: this.state.name,
                 username: this.state.username,
                 phone_number: this.state.phone_number,
                 password: this.state.password,
-                img: formData
+               // img: formData
             }
 
-            axios.post(`${SERVER_HOST}/api/user`, userObject,{headers: {"Content-type": "multipart/form-data"}})
+            axios.post(`${SERVER_HOST}/api/company`, companyObject,{headers: {"Content-type": "multipart/form-data"}})
             .then(res => 
             {   
                 if(res.data)
@@ -134,7 +134,7 @@ export default class SignInCompany extends Component
 
                         localStorage._id = res.data.id
                         localStorage.username = res.data.username
-                        localStorage.accessLevel = ACCESS_LEVEL_GUEST//res.data.accessLevel                    
+                        localStorage.accessLevel = res.data.access_level                    
                         localStorage.token = res.data.token
                         
                         this.setState({alreadyRegistered:true})
@@ -160,7 +160,6 @@ export default class SignInCompany extends Component
         let passwordCheck = "";
         let passwordConfirmationCheck = "";
         let phone_numberCheck = "";
-        let selectedFileCheck = "";
 
 
         if(this.validateUsername()){
@@ -181,10 +180,6 @@ export default class SignInCompany extends Component
 
         if(this.validatePhone_number()){
             phone_numberCheck = <FontAwesomeIcon icon={faCheck}/>
-        }
-
-        if(this.validateSelectedFile()){
-            selectedFileCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
         return (
@@ -234,7 +229,7 @@ export default class SignInCompany extends Component
                         />
                     </div>
            
-                {/*
+                
                     <div className="form-group">
                         <label className="label-form">Company Logo</label> 
                             <input className="form-control"
@@ -245,7 +240,7 @@ export default class SignInCompany extends Component
                             />
                     </div>
 
-                */ }
+            
 
                     <div className="form-group">
                         <label  className="label-form">Password {passwordCheck}</label> 
