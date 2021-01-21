@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const Company = require('../models/Company');
+const User = require('../models/User');
 const { companySchema } = require('../schemas/company');
 const verify = require('../middleware/verifyToken');
 
@@ -18,8 +19,16 @@ router.post('/', async (req,res)=> {
         res.status(400).send(result.error.details[0].message);
     return;
     }
+    const userFind = await User.findOne({username: req.body.username});
+    const companyFind = await Company.findOne({username: req.body.username});
+    if(userFind || companyFind){
+        res.status(401).send("Username already exists");
+        return;
+    }  
     try {
         const hashed_password = await bcrypt.hash(req.body.password,10);
+        
+
         const company = new Company({
             username: req.body.username,
             password: hashed_password,
