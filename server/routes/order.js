@@ -15,14 +15,14 @@ router.get('/user/:user_id',verify ,(req,res) => {
 });
 
 //Get a certain Order
-router.get('/:order_id', async(req,res)=> {
+router.get('/:order_id',verify, async(req,res)=> {
     const order =  await Order.findOne({_id: req.params.order_id});
     res.send(order);
 });
 
 
 //Make an order
-router.post('/' ,(req,res) => {
+router.post('/' ,verify,(req,res) => {
     const result = orderSchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
@@ -48,7 +48,7 @@ router.post('/' ,(req,res) => {
 });
 
 //Update an order
-router.put('/:order_id',(req,res) => {
+router.put('/:order_id',verify,(req,res) => {
     const result = orderSchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
@@ -70,7 +70,7 @@ router.put('/:order_id',(req,res) => {
 });
 
 //Delete an order
-router.delete('/:order_id' ,(req,res) => {
+router.delete('/:order_id' ,verify,(req,res) => {
     Order.findByIdAndRemove({_id: req.params.order_id},req.body).then(function(order){
         res.send(order);
     });

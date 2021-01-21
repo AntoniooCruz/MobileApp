@@ -1,11 +1,12 @@
 const express = require('express');
+const verifyToken = require('../middleware/verifyToken');
 const router = express.Router();
 const verify = require('../middleware/verifyToken');
 const Product = require('../models/Product');
 const { productSchema } = require('../schemas/products');
 
 //Get a company products
-router.get('/company/:company_id',verify ,(req,res) => {
+router.get('/company/:company_id',(req,res) => {
     res.send('Only logged users can do this');
 });
 
@@ -16,7 +17,7 @@ router.get('/:product_id', async(req,res)=> {
 });
 
 //Add a product
-router.post('/' ,(req,res) => {
+router.post('/' ,verify,(req,res) => {
     const result = productSchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
@@ -39,7 +40,7 @@ router.post('/' ,(req,res) => {
 });
 
 //Update a product
-router.put('/:product_id' ,(req,res) => {
+router.put('/:product_id' ,verify,(req,res) => {
 
     const result = productSchema.validate(req.body);
     if (result.error) {
@@ -62,7 +63,7 @@ router.put('/:product_id' ,(req,res) => {
 });
 
 //Delete a Product
-router.delete('/:product_id' ,(req,res) => {
+router.delete('/:product_id' ,verify,(req,res) => {
     Product.findByIdAndRemove({_id: req.params.product_id},req.body).then(function(product){
         res.send(product);
     });

@@ -7,6 +7,7 @@ const Company = require('../models/Company');
 const Joi = require('joi');
 const verify = require('../middleware/verifyToken');
 const { userSchema } = require('../schemas/users');
+const verifyToken = require('../middleware/verifyToken');
 
 
 router.get('/:user_id', async(req,res)=> {
@@ -20,9 +21,16 @@ router.post('/', async (req,res)=> {
         res.status(400).send(result.error.details[0].message);
     return;
     }
-
+    const userFind = await User.findOne({username: req.body.username});
+    const companyFind = await Company.findOne({username: req.body.username});
+    if(userFind || companyFind){
+        res.status(401).send("Username already exists");
+        return;
+    }  
     try {
         const hashed_password = await bcrypt.hash(req.body.password,10);
+        
+
         const user = new User({
             username: req.body.username,
             password: hashed_password,
@@ -72,7 +80,7 @@ router.put('/:user_id',(req,res) => {
 });
 
 //Delete a user
-router.delete('/:user_id',(req,res) => {
+router.delete('/:user_id',verifyToken,(req,res) => {
     User.findByIdAndRemove({_id: req.params.user_id},req.body).then(function(user){
             res.send(user);
         });
