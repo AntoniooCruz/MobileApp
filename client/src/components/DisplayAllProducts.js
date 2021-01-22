@@ -23,7 +23,7 @@ export default class DisplayAllProducts extends Component
     componentDidMount() 
     {
         const company_id = this.props.match.params.id
-        axios.get(`${SERVER_HOST}/api/product/company/${company_id}`)
+        axios.get(`${SERVER_HOST}/api/product/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)

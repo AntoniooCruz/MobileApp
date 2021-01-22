@@ -22,7 +22,7 @@ export default class Orders extends Component
     componentDidMount() 
     {
         const user_id = localStorage._id
-        axios.get(`${SERVER_HOST}/api/order/user/${user_id}`)
+        axios.get(`${SERVER_HOST}/api/order/user/${user_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)
