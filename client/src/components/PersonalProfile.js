@@ -34,7 +34,7 @@ export default class PersonalProfile extends Component
     componentDidMount() 
     {     
         this.inputToFocus.focus() 
-        axios.get(`${SERVER_HOST}/api/user/${localStorage._id}`)
+        axios.get(`${SERVER_HOST}/api/user/${localStorage._id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
             {
                 if(res.data)

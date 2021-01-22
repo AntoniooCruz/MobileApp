@@ -35,7 +35,7 @@ export default class OrdersTableRow extends Component
     getCompanyName(){
         const company_id = this.props.order.company
         let company_name = ""
-        axios.get(`${SERVER_HOST}/api/company/${company_id}`)
+        axios.get(`${SERVER_HOST}/api/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)
@@ -63,7 +63,7 @@ export default class OrdersTableRow extends Component
     getProductName(){
         const product_id = this.props.order.product
         let product_name = ""
-        axios.get(`${SERVER_HOST}/api/product/${product_id}`)
+        axios.get(`${SERVER_HOST}/api/product/${product_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)

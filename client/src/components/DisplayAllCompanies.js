@@ -21,7 +21,7 @@ export default class DisplayAllCompanies extends Component
     
     componentDidMount() 
     {
-        axios.get(`companies.json`)//axios.get(`${SERVER_HOST}/api/company/`)
+        axios.get(`${SERVER_HOST}/api/company/`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)

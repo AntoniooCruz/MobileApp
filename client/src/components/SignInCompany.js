@@ -116,8 +116,12 @@ export default class SignInCompany extends Component
                 username: this.state.username,
                 phone_number: this.state.phone_number,
                 password: this.state.password,
-               // img: formData
+                img: formData
+
+               
             }
+
+            console.log(formData)
 
             axios.post(`${SERVER_HOST}/api/company`, companyObject,{headers: {"Content-type": "multipart/form-data"}})
             .then(res => 

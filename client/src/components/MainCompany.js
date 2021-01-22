@@ -10,7 +10,7 @@ import {SERVER_HOST,OP_PENDING_ORDERS, OP_ALL_ORDERS, ACCESS_LEVEL_GUEST} from "
 import * as ReactBootStrap from "react-bootstrap";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faSpinner,faIdCard,faSignOutAlt,faBoxes,faHome} from '@fortawesome/free-solid-svg-icons';
+import {faSpinner,faIdCard,faSignOutAlt,faBoxes,faIce} from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "react-bootstrap"
 
 import OrdersCompany from "./OrdersCompany.js"
@@ -42,6 +42,9 @@ export default class MainCompany extends Component
             case "personalProfile": 
                 option = <PersonalProfileCompany/>
                 break;
+            case "products":
+                option = <ProductsCompany/>
+                break;
             case "logout": 
                 localStorage._id = ""
                 localStorage.username = "GUEST"
@@ -66,6 +69,14 @@ export default class MainCompany extends Component
                             </ReactBootStrap.Nav.Link>
                             <ReactBootStrap.Nav.Link href="#allOrders">
                                 All Orders &nbsp;
+                                <FontAwesomeIcon icon={faBoxes}/>
+                            </ReactBootStrap.Nav.Link>
+                            <ReactBootStrap.Nav.Link href="#products">
+                                Products &nbsp;
+                                <FontAwesomeIcon icon={faIceCream}/>
+                            </ReactBootStrap.Nav.Link>
+                            <ReactBootStrap.Nav.Link href="#products">
+                                Productss &nbsp;
                                 <FontAwesomeIcon icon={faBoxes}/>
                             </ReactBootStrap.Nav.Link>
                             <ReactBootStrap.Nav.Link href="#personalProfile">
