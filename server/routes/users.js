@@ -100,7 +100,7 @@ router.post('/login', async(req,res) => {
         id: user._id,
         username: user.username,
         token: token,
-        acess_level: 1
+        access_level: 1
     });
     }
     if(company){
@@ -111,7 +111,7 @@ router.post('/login', async(req,res) => {
         id: company._id,
         username: company.username,
         token: token,
-        acess_level: 2
+        access_level: 2
     });
     }
     
