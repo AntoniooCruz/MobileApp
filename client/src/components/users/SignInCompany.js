@@ -3,14 +3,15 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {SERVER_HOST} from "../config/global_constants"
+import {ACCESS_LEVEL_GUEST, SERVER_HOST,OP_PENDING_ORDERS} from "../../config/global_constants"
 
-import LinkInClass from "../components/LinkInClass"
+import LinkInClass from "../LinkInClass"
 
 import {faCheck} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-export default class SignIn extends Component 
+
+export default class SignInCompany extends Component 
 {
     constructor(props) 
     {
@@ -22,7 +23,7 @@ export default class SignIn extends Component
             phone_number:"",
             password:"",
             passwordConfirmation:"",
-
+            selectedFile:null,
             alreadyRegistered:false
         }
     }
@@ -36,9 +37,12 @@ export default class SignIn extends Component
     handleChange = (e) => 
     {
         this.setState({[e.target.name]: e.target.value})
+    }
 
-
-
+    handleFileChange = (e) => 
+    {
+        this.setState({selectedFile: e.target.files[0]})
+        console.log(e.target.files[0])
     }
 
     validateConfirmPassword()
@@ -72,13 +76,19 @@ export default class SignIn extends Component
     }
 
     validatePhone_number(){
-        if(this.state.phone_number.length>=3){
+        if(this.state.phone_number.length>=3 && this.state.phone_number.match(/^[0-9]+$/)){
             return true;
         }
         return false;
     }
 
     validate(){
+        /*const username = this.state.username;
+        const name = this.state.name;
+        const phone_number = this.state.phone_number;
+        const password = this.state.password;
+        const selectedFile = this.state.selectedFile;*/
+
         return{
             username: this.validateUsername(),
             name: this.validatePassword(),
@@ -88,31 +98,32 @@ export default class SignIn extends Component
         };
     }
 
-    isRegistered(){
-        return  this.state.isRegistered;
-    }
-
 
 
     handleSubmit = (e) =>
     {
         e.preventDefault();
 
-        this.validate();
-
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
+        let formData = new FormData()
+        formData.append("logoPhoto",this.state.selectedFile)
         if(inputsAreAllValid){
 
-            const userObject = {
+            const companyObject = {
                 name: this.state.name,
                 username: this.state.username,
                 phone_number: this.state.phone_number,
-                password: this.state.password
+                password: this.state.password,
+                img: formData
+
+               
             }
 
-            axios.post(`${SERVER_HOST}/api/user`, userObject)
+            console.log(companyObject.img)
+
+            axios.post(`${SERVER_HOST}/api/company`, companyObject,{headers: {"Content-type": "multipart/form-data"}})
             .then(res => 
             {   
                 if(res.data)
@@ -127,7 +138,7 @@ export default class SignIn extends Component
 
                         localStorage._id = res.data.id
                         localStorage.username = res.data.username
-                        localStorage.accessLevel = res.data.accessLevel                    
+                        localStorage.accessLevel = res.data.access_level                    
                         localStorage.token = res.data.token
                         
                         this.setState({alreadyRegistered:true})
@@ -142,18 +153,9 @@ export default class SignIn extends Component
         }
     }
 
-    oneKeyPressFunction = (e) =>
-    {
-
-        if(e.charCode == 13){
-            this.handleSubmit()
-        }
-    }
-
+    
     render() 
     {     
-        //const formInputsState = this.validate();
-        //const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
         let usernameCheck = "";
         let nameCheck = "";
@@ -183,13 +185,13 @@ export default class SignIn extends Component
         }
 
         return (
-            <div> 
-                {this.state.alreadyRegistered ? <Redirect to="/Main"/> : null} 
+            <div>
+                {this.state.alreadyRegistered ? <Redirect to={"/Orders/" + OP_PENDING_ORDERS}/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
 
-                    <h3 className="form-tittle">User Sign In</h3>
+                    <h3 className="form-tittle">Company Sign In</h3>
                     
                     <div className="form-group">
                         <label className="label-form">Name {nameCheck}</label>
@@ -228,6 +230,19 @@ export default class SignIn extends Component
                             onChange = {this.handleChange}
                         />
                     </div>
+           
+                
+                    <div className="form-group">
+                        <label className="label-form">Company Logo</label> 
+                            <input className="form-control"
+                                name = "selectedFile"           
+                                type = "file"
+                                autoComplete="selectedFile"
+                                onChange = {this.handleFileChange}
+                            />
+                    </div>
+
+            
 
                     <div className="form-group">
                         <label  className="label-form">Password {passwordCheck}</label> 
@@ -252,19 +267,20 @@ export default class SignIn extends Component
                             autoComplete="passwordConfirmation"
                             value = {this.state.passwordConfirmation}
                             onChange = {this.handleChange}
-                            onKeyPress = {this.oneKeyPressFunction}
                         />
                     </div>
 
                     <LinkInClass value="Sign In" className="blue-button" onClick={this.handleSubmit} />
                     <Link className="dark-blue-button" to={"/Login"}>Cancel</Link> 
-                    <Link className="light-blue-button" to={"/SignInCompany"}>Sign in as a Company</Link> 
+                    <Link className="light-blue-button" to={"/SignIn"}>Sign in as a user</Link>  
                     
                 </form>
 
                 <br/><br/>
+
             </div>
         )
     }
     
 }
+

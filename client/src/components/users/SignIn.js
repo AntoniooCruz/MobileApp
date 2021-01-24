@@ -3,15 +3,14 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {ACCESS_LEVEL_GUEST, SERVER_HOST} from "../config/global_constants"
+import {SERVER_HOST} from "../../config/global_constants"
 
-import LinkInClass from "../components/LinkInClass"
+import LinkInClass from "../LinkInClass"
 
 import {faCheck} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
-
-export default class SignInCompany extends Component 
+export default class SignIn extends Component 
 {
     constructor(props) 
     {
@@ -23,7 +22,7 @@ export default class SignInCompany extends Component
             phone_number:"",
             password:"",
             passwordConfirmation:"",
-            selectedFile:null,
+
             alreadyRegistered:false
         }
     }
@@ -37,12 +36,9 @@ export default class SignInCompany extends Component
     handleChange = (e) => 
     {
         this.setState({[e.target.name]: e.target.value})
-    }
 
-    handleFileChange = (e) => 
-    {
-        this.setState({selectedFile: e.target.files[0]})
-        console.log(e.target.files[0])
+
+
     }
 
     validateConfirmPassword()
@@ -76,19 +72,13 @@ export default class SignInCompany extends Component
     }
 
     validatePhone_number(){
-        if(this.state.phone_number.length>=3){
+        if(this.state.phone_number.length>=3 && this.state.phone_number.match(/^[0-9]+$/)){
             return true;
         }
         return false;
     }
 
     validate(){
-        /*const username = this.state.username;
-        const name = this.state.name;
-        const phone_number = this.state.phone_number;
-        const password = this.state.password;
-        const selectedFile = this.state.selectedFile;*/
-
         return{
             username: this.validateUsername(),
             name: this.validatePassword(),
@@ -98,32 +88,31 @@ export default class SignInCompany extends Component
         };
     }
 
+    isRegistered(){
+        return  this.state.isRegistered;
+    }
+
 
 
     handleSubmit = (e) =>
     {
         e.preventDefault();
 
+        this.validate();
+
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
-        let formData = new FormData()
-        formData.append("logoPhoto",this.state.selectedFile)
         if(inputsAreAllValid){
 
-            const companyObject = {
+            const userObject = {
                 name: this.state.name,
                 username: this.state.username,
                 phone_number: this.state.phone_number,
-                password: this.state.password,
-                img: formData
-
-               
+                password: this.state.password
             }
 
-            console.log(formData)
-
-            axios.post(`${SERVER_HOST}/api/company`, companyObject,{headers: {"Content-type": "multipart/form-data"}})
+            axios.post(`${SERVER_HOST}/api/user`, userObject)
             .then(res => 
             {   
                 if(res.data)
@@ -138,7 +127,7 @@ export default class SignInCompany extends Component
 
                         localStorage._id = res.data.id
                         localStorage.username = res.data.username
-                        localStorage.accessLevel = res.data.access_level                    
+                        localStorage.accessLevel = res.data.accessLevel                    
                         localStorage.token = res.data.token
                         
                         this.setState({alreadyRegistered:true})
@@ -153,7 +142,14 @@ export default class SignInCompany extends Component
         }
     }
 
-    
+    oneKeyPressFunction = (e) =>
+    {
+
+        if(e.charCode == 13){
+            this.handleSubmit()
+        }
+    }
+
     render() 
     {     
         //const formInputsState = this.validate();
@@ -187,8 +183,8 @@ export default class SignInCompany extends Component
         }
 
         return (
-            <div>
-                {this.state.alreadyRegistered ? <Redirect to="/MainCompany"/> : null} 
+            <div> 
+                {this.state.alreadyRegistered ? <Redirect to="/DisplayAllCompanies"/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
@@ -232,19 +228,6 @@ export default class SignInCompany extends Component
                             onChange = {this.handleChange}
                         />
                     </div>
-           
-                
-                    <div className="form-group">
-                        <label className="label-form">Company Logo</label> 
-                            <input className="form-control"
-                                name = "selectedFile"           
-                                type = "file"
-                                autoComplete="selectedFile"
-                                onChange = {this.handleFileChange}
-                            />
-                    </div>
-
-            
 
                     <div className="form-group">
                         <label  className="label-form">Password {passwordCheck}</label> 
@@ -269,21 +252,19 @@ export default class SignInCompany extends Component
                             autoComplete="passwordConfirmation"
                             value = {this.state.passwordConfirmation}
                             onChange = {this.handleChange}
+                            onKeyPress = {this.oneKeyPressFunction}
                         />
                     </div>
 
                     <LinkInClass value="Sign In" className="blue-button" onClick={this.handleSubmit} />
                     <Link className="dark-blue-button" to={"/Login"}>Cancel</Link> 
-                    <Link className="light-blue-button" to={"/SignIn"}>Sign in as a user</Link>  
+                    <Link className="light-blue-button" to={"/SignInCompany"}>Sign in as a Company</Link> 
                     
                 </form>
 
                 <br/><br/>
-
-            
             </div>
         )
     }
     
 }
-

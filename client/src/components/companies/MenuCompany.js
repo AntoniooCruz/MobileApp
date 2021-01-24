@@ -3,20 +3,21 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import DisplayAllCompanies from "./DisplayAllCompanies"
+import DisplayAllCompanies from "../users/DisplayAllCompanies"
 
-import {SERVER_HOST,OP_PENDING_ORDERS, OP_ALL_ORDERS, ACCESS_LEVEL_GUEST} from "../config/global_constants"
+import {SERVER_HOST,OP_PENDING_ORDERS, OP_ALL_ORDERS, ACCESS_LEVEL_GUEST} from "../../config/global_constants"
 
 import * as ReactBootStrap from "react-bootstrap";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faSpinner,faIdCard,faSignOutAlt,faBoxes,faIce} from '@fortawesome/free-solid-svg-icons';
+import {faSpinner,faIceCream,faIdCard,faSignOutAlt,faBoxes,faIce} from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "react-bootstrap"
 
 import OrdersCompany from "./OrdersCompany.js"
-import PersonalProfileCompany from "./PersonalProfileCompany.js"
+import PersonalProfileCompany from "../companies/PersonalProfileCompany.js"
+import ProductsCompany from "./ProductsCompany.js"
 
-export default class MainCompany extends Component 
+export default class MenuCompany extends Component 
 {
     constructor(props) 
     {
@@ -26,6 +27,7 @@ export default class MainCompany extends Component
   
     render() 
     {   
+        /*
 
         let opAux = window.location.href.split('#',2)
 
@@ -54,7 +56,7 @@ export default class MainCompany extends Component
                 break
             default:
                 option = <OrdersCompany/>
-        }
+        }*/
 
         return (      
             <div>
@@ -63,27 +65,23 @@ export default class MainCompany extends Component
                     <ReactBootStrap.Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <ReactBootStrap.Navbar.Collapse id="basic-navbar-nav">
                         <ReactBootStrap.Nav className="mr-auto">
-                            <ReactBootStrap.Nav.Link href="#pendingOrders">
+                            <ReactBootStrap.Nav.Link href="OrdersCompany/Pending">
                                 Pending Orders &nbsp;
                                 <FontAwesomeIcon icon={faSpinner}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="#allOrders">
+                            <ReactBootStrap.Nav.Link href="OrdersCompany/All">
                                 All Orders &nbsp;
                                 <FontAwesomeIcon icon={faBoxes}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="#products">
+                            <ReactBootStrap.Nav.Link href="ProductsCompany">
                                 Products &nbsp;
                                 <FontAwesomeIcon icon={faIceCream}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="#products">
-                                Productss &nbsp;
-                                <FontAwesomeIcon icon={faBoxes}/>
-                            </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="#personalProfile">
+                            <ReactBootStrap.Nav.Link href="PersonalProfileCompany">
                                 Personal Profile &nbsp;
                                 <FontAwesomeIcon icon={faIdCard}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="#logout">
+                            <ReactBootStrap.Nav.Link href="Logout">
                                 Log Out &nbsp;
                                 <FontAwesomeIcon icon={faSignOutAlt}/>
                             </ReactBootStrap.Nav.Link>
@@ -91,7 +89,6 @@ export default class MainCompany extends Component
                     </ReactBootStrap.Navbar.Collapse>
                 </ReactBootStrap.Navbar>
                 
-                {option}
             </div>    
         )
     }

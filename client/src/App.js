@@ -9,12 +9,15 @@ import "./css/sidemenu.css"
 //const SERVER_HOST = `http://virtserver.swaggerhub.com/AntonioCruz/MobileAPP/1.0.0`
 
 import Login from "./components/Login.js"
-import SignIn from "./components/SignIn.js"
-import Main from "./components/Main.js"
-import MainCompany from "./components/MainCompany.js"
-import SignInCompany from "./components/SignInCompany.js"
-import DisplayAllProducts from "./components/DisplayAllProducts.js"
-import PrivateRoute from "./components/PrivateRoute"
+import SignIn from "./components/users/SignIn.js"
+import DisplayAllCompanies from "./components/users/DisplayAllCompanies.js"
+import SignInCompany from "./components/users/SignInCompany.js"
+import DisplayAllProducts from "./components/users/DisplayAllProducts.js"
+import PrivateRoute from "./components/PrivateRoute.js"
+import PersonalProfile from "./components/users/PersonalProfile.js"
+import Logout from "./components/Logout.js"
+import Orders from "./components/users/Orders.js"
+import OrdersCompany from "./components/companies/OrdersCompany.js"
 
 
 import {ACCESS_LEVEL_GUEST} from "./config/global_constants"
@@ -37,11 +40,17 @@ export default class App extends Component
                 <Switch>           
                     <Route exact path="/" component={Login} />
                     <Route exact path="/Login" component={Login} />
+                    <PrivateRoute exact path="/Logout" component={Logout}/>
+
                     <Route exact path="/SignIn" component={SignIn} />
+                    <PrivateRoute exact path="/DisplayAllCompanies" component={DisplayAllCompanies}/>
+                    <PrivateRoute exact path="/PersonalProfile" component={PersonalProfile}/>
+                    <PrivateRoute exact path="/Orders/:option" component={Orders}/>
+                    <PrivateRoute exact path="/DisplayAllProducts/:companyId" component={DisplayAllProducts}/>
+
                     <Route exact path="/SignInCompany" component={SignInCompany} />
-                    <PrivateRoute exact path="/Main" component={Main}/>
-                    <PrivateRoute exact path="/MainCompany" component={MainCompany} />
-                    <PrivateRoute exact path="/DisplayAllProducts/:id" component={DisplayAllProducts}/>
+                    <PrivateRoute exact path="/OrdersCompany/:option" component={OrdersCompany} />
+                    
                     <Route path="*" component={Login}/>                            
                 </Switch>
             </BrowserRouter>

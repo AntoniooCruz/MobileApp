@@ -2,10 +2,11 @@ import React, {Component} from "react"
 
 import axios from "axios"
 
-import CompanyTable from "./CompanyTable"
+import CompanyTable from "./DisplayAllCompaniesTable"
 
-import {SERVER_HOST} from "../config/global_constants"
+import {SERVER_HOST} from "../../config/global_constants"
 
+import Menu from "../users/Menu"
 
 export default class DisplayAllCompanies extends Component 
 {
@@ -21,7 +22,7 @@ export default class DisplayAllCompanies extends Component
     
     componentDidMount() 
     {
-        axios.get(`${SERVER_HOST}/api/company/`,{headers: {"auth-token": localStorage.token}})
+        axios.get('companies.json')//axios.get(`${SERVER_HOST}/api/company/all/`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)
@@ -48,6 +49,7 @@ export default class DisplayAllCompanies extends Component
     {   
         return (      
             <div>
+                <Menu/>
                 <div className="form-container">
                     <h3>Companies</h3>
                     <div className="table-container">

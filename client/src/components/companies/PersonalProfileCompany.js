@@ -4,12 +4,14 @@ import Form from "react-bootstrap/Form"
 
 import axios from "axios"
 
-import {SERVER_HOST} from "../config/global_constants"
+import {SERVER_HOST} from "../../config/global_constants";
 
-import LinkInClass from "../components/LinkInClass"
+import LinkInClass from "../LinkInClass"
 
 import {faCheck, faLessThan} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
+import MenuCompany from "./MenuCompany.js"
 
 export default class PersonalProfileCompany extends Component 
 {
@@ -215,12 +217,10 @@ export default class PersonalProfileCompany extends Component
             phone_numberCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
-        /*if(this.isRegistered()){
-            usernameErrorMessage = <label className="label-form-error">Invalid username</label>
-        }*/
-
         return (
             <div> 
+                <MenuCompany/>
+
                 <img className="img-logo" src="logo.png" alt=""/>
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">

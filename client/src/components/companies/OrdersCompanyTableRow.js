@@ -3,7 +3,7 @@ import {Link} from "react-router-dom"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faClock, faCheck} from '@fortawesome/free-solid-svg-icons';
 import axios from "axios"
-import {SERVER_HOST} from "../config/global_constants"
+import { OP_ALL_ORDERS, SERVER_HOST } from "../../config/global_constants";
 
 
 export default class OrdersCompanyTableRow extends Component 
@@ -14,13 +14,13 @@ export default class OrdersCompanyTableRow extends Component
         super(props)
         
         this.state = {
-            product_id: this.props.data.product_id,
+            product_id: this.props.order.product_id,
             productName: "",
-            message: this.props.data.message,
-            client_id: this.props.data.client_id,
+            message: this.props.order.message,
+            client_id: this.props.order.client_id,
             username: "",
-            location: this.props.data.location,
-            is_fulfilled: this.props.data.is_fulfilled
+            location: this.props.order.location,
+            is_fulfilled: this.props.order.is_fulfilled
         }
     }
 
@@ -46,7 +46,6 @@ export default class OrdersCompanyTableRow extends Component
                 console.log("Record not found")
             }
         })  
-
         axios.get(`${SERVER_HOST}/api/product/${this.state.product_id}`)
         .then(res => 
         {
@@ -76,7 +75,15 @@ export default class OrdersCompanyTableRow extends Component
 
     render() 
     {
-        return (
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        const option = urlParams.get('option')
+
+        let action = ""
+
+        if(option == OP_ALL_ORDERS || !this.props.order.is_fulfilled){
+            action = 
             <tr>
                 <td>{this.state.productName}</td>
                 <td>{this.state.message}</td>
@@ -87,6 +94,10 @@ export default class OrdersCompanyTableRow extends Component
                         : <FontAwesomeIcon className="red-icon" icon={faClock} onClick={this.handleDeliveredOrder}/> }
                 </td>
             </tr>
+        }
+
+        return (
+            {action}
         )
     }
 }

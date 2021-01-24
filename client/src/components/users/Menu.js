@@ -2,9 +2,9 @@ import React, {Component} from "react"
 import {Link, Redirect} from "react-router-dom"
 
 import axios from "axios"
-import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS,ACCESS_LEVEL_GUEST} from "../config/global_constants"
+import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS,ACCESS_LEVEL_GUEST} from "../../config/global_constants";
 
-import DisplayAllCompanies from "./DisplayAllCompanies"
+import DisplayAllCompanies from "../users/DisplayAllCompanies"
 
 
 import * as ReactBootStrap from "react-bootstrap";
@@ -14,43 +14,13 @@ import {faHome,faIdCard,faShippingFast,faBoxes, faSignOutAlt} from '@fortawesome
 import { Navbar } from "react-bootstrap"
 import PersonalProfile from "./PersonalProfile"
 import Orders from "./Orders.js"
-import Login from "./Login.js"
+import Login from "../Login.js"
 
-export default class Main extends Component 
+export default class Menu extends Component 
 {
   
     render() 
     {   
-
-
-        let opAux = window.location.href.split('#',2)
-
-        let option = "" 
-
-        switch(opAux[1]){
-            case "home":
-                option = <DisplayAllCompanies/>
-                break;
-            case "personalProfile": 
-                option = <PersonalProfile/>
-                break;
-            case "orders/pending": 
-                option = <Orders option={OP_PENDING_ORDERS}/>
-                break;
-            case "orders/all": 
-                option = <Orders option={OP_ALL_ORDERS}/>
-                break;
-            case "logout": 
-                localStorage._id = ""
-                localStorage.username = "GUEST"
-                localStorage.accessLevel = ACCESS_LEVEL_GUEST
-                localStorage.token = null
-                option = <Redirect to="/Login"/>
-                break
-            default:
-                option = <DisplayAllCompanies/>
-        }
-
         return (      
             <div>
                 <ReactBootStrap.Navbar bg="light" expand="lg">
@@ -58,34 +28,32 @@ export default class Main extends Component
                     <ReactBootStrap.Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <ReactBootStrap.Navbar.Collapse id="basic-navbar-nav">
                         <ReactBootStrap.Nav className="mr-auto">
-                            <ReactBootStrap.Nav.Link href="#home">
+                            <ReactBootStrap.Nav.Link href="DisplayAllCompanies">
                                 Home &nbsp;
                                 <FontAwesomeIcon icon={faHome}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="#personalProfile">
+                            <ReactBootStrap.Nav.Link href="PersonalProfile">
                                 Personal Profile &nbsp;
                                 <FontAwesomeIcon icon={faIdCard}/>
                             </ReactBootStrap.Nav.Link>
                             <ReactBootStrap.NavDropdown title="Orders" id="basic-nav-dropdown">
-                                <ReactBootStrap.NavDropdown.Item href="#orders/pending">
+                                <ReactBootStrap.NavDropdown.Item href="Orders/Pending">
                                     Pending Orders &nbsp;
                                     <FontAwesomeIcon icon={faShippingFast}/>
                                 </ReactBootStrap.NavDropdown.Item>
                                 <ReactBootStrap.NavDropdown.Divider />
-                                <ReactBootStrap.NavDropdown.Item href="#orders/all">
+                                <ReactBootStrap.NavDropdown.Item href="Orders/All">
                                     All Orders &nbsp;
                                     <FontAwesomeIcon icon={faBoxes}/>
                                 </ReactBootStrap.NavDropdown.Item>
                             </ReactBootStrap.NavDropdown>
-                            <ReactBootStrap.Nav.Link href="#logout">
+                            <ReactBootStrap.Nav.Link href="Logout">
                                 Log Out &nbsp;
                                 <FontAwesomeIcon icon={faSignOutAlt}/>
                             </ReactBootStrap.Nav.Link>
                         </ReactBootStrap.Nav>
                     </ReactBootStrap.Navbar.Collapse>
                 </ReactBootStrap.Navbar>
-
-                {option}
             </div>    
         )
     }

@@ -1,0 +1,18 @@
+[
+    {
+        "_id": 0,
+        "name": "Cocacola",
+        "price": 12.5,
+        "img": {},
+        "company_id":0,
+        "is_available": true
+    },
+    {
+        "_id": 1,
+        "name": "Fanta",
+        "price": 15,
+        "img": {},
+        "company_id":0,
+        "is_available": true
+    }
+]

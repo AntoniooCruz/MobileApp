@@ -3,7 +3,7 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_COMPANY, ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../config/global_constants"
+import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_COMPANY, ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST,OP_PENDING_ORDERS} from "../config/global_constants"
 
 
 export default class Login extends Component 
@@ -37,7 +37,7 @@ export default class Login extends Component
             password: this.state.password
         }
 
-        axios.post(`${SERVER_HOST}/api/user/login`,userObject)
+        axios.post(`${SERVER_HOST}/api/user/login`,userObject,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {     
             if(res.data)
@@ -52,10 +52,10 @@ export default class Login extends Component
                     
                     localStorage._id = res.data.id
                     localStorage.username = res.data.username
-                    localStorage.accessLevel = ACCESS_LEVEL_COMPANY//res.data.acess_level
+                    localStorage.accessLevel = res.data.acess_level
                     localStorage.token = res.data.token
 
-                    console.log(localStorage.accessLevel)
+                    //console.log(localStorage.accessLevel)
                     
                     this.setState({isLoggedIn:true})
                 }        
@@ -80,23 +80,22 @@ export default class Login extends Component
    render() 
     {     
 
-        let redirectAction = null
-        if(this.state.isLoggedIn){
-            switch(localStorage.accessLevel){
-                case ACCESS_LEVEL_NORMAL_USER:
-                    redirectAction = <Redirect to="/Main"/>
-                    break
-                case ACCESS_LEVEL_COMPANY:
-                    redirectAction = <Redirect to="/MainCompany"/>
-                    break
-                /*case ACCESS_LEVEL_ADMIN:
-                    redirectAction = <Redirect to "/MainAdmin"/>
-                    break*/
-                case ACCESS_LEVEL_GUEST:
-                default:
-                    console.log("bb")
-                    redirectAction = null         
-            }
+        let redirectAction = ""
+
+        
+        switch(parseInt(localStorage.accessLevel)){
+            case (ACCESS_LEVEL_NORMAL_USER):
+                redirectAction = <Redirect to="/DisplayAllCompanies"/>
+                break;
+            case (ACCESS_LEVEL_COMPANY):
+                redirectAction = <Redirect to={"/OrdersCompany/" + OP_PENDING_ORDERS} />
+                break;
+            case (ACCESS_LEVEL_ADMIN):
+                //edirectAction = <Redirect to "/MainAdmin"/>
+                break;
+            case (ACCESS_LEVEL_GUEST):
+            default:
+                break;
         }
         
         return (

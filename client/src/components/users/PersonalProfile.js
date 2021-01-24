@@ -4,12 +4,14 @@ import Form from "react-bootstrap/Form"
 
 import axios from "axios"
 
-import {SERVER_HOST} from "../config/global_constants"
+import {SERVER_HOST} from "../../config/global_constants"
 
-import LinkInClass from "../components/LinkInClass"
+import LinkInClass from "../LinkInClass"
 
 import {faCheck, faLessThan} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
+import Menu from './Menu';
 
 export default class PersonalProfile extends Component 
 {
@@ -26,7 +28,9 @@ export default class PersonalProfile extends Component
             newPassword: "",
             newPasswordConfirmation:"",
 
-            passwordChange:false
+            passwordChange:false,
+
+            hasBeenChanged : false
         }
     }
 
@@ -159,6 +163,7 @@ export default class PersonalProfile extends Component
                     {           
                         console.log("Record update")
                         localStorage.username = res.data.username
+                        this.setState({hasBeenChanged: true})
                     }   
                 }
                 else
@@ -172,9 +177,7 @@ export default class PersonalProfile extends Component
     
     render() 
     {     
-        //const formInputsState = this.validate();
-        //const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
-
+        
         let usernameCheck = "";
         let nameCheck = "";
         let newPasswordCheck = "";
@@ -202,12 +205,9 @@ export default class PersonalProfile extends Component
             phone_numberCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
-        /*if(this.isRegistered()){
-            usernameErrorMessage = <label className="label-form-error">Invalid username</label>
-        }*/
-
         return (
             <div> 
+                <Menu/>
                 <img className="img-logo" src="logo.png" alt=""/>
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
@@ -290,7 +290,7 @@ export default class PersonalProfile extends Component
                     }
 
                     <LinkInClass value="Update" className="blue-button" onClick={this.handleSubmit} />
-                      
+                    {this.state.hasBeenChanged ? <p align="center">Changes done successfully</p> : null}
                 </form>
 
                 <br/><br/>

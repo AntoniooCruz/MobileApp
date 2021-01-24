@@ -3,26 +3,31 @@ import {Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS,NOT_FULL_FILLED,FULL_FILLED} from "../config/global_constants"
+import ProductTable from "../users/ProductTable"
 
-import OrdersCompanyTable from "./OrdersCompanyTable.js"
+import {SERVER_HOST} from "../../config/global_constants"
 
 
-export default class OrdersCompany extends Component 
+export default class DisplayAllProducts extends Component 
 {
     constructor(props) 
     {
         super(props)
         
         this.state = {
-            orders:[]
+            products:[]
         }
     }
     
+    
     componentDidMount() 
     {
-        const company_id = localStorage._id
-        axios.get(`${SERVER_HOST}/api/order/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        const company_id = urlParams.get('companyId')
+        
+        axios.get('products.json')//axios.get(`${SERVER_HOST}/api/product/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)
@@ -34,7 +39,7 @@ export default class OrdersCompany extends Component
                 else
                 {           
                     console.log("Records read")   
-                    this.setState({orders: res.data}) 
+                    this.setState({products: res.data}) 
                 }   
             }
             else
@@ -50,9 +55,8 @@ export default class OrdersCompany extends Component
         return (      
             <div>
                 <div className="form-container">
-                    {this.props.option == OP_ALL_ORDERS ? <h3>All Orderes</h3> : <h3>Pending Orders</h3>}
                     <div className="table-container">
-                        <OrdersCompanyTable orders={this.state.orders} option={this.props.option} /> 
+                        <ProductTable products={this.state.products} /> 
                     </div>
                 </div> 
             </div>    

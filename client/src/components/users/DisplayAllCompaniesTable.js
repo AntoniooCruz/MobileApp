@@ -1,8 +1,8 @@
 import React, {Component} from "react"
-import CompanyTableRow from "./CompanyTableRow"
+import CompanyTableRow from "./DisplayAllCompaniesTableRow"
 
 
-export default class CompanyTable extends Component 
+export default class DisplayAllCompaniesTable extends Component 
 {
     render() 
     {
@@ -12,7 +12,7 @@ export default class CompanyTable extends Component
                     <tr>
                         <th>Name</th>
                         <th>Phone Number</th>
-                        <th> </th>
+                        <th></th>
                     </tr>
                 </thead>
                   

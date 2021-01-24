@@ -1,14 +1,13 @@
 import React, {Component} from "react"
-import {Link} from "react-router-dom"
 
 import axios from "axios"
 
-import ProductTable from "./ProductTable"
+import ProductsCompanyTable from "./ProductsCompanyTable"
 
-import {SERVER_HOST} from "../config/global_constants"
+import {SERVER_HOST} from "../../config/global_constants"
 
 
-export default class DisplayAllProducts extends Component 
+export default class ProductsCompany extends Component 
 {
     constructor(props) 
     {
@@ -22,8 +21,8 @@ export default class DisplayAllProducts extends Component
     
     componentDidMount() 
     {
-        const company_id = this.props.match.params.id
-        axios.get(`${SERVER_HOST}/api/product/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
+        const company_id = localStorage._id
+        axios.get(`${SERVER_HOST}/api/product/company/${company_id}` ,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)
@@ -51,8 +50,9 @@ export default class DisplayAllProducts extends Component
         return (      
             <div>
                 <div className="form-container">
+                    <h3>Products</h3>
                     <div className="table-container">
-                        <ProductTable products={this.state.products} /> 
+                        <ProductsCompanyTable products={this.state.products} /> 
                     </div>
                 </div> 
             </div>    

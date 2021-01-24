@@ -1,6 +1,6 @@
 import React, {Component} from "react"
-import OrderCompanyTableRow from "./OrdersCompanyTableRow"
-
+import OrdersCompanyTableRow from "../companies/OrdersCompanyTableRow.js"
+import { OP_ALL_ORDERS } from "../../config/global_constants"
 
 export default class OrdersCompanyTable extends Component 
 {
@@ -19,7 +19,7 @@ export default class OrdersCompanyTable extends Component
                 </thead>
                   
                 <tbody>
-                    {this.props.orders.map((order) => <OrderCompanyTableRow key={order._id} order={order} />)}
+                    {this.props.orders.map((order) => <OrdersCompanyTableRow key={order._id} params={order}/>)}
                 </tbody>
             </table>      
         )

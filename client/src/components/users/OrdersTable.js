@@ -1,7 +1,6 @@
 import React, {Component} from "react"
-import { OP_ALL_ORDERS } from "../config/global_constants"
+import { OP_PENDING_ORDERS,OP_ALL_ORDERS } from "../../config/global_constants"
 import OrdersTableRow from "./OrdersTableRow.js"
-
 
 
 export default class OrdersTable extends Component 
@@ -10,6 +9,7 @@ export default class OrdersTable extends Component
     {
 
         let statusColumn = null
+        let action = ""
 
         if(this.props.option === OP_ALL_ORDERS){
             statusColumn = <th>Status</th>
@@ -26,9 +26,8 @@ export default class OrdersTable extends Component
                         {statusColumn}
                     </tr>
                 </thead>
-                  
                 <tbody>
-                    {this.props.orders.map((order) => <OrdersTableRow key={order._id} order={order} option={this.props.option}/>)}
+                    {this.props.orders.map((order) => <OrdersTableRow key={order._id} order={order}/>)}
                 </tbody>
             </table>      
         )

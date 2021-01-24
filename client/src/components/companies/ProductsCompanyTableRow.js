@@ -2,6 +2,9 @@ import React, {Component} from "react"
 import {Link} from "react-router-dom"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCheck,faTimes} from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios'
+import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_COMPANY, ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
+import LinkInClass from "../LinkInClass"
 
 export default class ProductsCompanyTableRow extends Component 
 {    

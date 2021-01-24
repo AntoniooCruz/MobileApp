@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import {Link} from "react-router-dom"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCheckSquare,faClock} from '@fortawesome/free-solid-svg-icons';
-import { SERVER_HOST, OP_PENDING_ORDERS, OP_ALL_ORDERS  } from "../config/global_constants";
+import { SERVER_HOST, OP_PENDING_ORDERS, OP_ALL_ORDERS  } from "../../config/global_constants";
 import axios from "axios"
 
 export default class OrdersTableRow extends Component 
@@ -92,8 +92,13 @@ export default class OrdersTableRow extends Component
     render() 
     {
 
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        const option = urlParams.get('option')
+
         let iconFullFilled = ""
-        if(this.state.is_fullfilled){
+        if(this.state.is_fullfilled && option == OP_ALL_ORDERS){
             iconFullFilled = <FontAwesomeIcon style="color:green"icon={faCheckSquare}/>
         }
         else{
@@ -101,15 +106,15 @@ export default class OrdersTableRow extends Component
         }
         return (
             <div>
-                {!this.state.is_fullfilled || this.props.option == OP_ALL_ORDERS ?
+                {option == OP_ALL_ORDERS ? <h3>All Orders</h3> : <h3>Pending Orders</h3>}
+
+                {!this.state.is_fullfilled || option==OP_ALL_ORDERS ?
                     <tr>
                         <td>{this.state.company}</td>
                         <td>{this.state.product}</td>
                         <td>{this.state.message}</td>
                         <td>{this.state.price}</td>
-
-                        {this.props.option == OP_ALL_ORDERS ?  <td>{iconFullFilled}</td> : null}
-                            
+                        {option == OP_ALL_ORDERS ? <td>{iconFullFilled}</td> : null}
                     </tr>
                     : null
                 }

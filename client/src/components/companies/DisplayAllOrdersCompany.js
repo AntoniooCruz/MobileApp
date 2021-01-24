@@ -5,7 +5,7 @@ import axios from "axios"
 
 import OrderCompanyTable from "./OrderCompanyTable"
 
-import {SERVER_HOST} from "../config/global_constants"
+import {SERVER_HOST} from "../../config/global_constants"
 
 
 export default class DisplayAllOrdersCompany extends Component 
