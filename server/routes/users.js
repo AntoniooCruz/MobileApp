@@ -54,7 +54,7 @@ router.post('/', async (req,res)=> {
 });
 
 //Update a user
-router.put('/:user_id',(req,res) => {
+router.put('/:user_id',verify,(req,res) => {
 
     const result = userSchema.validate(req.body);
     if (result.error) {
@@ -94,19 +94,20 @@ router.post('/login', async(req,res) => {
     if(!user && !company) return res.status(400).send('User not found');
     if(user){
         const valid_password = await bcrypt.compare(req.body.password, user.password);
-        if(!valid_password) return res.status(400).send('Invalid Password');
+        if(!valid_password) return res.status(401).send('Invalid Password');
         const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-        let acess_level  = (user.is_admin) ? (3) : (1);     
+        let acess_level  = (user.is_admin) ? (3) : (1); 
+        let acessToken  = (user.is_admin) ? (token) : (null); 
         res.header('auth-token', token).json({
         id: user._id,
         username: user.username,
-        token: token,
+        token: acessToken,
         access_level: acess_level
     });
     }
     if(company){
         const valid_password = await bcrypt.compare(req.body.password, company.password);
-        if(!valid_password) return res.status(400).send('Invalid Password');
+        if(!valid_password) return res.status(401).send('Invalid Password');
         const token = jwt.sign({_id: company._id}, process.env.TOKEN_SECRET);
         res.header('auth-token', token).json({
         id: company._id,

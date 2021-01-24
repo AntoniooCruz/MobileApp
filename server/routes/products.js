@@ -7,17 +7,31 @@ const { productSchema } = require('../schemas/products');
 
 //Get a company products
 router.get('/company/:company_id',(req,res) => {
-    res.send('Only logged users can do this');
+    Product.find({company_id: req.params.company_id}, function(err, products) 
+    {
+       if (err)
+       {
+           res.status(400).send(err);
+       }
+       res.json(products);
+    });
 });
 
 //Get a certain product
 router.get('/:product_id', async(req,res)=> {
-    const product =  await Product.findOne({_id: req.params.product_id});
-    res.send(product);
+    const product =  await Product.findOne({_id: req.params.product_id}, function(err, product) 
+    {
+       if (err)
+       {
+           res.status(400).send(err);
+       }
+       res.send(product);
+    });
+    
 });
 
 //Add a product
-router.post('/' ,verify,(req,res) => {
+router.post('/' ,(req,res) => {
     const result = productSchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);

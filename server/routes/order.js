@@ -6,23 +6,23 @@ const Order = require('../models/Order');
 const { orderSchema } = require('../schemas/order');
 
 //Get a company orders
-router.get('/company/:company_id',verify ,(req,res) => {
+router.get('/company/:company_id' ,(req,res) => {
 });
 
 //Get a user orders
-router.get('/user/:user_id',verify ,(req,res) => {
+router.get('/user/:user_id' ,(req,res) => {
     res.send('Only logged users can do this');
 });
 
 //Get a certain Order
-router.get('/:order_id',verify, async(req,res)=> {
+router.get('/:order_id', async(req,res)=> {
     const order =  await Order.findOne({_id: req.params.order_id});
     res.send(order);
 });
 
 
 //Make an order
-router.post('/' ,verify,(req,res) => {
+router.post('/' ,(req,res) => {
     const result = orderSchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);

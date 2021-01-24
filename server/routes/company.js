@@ -14,8 +14,20 @@ router.get('/:company_id', async (req,res)=> {
     res.send(company);
 });
 
+router.get('/all/companies', async (req,res)=> {
+    Company.find({}, function(err, docs) {
+        if (!err) { 
+            res.send(docs);
+        }
+        else {
+            res.status(400).send(err);
+        }
+    });
+    
+});
+
 //Create a company
-router.post('/', upload.single("profilePhoto"), async (req,res)=> {
+router.post('/', async (req,res)=> {
     const result = companySchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
@@ -28,37 +40,40 @@ router.post('/', upload.single("profilePhoto"), async (req,res)=> {
         return;
     }  
 
-    if(!req.file)
+    /*if(!req.file)
     {
         res.json({errorMessage:`No file was selected to be uploaded`})
-    } else if(req.file.mimetype !== "image/png" && req.file.mimetype !== "image/jpg" && req.file.mimetype !== "image/jpeg")
-    { 
+    }
+    else if(req.file.mimetype !== "image/png" && req.file.mimetype !== "image/jpg" && req.file.mimetype !== "image/jpeg")
+    {
         fs.unlink(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, (error) => {res.json({errorMessage:`Only .png, .jpg and .jpeg format accepted`})})                
     }
+    else // uploaded file is valid
+    { */
+        try {
+            const hashed_password = await bcrypt.hash(req.body.password,10);
+            
 
-    try {
-        const hashed_password = await bcrypt.hash(req.body.password,10);
-        
+            const company = new Company({
+                username: req.body.username,
+                password: hashed_password,
+                name: req.body.name,
+                phone_number: req.body.phone_number,
+                img: req.file.filename
+            })
 
-        const company = new Company({
-            username: req.body.username,
-            password: hashed_password,
-            name: req.body.name,
-            phone_number: req.body.phone_number,
-            img: req.file.filename
-        })
+            company.save()
+            .then(data =>{
+                res.json(data);
+            })
+            .catch(err => {
+                res.json({message: err});
+            });
 
-        company.save()
-        .then(data =>{
-            res.json(data);
-        })
-        .catch(err => {
-            res.json({message: err});
-        });
-
-    } catch (error) {
-        res.status(500).send();
-    }
+        } catch (error) {
+            res.status(500).send();
+        }
+  // }
 
     
 });
