@@ -35,7 +35,8 @@ router.post('/', async (req,res)=> {
             username: req.body.username,
             password: hashed_password,
             name: req.body.name,
-            phone_number: req.body.phone_number
+            phone_number: req.body.phone_number,
+            is_admin: false
         })
 
         user.save()
