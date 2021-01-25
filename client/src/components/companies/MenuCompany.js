@@ -27,37 +27,6 @@ export default class MenuCompany extends Component
   
     render() 
     {   
-        /*
-
-        let opAux = window.location.href.split('#',2)
-
-        let option = "" 
-
-        switch(opAux[1]){
-            case "pendingOrders": 
-                option = <OrdersCompany option={OP_PENDING_ORDERS}/>
-                break;
-
-            case "allOrders": 
-                option = <OrdersCompany option={OP_ALL_ORDERS}/>
-                break;
-            case "personalProfile": 
-                option = <PersonalProfileCompany/>
-                break;
-            case "products":
-                option = <ProductsCompany/>
-                break;
-            case "logout": 
-                localStorage._id = ""
-                localStorage.username = "GUEST"
-                localStorage.accessLevel = ACCESS_LEVEL_GUEST
-                localStorage.token = null
-                option = <Redirect to="/Login"/>
-                break
-            default:
-                option = <OrdersCompany/>
-        }*/
-
         return (      
             <div>
                 <ReactBootStrap.Navbar bg="light" expand="lg">
@@ -80,10 +49,6 @@ export default class MenuCompany extends Component
                             <ReactBootStrap.Nav.Link href="/PersonalProfileCompany">
                                 Personal Profile &nbsp;
                                 <FontAwesomeIcon icon={faIdCard}/>
-                            </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="/Logout">
-                                Log Out &nbsp;
-                                <FontAwesomeIcon icon={faSignOutAlt}/>
                             </ReactBootStrap.Nav.Link>
                         </ReactBootStrap.Nav>
                         <Link className="dark-blue-button" to={"/Logout"}>Log Out  &nbsp; <FontAwesomeIcon icon={faSignOutAlt}/> </Link>
