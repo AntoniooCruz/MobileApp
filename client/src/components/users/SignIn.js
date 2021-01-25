@@ -125,6 +125,8 @@ export default class SignIn extends Component
                     {   
                         console.log("User registered and logged in")
 
+                        console.log(res.data.username)
+
                         localStorage._id = res.data.id
                         localStorage.username = res.data.username
                         localStorage.accessLevel = res.data.accessLevel                    

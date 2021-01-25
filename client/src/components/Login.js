@@ -52,8 +52,9 @@ export default class Login extends Component
                     
                     localStorage._id = res.data.id
                     localStorage.username = res.data.username
-                    localStorage.accessLevel = res.data.acess_level
+                    localStorage.accessLevel = res.data.access_level
                     localStorage.token = res.data.token
+
 
                     //console.log(localStorage.accessLevel)
                     
@@ -85,7 +86,9 @@ export default class Login extends Component
         
         switch(parseInt(localStorage.accessLevel)){
             case (ACCESS_LEVEL_NORMAL_USER):
+                console.log("It works")
                 redirectAction = <Redirect to="/DisplayAllCompanies"/>
+                
                 break;
             case (ACCESS_LEVEL_COMPANY):
                 redirectAction = <Redirect to={"/OrdersCompany/" + OP_PENDING_ORDERS} />

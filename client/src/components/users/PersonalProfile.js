@@ -237,7 +237,6 @@ export default class PersonalProfile extends Component
                             autoComplete="username"
                             value = {this.state.username}
                             onChange = {this.handleChange}
-                            disable= {true}
                         />
                     </div>
                     
