@@ -3,7 +3,7 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {SERVER_HOST} from "../../config/global_constants"
+import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
 
 import LinkInClass from "../LinkInClass"
 
@@ -129,7 +129,7 @@ export default class SignIn extends Component
 
                         localStorage._id = res.data.id
                         localStorage.username = res.data.username
-                        localStorage.accessLevel = res.data.accessLevel                    
+                        localStorage.accessLevel = ACCESS_LEVEL_NORMAL_USER//res.data.access_level                    
                         localStorage.token = res.data.token
                         
                         this.setState({alreadyRegistered:true})
