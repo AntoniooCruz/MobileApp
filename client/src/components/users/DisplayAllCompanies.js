@@ -1,10 +1,12 @@
 import React, {Component} from "react"
 
+import {Redirect, Link} from "react-router-dom"
+
 import axios from "axios"
 
 import CompanyTable from "./DisplayAllCompaniesTable"
 
-import {SERVER_HOST} from "../../config/global_constants"
+import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_COMPANY, ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
 
 import Menu from "../users/Menu"
 
@@ -49,6 +51,7 @@ export default class DisplayAllCompanies extends Component
     {   
         return (      
             <div>
+                {localStorage.accessLevel == ACCESS_LEVEL_ADMIN || localStorage.accessLevel == ACCESS_LEVEL_COMPANY  ? <Redirect to={"/Login"}/> : null}
                 <Menu/>
                 <div className="form-container">
                     <h3>Companies</h3>

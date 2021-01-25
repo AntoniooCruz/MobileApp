@@ -88,7 +88,6 @@ export default class Login extends Component
             case (ACCESS_LEVEL_NORMAL_USER):
                 console.log("It works")
                 redirectAction = <Redirect to="/DisplayAllCompanies"/>
-                
                 break;
             case (ACCESS_LEVEL_COMPANY):
                 redirectAction = <Redirect to={"/OrdersCompany/" + OP_PENDING_ORDERS} />

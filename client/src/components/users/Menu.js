@@ -50,9 +50,9 @@ export default class Menu extends Component
                         </ReactBootStrap.Nav>
                         {
                             localStorage.accessLevel == ACCESS_LEVEL_GUEST ? 
-                            <Link className="light-blue-button" to={"/Login"}><FontAwesomeIcon icon={faSignInAlt}/> &nbsp; Log Out</Link>
+                            <Link className="light-blue-button" to={"/Login"}><FontAwesomeIcon icon={faSignInAlt}/> &nbsp; Log In</Link>
                             :
-                            <Link className="dark-blue-button" to={"/Logout"}>Log In  &nbsp; <FontAwesomeIcon icon={faSignOutAlt}/> </Link>
+                            <Link className="dark-blue-button" to={"/Logout"}>Log Out  &nbsp; <FontAwesomeIcon icon={faSignOutAlt}/> </Link>
                         }
                         
                     </ReactBootStrap.Navbar.Collapse>

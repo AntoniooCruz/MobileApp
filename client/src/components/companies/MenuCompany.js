@@ -86,6 +86,7 @@ export default class MenuCompany extends Component
                                 <FontAwesomeIcon icon={faSignOutAlt}/>
                             </ReactBootStrap.Nav.Link>
                         </ReactBootStrap.Nav>
+                        <Link className="dark-blue-button" to={"/Logout"}>Log Out  &nbsp; <FontAwesomeIcon icon={faSignOutAlt}/> </Link>
                     </ReactBootStrap.Navbar.Collapse>
                 </ReactBootStrap.Navbar>
                 
