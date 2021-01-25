@@ -12,8 +12,6 @@ export default class DisplayAllCompaniesTableRow extends Component
         let click = false
 
         return (
-
-            <div>
                 <tr>
                     <td>{this.props.company.name}</td>
                     <td>{this.props.company.phone_number}</td>
@@ -22,9 +20,7 @@ export default class DisplayAllCompaniesTableRow extends Component
                             <FontAwesomeIcon icon={faShoppingBasket}/>
                         </Link> 
                     </td>
-                </tr>          
-            </div>
-            
+                </tr> 
         )
     }
 }
