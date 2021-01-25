@@ -54,6 +54,7 @@ export default class Login extends Component
                     localStorage.username = res.data.username
                     localStorage.accessLevel = res.data.access_level
                     localStorage.token = res.data.token
+                    console.log(res.data);;
 
 
                     //console.log(localStorage.accessLevel)

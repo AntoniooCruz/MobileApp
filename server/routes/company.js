@@ -8,6 +8,9 @@ const { companySchema } = require('../schemas/company');
 const verify = require('../middleware/verifyToken');
 const multer  = require('multer');
 const upload = multer({dest: `${process.env.UPLOADED_FILES_FOLDER}`});
+const emptyFolder = require('empty-folder');
+const fs = require('fs')
+
 
 router.get('/:company_id', async (req,res)=> {
     const company =  await Company.findOne({_id: req.params.company_id});
@@ -27,8 +30,14 @@ router.get('/all/companies', async (req,res)=> {
 });
 
 //Create a company
-router.post('/', async (req,res)=> {
-    const result = companySchema.validate(req.body);
+router.post('/',upload.single("selectedFile"), async (req,res)=> {
+    console.log(req.body);
+    const result = companySchema.validate({
+        username: req.body.username,
+        name: req.body.name,
+        password: req.body.password,
+        phone_number: req.body.phone_number
+    });
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
     return;
@@ -36,35 +45,42 @@ router.post('/', async (req,res)=> {
     const userFind = await User.findOne({username: req.body.username});
     const companyFind = await Company.findOne({username: req.body.username});
     if(userFind || companyFind){
-        res.status(401).send("Username already exists");
+        res.status(409).send("Username already exists");
         return;
     }  
 
-    /*if(!req.file)
+    if(!req.file)
     {
         res.json({errorMessage:`No file was selected to be uploaded`})
     }
     else if(req.file.mimetype !== "image/png" && req.file.mimetype !== "image/jpg" && req.file.mimetype !== "image/jpeg")
     {
-        fs.unlink(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, (error) => {res.json({errorMessage:`Only .png, .jpg and .jpeg format accepted`})})                
+        fs.unlink(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, (error) => {res.json({errorMessage:`Only .png, .jpg and .jpeg format accepted`})})             
     }
     else // uploaded file is valid
-    { */
+    { 
         try {
             const hashed_password = await bcrypt.hash(req.body.password,10);
-            
+            let img;
+            fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, 'base64', (err, fileData) => 
+            {  img = fileData });
 
             const company = new Company({
                 username: req.body.username,
                 password: hashed_password,
                 name: req.body.name,
                 phone_number: req.body.phone_number,
-                img: req.file.filename
+                img: req.file.filename         
             })
-
+        
+                
             company.save()
             .then(data =>{
-                res.json(data);
+                res.json({
+                    username: data.username,
+                    acess_level: 2,
+                    logoPhoto: fileData
+                });
             })
             .catch(err => {
                 res.json({message: err});
@@ -73,7 +89,7 @@ router.post('/', async (req,res)=> {
         } catch (error) {
             res.status(500).send();
         }
-  // }
+  }
 
     
 });

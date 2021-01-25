@@ -134,6 +134,8 @@ export default class SignIn extends Component
                         
                         this.setState({alreadyRegistered:true})
 
+                        console.log(res.data);
+
                     } 
                 }
                 else

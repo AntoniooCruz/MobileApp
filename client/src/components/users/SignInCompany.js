@@ -106,24 +106,18 @@ export default class SignInCompany extends Component
 
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
-
         let formData = new FormData()
-        formData.append("logoPhoto",this.state.selectedFile)
+        formData.append("selectedFile",this.state.selectedFile)
+        console.log(formData);
+
         if(inputsAreAllValid){
 
-            const companyObject = {
-                name: this.state.name,
-                username: this.state.username,
-                phone_number: this.state.phone_number,
-                password: this.state.password,
-                img: formData
+            formData.append("username", this.state.username);
+            formData.append("name", this.state.name);
+            formData.append("password", this.state.password);
+            formData.append("phone_number", this.state.phone_number);
 
-               
-            }
-
-            console.log(companyObject.img)
-
-            axios.post(`${SERVER_HOST}/api/company`, companyObject,{headers: {"Content-type": "multipart/form-data"}})
+            axios.post(`${SERVER_HOST}/api/company`, formData, {headers: {"Content-type": "multipart/form-data"}})
             .then(res => 
             {   
                 if(res.data)
@@ -140,6 +134,7 @@ export default class SignInCompany extends Component
                         localStorage.username = res.data.username
                         localStorage.accessLevel = res.data.access_level                    
                         localStorage.token = res.data.token
+                        localStorage.logoPhoto = res.data.logoPhoto
                         
                         this.setState({alreadyRegistered:true})
 
