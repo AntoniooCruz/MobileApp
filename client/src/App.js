@@ -38,12 +38,12 @@ export default class App extends Component
         return (
             <BrowserRouter>
                 <Switch>           
-                    <Route exact path="/" component={Login} />
+                    <Route exact path="/" component={DisplayAllCompanies} />
                     <Route exact path="/Login" component={Login} />
                     <PrivateRoute exact path="/Logout" component={Logout}/>
 
                     <Route exact path="/SignIn" component={SignIn} />
-                    <PrivateRoute exact path="/DisplayAllCompanies" component={DisplayAllCompanies}/>
+                    <Route exact path="/DisplayAllCompanies" component={DisplayAllCompanies}/>
                     <PrivateRoute exact path="/PersonalProfile" component={PersonalProfile}/>
                     <PrivateRoute exact path="/Orders/:option" component={Orders}/>
                     <PrivateRoute exact path="/DisplayAllProducts/:companyId" component={DisplayAllProducts}/>
@@ -51,7 +51,7 @@ export default class App extends Component
                     <Route exact path="/SignInCompany" component={SignInCompany} />
                     <PrivateRoute exact path="/OrdersCompany/:option" component={OrdersCompany} />
                     
-                    <Route path="*" component={Login}/>                            
+                    <Route path="*" component={DisplayAllCompanies}/>                            
                 </Switch>
             </BrowserRouter>
         )

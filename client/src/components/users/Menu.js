@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import {Link, Redirect} from "react-router-dom"
 
 import axios from "axios"
-import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS,ACCESS_LEVEL_GUEST} from "../../config/global_constants";
+import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS,ACCESS_LEVEL_GUEST,ACCESS_LEVEL_NORMAL_USER} from "../../config/global_constants";
 
 import DisplayAllCompanies from "../users/DisplayAllCompanies"
 
@@ -10,7 +10,7 @@ import DisplayAllCompanies from "../users/DisplayAllCompanies"
 import * as ReactBootStrap from "react-bootstrap";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faHome,faIdCard,faShippingFast,faBoxes, faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
+import {faHome,faIdCard,faShippingFast,faBoxes, faSignOutAlt, faSignInAlt} from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "react-bootstrap"
 import PersonalProfile from "./PersonalProfile"
 import Orders from "./Orders.js"
@@ -18,9 +18,6 @@ import Login from "../Login.js"
 
 export default class Menu extends Component 
 {
-  
-
-    
     render() 
     {   
         return (      
@@ -34,26 +31,30 @@ export default class Menu extends Component
                                 Home &nbsp;
                                 <FontAwesomeIcon icon={faHome}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="/PersonalProfile">
+                            <ReactBootStrap.Nav.Link href={localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ? "/PersonalProfile" : "/Login"}>
                                 Personal Profile &nbsp;
                                 <FontAwesomeIcon icon={faIdCard}/>
                             </ReactBootStrap.Nav.Link>
                             <ReactBootStrap.NavDropdown title="Orders" id="basic-nav-dropdown">
-                                <ReactBootStrap.NavDropdown.Item href="/Orders/Pending">
+                                <ReactBootStrap.NavDropdown.Item href={localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ? "/Orders/Pending" : "/Login"}>
                                     Pending Orders &nbsp;
                                     <FontAwesomeIcon icon={faShippingFast}/>
                                 </ReactBootStrap.NavDropdown.Item>
                                 <ReactBootStrap.NavDropdown.Divider />
-                                <ReactBootStrap.NavDropdown.Item href="/Orders/All">
+                                <ReactBootStrap.NavDropdown.Item href={localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ? "/Orders/All" : "/Login"}>
                                     All Orders &nbsp;
                                     <FontAwesomeIcon icon={faBoxes}/>
                                 </ReactBootStrap.NavDropdown.Item>
                             </ReactBootStrap.NavDropdown>
-                            <ReactBootStrap.Nav.Link href="/Logout">
-                                Log Out &nbsp;
-                                <FontAwesomeIcon icon={faSignOutAlt}/>
-                            </ReactBootStrap.Nav.Link>
+                            
                         </ReactBootStrap.Nav>
+                        {
+                            localStorage.accessLevel == ACCESS_LEVEL_GUEST ? 
+                            <Link className="light-blue-button" to={"/Login"}><FontAwesomeIcon icon={faSignInAlt}/> &nbsp; Log Out</Link>
+                            :
+                            <Link className="dark-blue-button" to={"/Logout"}>Log In  &nbsp; <FontAwesomeIcon icon={faSignOutAlt}/> </Link>
+                        }
+                        
                     </ReactBootStrap.Navbar.Collapse>
                 </ReactBootStrap.Navbar>
             </div>    
