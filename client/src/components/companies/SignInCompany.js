@@ -22,6 +22,7 @@ export default class SignInCompany extends Component
             name:"",
             phone_number:"",
             password:"",
+            description:"",
             passwordConfirmation:"",
             selectedFile:null,
             alreadyRegistered:false
@@ -53,6 +54,14 @@ export default class SignInCompany extends Component
     validateName()
     {    
         if(this.state.name.length>0){
+            return true;
+        }
+        return false;
+    }
+
+    validateDescription()
+    {    
+        if(this.state.description.length>0){
             return true;
         }
         return false;
@@ -94,7 +103,8 @@ export default class SignInCompany extends Component
             name: this.validatePassword(),
             phone_number: this.validatePhone_number(),
             password: this.validatePassword(),
-            passwordConfirmation: this.validateConfirmPassword()
+            passwordConfirmation: this.validateConfirmPassword(),
+            description: this.validateDescription(),
         };
     }
 
@@ -116,6 +126,7 @@ export default class SignInCompany extends Component
             formData.append("name", this.state.name);
             formData.append("password", this.state.password);
             formData.append("phone_number", this.state.phone_number);
+            formData.append("description", this.state.description);
 
             axios.post(`${SERVER_HOST}/api/company`, formData, {headers: {"Content-type": "multipart/form-data"}})
             .then(res => 
@@ -157,10 +168,14 @@ export default class SignInCompany extends Component
         let passwordCheck = "";
         let passwordConfirmationCheck = "";
         let phone_numberCheck = "";
+        let descriptionCheck = "";
 
 
         if(this.validateUsername()){
             usernameCheck = <FontAwesomeIcon icon={faCheck}/>
+        }
+        if(this.validateDescription()){
+            descriptionCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
         if(this.validateName()){
@@ -235,6 +250,18 @@ export default class SignInCompany extends Component
                                 autoComplete="selectedFile"
                                 onChange = {this.handleFileChange}
                             />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="label-form">Description {descriptionCheck}</label>  
+                        <input  className = "form-control"
+                            name = "description"              
+                            type = "decription"
+                            placeholder = "Tell us about your company"
+                            autoComplete="description"
+                            value = {this.state.description}
+                            onChange = {this.handleChange}
+                        />
                     </div>
 
             

@@ -14,18 +14,25 @@ const fs = require('fs')
 
 router.get('/:company_id', async (req,res)=> {
     const company =  await Company.findOne({_id: req.params.company_id});
-    res.send(company);
+    if(!company){
+        res.status(404).send("Company Not Found");
+    }
+    res.send(company);    
 });
 
-router.get('/all/companies', async (req,res)=> {
+router.get('/all/companies', (req,res)=> {
     Company.find({}, function(err, docs) {
         if (!err) { 
-            res.send(docs);
+           res.send(docs);
         }
         else {
             res.status(400).send(err);
         }
     });
+
+
+
+    
     
 });
 
@@ -36,7 +43,8 @@ router.post('/',upload.single("selectedFile"), async (req,res)=> {
         username: req.body.username,
         name: req.body.name,
         password: req.body.password,
-        phone_number: req.body.phone_number
+        phone_number: req.body.phone_number,
+        description: req.body.description
     });
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
@@ -63,14 +71,15 @@ router.post('/',upload.single("selectedFile"), async (req,res)=> {
             const hashed_password = await bcrypt.hash(req.body.password,10);
             let img;
             fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, 'base64', (err, fileData) => 
-            {  img = fileData });
+            {  img = fileData 
 
             const company = new Company({
                 username: req.body.username,
                 password: hashed_password,
                 name: req.body.name,
                 phone_number: req.body.phone_number,
-                img: req.file.filename         
+                description: req.body.description,
+                img: fileData         
             })
         
                 
@@ -85,6 +94,7 @@ router.post('/',upload.single("selectedFile"), async (req,res)=> {
             .catch(err => {
                 res.json({message: err});
             });
+        });
 
         } catch (error) {
             res.status(500).send();

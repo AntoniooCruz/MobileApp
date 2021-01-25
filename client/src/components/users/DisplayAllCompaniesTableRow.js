@@ -14,12 +14,13 @@ export default class DisplayAllCompaniesTableRow extends Component
 
         return (
             <Card className="text-center">
-            <Card.Header>Beach Bar</Card.Header>
-            <Card.Img variant="top"src="https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" />
+            <Card.Header>{this.props.company.name}</Card.Header>
+            <Card.Img variant="top"src={`data:;base64,${this.props.company.img}`}/>
+            
             <Card.Body>
-              <Card.Title>{this.props.company.name}</Card.Title>
+           
               <Card.Text>
-                With supporting text below as a natural lead-in to additional content.
+              {this.props.company.description}
               </Card.Text>
               <Link  to={"/DisplayAllProducts/" + this.props.company.id}>
               <Button variant="primary">See Products</Button>
