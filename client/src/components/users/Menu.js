@@ -19,6 +19,8 @@ import Login from "../Login.js"
 export default class Menu extends Component 
 {
   
+
+    
     render() 
     {   
         return (      
@@ -28,26 +30,26 @@ export default class Menu extends Component
                     <ReactBootStrap.Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <ReactBootStrap.Navbar.Collapse id="basic-navbar-nav">
                         <ReactBootStrap.Nav className="mr-auto">
-                            <ReactBootStrap.Nav.Link href="DisplayAllCompanies">
+                            <ReactBootStrap.Nav.Link href="/DisplayAllCompanies">
                                 Home &nbsp;
                                 <FontAwesomeIcon icon={faHome}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="PersonalProfile">
+                            <ReactBootStrap.Nav.Link href="/PersonalProfile">
                                 Personal Profile &nbsp;
                                 <FontAwesomeIcon icon={faIdCard}/>
                             </ReactBootStrap.Nav.Link>
                             <ReactBootStrap.NavDropdown title="Orders" id="basic-nav-dropdown">
-                                <ReactBootStrap.NavDropdown.Item href="Orders/Pending">
+                                <ReactBootStrap.NavDropdown.Item href="/Orders/Pending">
                                     Pending Orders &nbsp;
                                     <FontAwesomeIcon icon={faShippingFast}/>
                                 </ReactBootStrap.NavDropdown.Item>
                                 <ReactBootStrap.NavDropdown.Divider />
-                                <ReactBootStrap.NavDropdown.Item href="Orders/All">
+                                <ReactBootStrap.NavDropdown.Item href="/Orders/All">
                                     All Orders &nbsp;
                                     <FontAwesomeIcon icon={faBoxes}/>
                                 </ReactBootStrap.NavDropdown.Item>
                             </ReactBootStrap.NavDropdown>
-                            <ReactBootStrap.Nav.Link href="Logout">
+                            <ReactBootStrap.Nav.Link href="/Logout">
                                 Log Out &nbsp;
                                 <FontAwesomeIcon icon={faSignOutAlt}/>
                             </ReactBootStrap.Nav.Link>

@@ -65,23 +65,23 @@ export default class MenuCompany extends Component
                     <ReactBootStrap.Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <ReactBootStrap.Navbar.Collapse id="basic-navbar-nav">
                         <ReactBootStrap.Nav className="mr-auto">
-                            <ReactBootStrap.Nav.Link href="OrdersCompany/Pending">
+                            <ReactBootStrap.Nav.Link href="/OrdersCompany/Pending">
                                 Pending Orders &nbsp;
                                 <FontAwesomeIcon icon={faSpinner}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="OrdersCompany/All">
+                            <ReactBootStrap.Nav.Link href="/OrdersCompany/All">
                                 All Orders &nbsp;
                                 <FontAwesomeIcon icon={faBoxes}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="ProductsCompany">
+                            <ReactBootStrap.Nav.Link href="/ProductsCompany">
                                 Products &nbsp;
                                 <FontAwesomeIcon icon={faIceCream}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="PersonalProfileCompany">
+                            <ReactBootStrap.Nav.Link href="/PersonalProfileCompany">
                                 Personal Profile &nbsp;
                                 <FontAwesomeIcon icon={faIdCard}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href="Logout">
+                            <ReactBootStrap.Nav.Link href="/Logout">
                                 Log Out &nbsp;
                                 <FontAwesomeIcon icon={faSignOutAlt}/>
                             </ReactBootStrap.Nav.Link>

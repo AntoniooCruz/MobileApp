@@ -6,7 +6,7 @@ import axios from "axios"
 import ProductTable from "../users/ProductTable"
 
 import {SERVER_HOST} from "../../config/global_constants"
-
+import Menu from "./Menu.js"
 
 export default class DisplayAllProducts extends Component 
 {
@@ -54,6 +54,7 @@ export default class DisplayAllProducts extends Component
     {   
         return (      
             <div>
+                <Menu/>
                 <div className="form-container">
                     <div className="table-container">
                         <ProductTable products={this.state.products} /> 
