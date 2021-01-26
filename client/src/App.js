@@ -18,6 +18,10 @@ import PersonalProfile from "./components/users/PersonalProfile.js"
 import Logout from "./components/Logout.js"
 import Orders from "./components/users/Orders.js"
 import OrdersCompany from "./components/companies/OrdersCompany.js"
+import ProductsCompany from "./components/companies/ProductsCompany.js"
+import PersonalProfileCompany from "./components/companies/PersonalProfileCompany.js"
+import AddProduct from "./components/companies/AddProduct.js"
+import MakeAnOrder from "./components/users/MakeAnOrder.js"
 
 
 import {ACCESS_LEVEL_GUEST} from "./config/global_constants"
@@ -50,6 +54,10 @@ export default class App extends Component
 
                     <Route exact path="/SignInCompany" component={SignInCompany} />
                     <PrivateRoute exact path="/OrdersCompany/:option" component={OrdersCompany} />
+                    <PrivateRoute exact path="/ProductsCompany" component={ProductsCompany}/>
+                    <PrivateRoute exact path="/PersonalProfileCompany" component={PersonalProfileCompany}/>
+                    <PrivateRoute exact path="/AddProduct" component={AddProduct}/>
+                    <PrivateRoute exact path="/MakeAnOrder/:companyId/:productId" component={MakeAnOrder}/>
                     
                     <Route path="*" component={DisplayAllCompanies}/>                            
                 </Switch>
