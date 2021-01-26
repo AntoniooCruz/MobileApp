@@ -7,6 +7,7 @@ const { productSchema } = require('../schemas/products');
 
 //Get a company products
 router.get('/company/:company_id',(req,res) => {
+    console.log(req.params.company_id);
     Product.find({company_id: req.params.company_id}, function(err, products) 
     {
        if (err)

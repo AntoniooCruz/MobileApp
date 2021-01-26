@@ -22,12 +22,10 @@ export default class DisplayAllProducts extends Component
     
     componentDidMount() 
     {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
 
-        const company_id = urlParams.get('companyId')
-        
-        axios.get('products.json')//axios.get(`${SERVER_HOST}/api/product/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
+        const company_id = this.props.match.params.companyId
+
+        axios.get(`${SERVER_HOST}/api/product/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)

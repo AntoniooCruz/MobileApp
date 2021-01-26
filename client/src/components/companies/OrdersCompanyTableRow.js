@@ -75,10 +75,8 @@ export default class OrdersCompanyTableRow extends Component
 
     render() 
     {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-
-        const option = urlParams.get('option')
+        
+        const option = this.props.match.params.option
 
         let action = ""
 
