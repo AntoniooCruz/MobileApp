@@ -4,6 +4,9 @@ const router = express.Router();
 const verify = require('../middleware/verifyToken');
 const Product = require('../models/Product');
 const { productSchema } = require('../schemas/products');
+const multer  = require('multer');
+const upload = multer({dest: `${process.env.UPLOADED_FILES_FOLDER}`});
+
 
 //Get a company products
 router.get('/company/:company_id',(req,res) => {
@@ -32,7 +35,9 @@ router.get('/:product_id', async(req,res)=> {
 });
 
 //Add a product
-router.post('/' ,(req,res) => {
+router.post('/',  upload.single("selectedFile"),async (req,res) => {
+    console.log("REQBODY: ")
+    console.log(req.body.name)
     const result = productSchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
