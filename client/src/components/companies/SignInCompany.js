@@ -118,7 +118,6 @@ export default class SignInCompany extends Component
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
         let formData = new FormData()
         formData.append("selectedFile",this.state.selectedFile)
-        console.log(formData);
 
         if(inputsAreAllValid){
 
@@ -140,8 +139,8 @@ export default class SignInCompany extends Component
                     }else
                     {   
                         console.log("User registered and logged in")
-
-                        localStorage._id = res.data._id
+                        console.log(res.data)
+                        localStorage._id = res.data.id
                         localStorage.username = res.data.username
                         localStorage.accessLevel = res.data.access_level                    
                         localStorage.token = res.data.token

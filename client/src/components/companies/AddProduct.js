@@ -19,6 +19,7 @@ export default class SignIn extends Component
         this.state = {
             name:"",
             price:"",
+            selectedFile:null,
 
             alreadyAdded:false
         }
@@ -33,6 +34,12 @@ export default class SignIn extends Component
     handleChange = (e) => 
     {
         this.setState({[e.target.name]: e.target.value})
+    }
+
+    handleFileChange = (e) => 
+    {
+        this.setState({selectedFile: e.target.files[0]})
+        console.log(e.target.files[0])
     }
 
     validateName()
@@ -69,6 +76,8 @@ export default class SignIn extends Component
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
+        let formData = new FormData()
+        formData.append("selectedFile",this.state.selectedFile)
 
         if(inputsAreAllValid){
 
@@ -79,7 +88,13 @@ export default class SignIn extends Component
                 is_available: true,
             }
 
-            axios.post(`${SERVER_HOST}/api/products`, productObject)
+            formData.append("name", this.state.name);
+            formData.append("price", this.state.price);
+            formData.append("is_available", true);
+
+            formData.append("company_id", localStorage._id);
+
+            axios.post(`${SERVER_HOST}/api/products`, formData, {headers: {"Content-type": "multipart/form-data", "auth-token": localStorage.token} })
             .then(res => 
             {   
                 if(res.data)
@@ -87,7 +102,6 @@ export default class SignIn extends Component
                     if (res.data.errorMessage)
                     {
                         console.log(res.errorMessage) 
-                        //If there´s error 400, then this.setState({alreadyRegistered:true})
                     }else
                     {   
                         console.log("Product added")                        
@@ -158,6 +172,16 @@ export default class SignIn extends Component
                             value = {this.state.price}
                             onChange = {this.handleChange}
                         />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="label-form">Product IMG</label> 
+                            <input className="form-control"
+                                name = "selectedFile"           
+                                type = "file"
+                                autoComplete="selectedFile"
+                                onChange = {this.handleFileChange}
+                            />
                     </div>
 
                     <LinkInClass value="Add new product" className="blue-button" onClick={this.handleSubmit} />

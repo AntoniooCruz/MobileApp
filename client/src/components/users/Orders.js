@@ -34,6 +34,7 @@ export default class Orders extends Component
                 }
                 else
                 {           
+                    console.log(res.data)
                     console.log("Records read")   
                     this.setState({orders: res.data}) 
                 }   
@@ -58,7 +59,7 @@ export default class Orders extends Component
                     {option == OP_ALL_ORDERS ? <h3>All Orderes</h3> : <h3>Pending Orders</h3>}
                     <div className="table-container">
                         {console.log(this.state.orders)}
-                        <OrdersTable orders={this.state.orders} option={option} /> 
+                        <OrdersTable orders={this.state.orders}/> 
                     </div>
                 </div> 
             </div>    

@@ -26,8 +26,9 @@ export default class OrdersTable extends Component
                         {statusColumn}
                     </tr>
                 </thead>
+                  
                 <tbody>
-                    {this.props.orders.map((order) => <OrdersTableRow key={order.id} order={order}/>)}
+                    {this.props.orders.map((order) => <OrdersTableRow key={order._id} params={order}/>)}
                 </tbody>
             </table>      
         )
