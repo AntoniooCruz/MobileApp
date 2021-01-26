@@ -141,7 +141,7 @@ export default class SignInCompany extends Component
                     {   
                         console.log("User registered and logged in")
 
-                        localStorage._id = res.data.id
+                        localStorage._id = res.data._id
                         localStorage.username = res.data.username
                         localStorage.accessLevel = res.data.access_level                    
                         localStorage.token = res.data.token
@@ -196,7 +196,7 @@ export default class SignInCompany extends Component
 
         return (
             <div>
-                {this.state.alreadyRegistered ? <Redirect to={"/Orders/" + OP_PENDING_ORDERS}/> : null} 
+                {this.state.alreadyRegistered ? <Redirect to={"/OrdersCompany/" + OP_PENDING_ORDERS}/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">

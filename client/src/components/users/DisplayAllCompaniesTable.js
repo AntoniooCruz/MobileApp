@@ -10,7 +10,6 @@ export default class DisplayAllCompaniesTable extends Component
     {
         return (
             <table>
-    
                 <tbody>
                     {this.props.companies.map((company) => <CompanyTableRow key={company._id} company={company}/>)}
                 </tbody>

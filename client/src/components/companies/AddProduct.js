@@ -19,7 +19,6 @@ export default class SignIn extends Component
         this.state = {
             name:"",
             price:"",
-            selectedFile: null,
 
             alreadyAdded:false
         }
@@ -46,7 +45,7 @@ export default class SignIn extends Component
 
     validatePrice()
     {
-        if(this.state.price.length > 0 && this.state.price.length.match(/^[0-9]+([.][0-9]+)?$/)){
+        if(this.state.price.length>0 && this.state.price.match(/^[0-9]+$/)){
             return true;
         }
         return false;
@@ -54,7 +53,7 @@ export default class SignIn extends Component
 
     validate(){
         return{
-            name: this.validatePassword(),
+            name: this.validateName(),
             price: this.validatePrice()
         };
     }
@@ -70,20 +69,17 @@ export default class SignIn extends Component
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
-        let formData = new FormData()
-        formData.append("logoPhoto",this.state.selectedFile)
 
         if(inputsAreAllValid){
 
             const productObject = {
                 company_id: localStorage._id,
                 name: this.state.name,
-                price: parseFloat(this.state.price),
+                price: this.state.price,//price: parseFloat(this.state.price),
                 is_available: true,
-                img: formData
             }
 
-            axios.post(`${SERVER_HOST}/api/product`, productObject)
+            axios.post(`${SERVER_HOST}/api/products`, productObject)
             .then(res => 
             {   
                 if(res.data)

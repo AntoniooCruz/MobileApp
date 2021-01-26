@@ -1,10 +1,11 @@
 import React, {Component} from "react"
-
+import {Redirect, Link} from "react-router-dom"
 import axios from "axios"
 
 import ProductsCompanyTable from "./ProductsCompanyTable"
 
 import {SERVER_HOST} from "../../config/global_constants"
+import MenuCompany from "./MenuCompany"
 
 
 export default class ProductsCompany extends Component 
@@ -22,7 +23,7 @@ export default class ProductsCompany extends Component
     componentDidMount() 
     {
         const company_id = localStorage._id
-        axios.get(`${SERVER_HOST}/api/product/company/${company_id}` ,{headers: {"auth-token": localStorage.token}})
+        axios.get(`${SERVER_HOST}/api/products/company/${company_id}` ,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)
@@ -49,11 +50,13 @@ export default class ProductsCompany extends Component
     {   
         return (      
             <div>
+                <MenuCompany/>
                 <div className="form-container">
                     <h3>Products</h3>
                     <div className="table-container">
                         <ProductsCompanyTable products={this.state.products} /> 
                     </div>
+                    <Link className="blue-button" to={"/AddProduct"}>Add Product</Link>
                 </div> 
             </div>    
         )

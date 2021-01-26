@@ -46,7 +46,7 @@ export default class OrdersCompanyTableRow extends Component
                 console.log("Record not found")
             }
         })  
-        axios.get(`${SERVER_HOST}/api/product/${this.state.product_id}`)
+        axios.get(`${SERVER_HOST}/api/products/${this.state.product_id}`)
         .then(res => 
         {
             if(res.data)

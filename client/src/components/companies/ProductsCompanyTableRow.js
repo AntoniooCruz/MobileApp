@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import {Link} from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCheck,faTimes} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios'
@@ -8,22 +8,18 @@ import LinkInClass from "../LinkInClass"
 
 export default class ProductsCompanyTableRow extends Component 
 {    
-
-
-
-
     modifyAvailabilityProduct = (e) =>
     {
+        console.log(this.props)
         const productModel = {
-            id: this.props.id,
-            name: this.props.name,
-            price: this.props.price,
-            img: this.props.img,
-            is_available: !this.props.is_available
+            company_id: localStorage._id,
+            price: this.props.product.price,
+            name: this.props.product.name,
+            is_available: !this.props.product.is_available
         }
 
         
-        axios.put(`${SERVER_HOST}/api/product`, productModel,{headers: {"auth-token": localStorage.token}})
+        axios.put(`${SERVER_HOST}/api/products/${this.props.product._id}`, productModel,{headers: {"auth-token": localStorage.token}})
             .then(res => 
             {  
                 if(res.data)
@@ -46,7 +42,7 @@ export default class ProductsCompanyTableRow extends Component
 
     deleteProduct = (e) =>
     {
-        axios.delete(`${SERVER_HOST}/api/product/${this.props.product.id}`,{headers: {"auth-token": localStorage.token}})
+        axios.delete(`${SERVER_HOST}/api/products/${this.props.product._id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)
@@ -68,16 +64,19 @@ export default class ProductsCompanyTableRow extends Component
     }
     render() 
     {
+
         return (
             <tr>
-                <td>{this.props.product.id}</td>
+                <td>{this.props.product._id}</td>
                 <td>{this.props.product.name}</td>
                 <td>{this.props.product.img}</td>
                 <td>{this.props.product.price}</td>
-                <td>{this.props.product.is_avaiable ? <FontAwesomeIcon className="green-icon" icon={faCheck}/> :  <FontAwesomeIcon className="red-icon" icon={faTimes}/>}</td>
+                <td>{this.props.product.is_available ? <FontAwesomeIcon className="green-icon" icon={faCheck}/> :  <FontAwesomeIcon className="red-icon" icon={faTimes}/>}</td>
                 <td>
+                    <div class="row">
                     <LinkInClass value={this.props.product.is_available ? "to Disable" : "to Enable"} className={this.props.product.is_available ? "red-button" : "green-button"} onClick={this.modifyAvailabilityProduct}/>
                     <LinkInClass value="Delete" className="red-button" onClick={this.deleteProduct} />
+                    </div>
                 </td>
             </tr>
         )

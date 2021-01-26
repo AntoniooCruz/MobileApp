@@ -50,7 +50,7 @@ export default class Login extends Component
                 { 
                     console.log("User logged in")
                     
-                    localStorage._id = res.data.id
+                    localStorage._id = res.data._id
                     localStorage.username = res.data.username
                     localStorage.accessLevel = res.data.access_level
                     localStorage.token = res.data.token

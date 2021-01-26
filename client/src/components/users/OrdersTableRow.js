@@ -63,7 +63,7 @@ export default class OrdersTableRow extends Component
     getProductName(){
         const product_id = this.props.order.product
         let product_name = ""
-        axios.get(`${SERVER_HOST}/api/product/${product_id}`,{headers: {"auth-token": localStorage.token}})
+        axios.get(`${SERVER_HOST}/api/products/${product_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)

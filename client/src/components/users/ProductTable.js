@@ -8,15 +8,6 @@ export default class ProductTable extends Component
     {
         return (
             <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th></th>
-                        <th>Price</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                  
                 <tbody>
                     {this.props.products.map((product) => <ProductTableRow key={product._id} product={product}/>)}
                 </tbody>

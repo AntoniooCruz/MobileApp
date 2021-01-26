@@ -25,7 +25,7 @@ export default class DisplayAllProducts extends Component
 
         const company_id = this.props.match.params.companyId
 
-        axios.get(`${SERVER_HOST}/api/product/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
+        axios.get(`${SERVER_HOST}/api/products/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)
@@ -57,6 +57,8 @@ export default class DisplayAllProducts extends Component
                     <div className="table-container">
                         <ProductTable products={this.state.products} /> 
                     </div>
+
+                    
                 </div> 
             </div>    
         )

@@ -50,7 +50,7 @@ export default class PersonalProfile extends Component
                     else
                     {           
                         console.log("Records read")   
-                        this.setState({id: res.data.id}) 
+                        this.setState({id: res.data._id}) 
                         this.setState({username: res.data.username}) 
                         this.setState({name: res.data.name}) 
                         this.setState({phone_number: res.data.phone_number}) 
