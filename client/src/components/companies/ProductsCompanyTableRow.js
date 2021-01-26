@@ -5,6 +5,8 @@ import {faCheck,faTimes} from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios'
 import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_COMPANY, ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
 import LinkInClass from "../LinkInClass"
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 
 export default class ProductsCompanyTableRow extends Component 
 {    
@@ -66,8 +68,25 @@ export default class ProductsCompanyTableRow extends Component
     {
 
         return (
+
+            <Card className="text-center">
+                <Card.Header>{this.props.product.name}</Card.Header>
+                <Card.Img variant="top"src={`data:;base64,${this.props.product.img}`}/>
+                <Card.Body>
+                    <Card.Text>
+                        Price:   &nbsp;{this.props.product.price} zl
+                    </Card.Text>
+                    <Card.Text>
+                        Availability:   &nbsp; {this.props.product.is_available ? <FontAwesomeIcon className="green-icon" icon={faCheck}/> :  <FontAwesomeIcon className="red-icon" icon={faTimes}/>}
+                    </Card.Text>
+                    <Card.Text>
+                        <LinkInClass value={this.props.product.is_available ? "to Disable" : "to Enable"} className={this.props.product.is_available ? "red-button" : "green-button"} onClick={this.modifyAvailabilityProduct}/>
+                        <LinkInClass value="Delete" className="red-button" onClick={this.deleteProduct} />
+                    </Card.Text>
+                </Card.Body>
+            </Card>
+/*
             <tr>
-                <td>{this.props.product._id}</td>
                 <td>{this.props.product.name}</td>
                 <td>{this.props.product.img}</td>
                 <td>{this.props.product.price}</td>
@@ -78,7 +97,7 @@ export default class ProductsCompanyTableRow extends Component
                     <LinkInClass value="Delete" className="red-button" onClick={this.deleteProduct} />
                     </div>
                 </td>
-            </tr>
+            </tr>*/
         )
     }
 }
