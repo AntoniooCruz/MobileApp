@@ -6,13 +6,13 @@ const Order = require('../models/Order');
 const { orderSchema } = require('../schemas/order');
 
 //Get a company orders
-router.get('/company/:company_id' ,(req,res) => {
+router.get('/company/:company_id' , async(req,res) => {
     const orders =  await Order.find({company_id: req.params.company_id});
     res.send(orders);
 });
 
 //Get a user orders
-router.get('/user/:user_id' ,(req,res) => {
+router.get('/user/:user_id', async (req,res) => {
     const orders =  await Order.find({client_id: req.params.user_id});
     res.send(orders);
 });
