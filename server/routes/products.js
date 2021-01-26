@@ -55,7 +55,7 @@ router.post('/' ,(req,res) => {
 });
 
 //Update a product
-router.put('/:product_id' ,verify,(req,res) => {
+router.put('/:product_id' ,(req,res) => {
 
     const result = productSchema.validate(req.body);
     if (result.error) {
