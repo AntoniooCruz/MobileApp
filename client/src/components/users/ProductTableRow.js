@@ -1,18 +1,25 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faShoppingBasket,faCashRegister} from '@fortawesome/free-solid-svg-icons';
+import {faShoppingBasket,faCashRegister,faEdit,faTrash} from '@fortawesome/free-solid-svg-icons';
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+import {ACCESS_LEVEL_NORMAL_USER,ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../../config/global_constants"
+
 
 export default class ProductTableRow extends Component 
 {    
 
     render() 
     {
+        let admin;
+        if (localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ) {
+          admin = <Card.Header>  <Button variant="info"> <FontAwesomeIcon icon={faEdit}/></Button> <Button variant="danger"> <FontAwesomeIcon icon={faTrash}/></Button> </Card.Header> 
+        } 
         return (
             
             <Card className="text-center">
+            {admin}    
             <Card.Header>{this.props.product.name}</Card.Header>
             <Card.Img variant="top"src={`data:;base64,${this.props.product.img}`}/>
             <Card.Body>
