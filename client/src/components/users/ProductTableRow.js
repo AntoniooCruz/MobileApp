@@ -16,11 +16,8 @@ export default class ProductTableRow extends Component
             <Card.Header>{this.props.product.name}</Card.Header>
             <Card.Img variant="top"src={`data:;base64,${this.props.product.img}`}/>
             <Card.Body>
-              <Card.Text>
-              {this.props.product.price}
-              </Card.Text>
               <Link  to={"/MakeAnOrder/" + this.props.product.company_id + "/" + this.props.product._id}>
-              <Button variant="primary">Buy &nbsp;<FontAwesomeIcon icon={faCashRegister}/> </Button>
+              <Button variant="primary">Buy {this.props.product.price} €  &nbsp;<FontAwesomeIcon icon={faCashRegister}/> </Button>
             </Link> 
             </Card.Body>
           </Card>

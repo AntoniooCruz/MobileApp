@@ -143,6 +143,11 @@ export default class SignIn extends Component
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
 
                     <h3 className="form-tittle">Order Confirmation</h3>
+
+                    <dl>
+                        <dt>INSERT PRODUCT NAME</dt>
+                        <dd>Insert Price</dd>
+                    </dl>
                     
                     <div className="form-group">
                         <label className="label-form">Message {messageCheck}</label>
@@ -171,6 +176,7 @@ export default class SignIn extends Component
                     </div>
 
                     <LinkInClass value="Finish and Pay" className="blue-button" onClick={this.handleSubmit} />
+                    <LinkInClass value="Finish and Pay on Delivery" className="blue-button" onClick={this.handleSubmit} />
                     <Link className="dark-blue-button" to={"/DisplayAllProducts/" + this.state.company_id}>Cancel</Link> 
                     
                 </form>
