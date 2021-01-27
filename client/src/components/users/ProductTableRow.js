@@ -5,16 +5,41 @@ import {faShoppingBasket,faCashRegister,faEdit,faTrash} from '@fortawesome/free-
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import {ACCESS_LEVEL_NORMAL_USER,ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../../config/global_constants"
+import axios from 'axios'
+
 
 
 export default class ProductTableRow extends Component 
 {    
+  deleteProduct = (e) =>
+  {
+      axios.delete(`${SERVER_HOST}/api/products/${this.props.product._id}`,{headers: {"auth-token": localStorage.token}})
+      .then(res => 
+      {
+          if(res.data)
+          {
+              if (res.data.errorMessage)
+              {
+                  console.log(res.data.errorMessage)    
+              }
+              else // success
+              { 
+                  console.log("Record deleted")
+                  window.location.href = window.location.href;
+              }
+          }
+          else 
+          {
+              console.log("Record not deleted")
+          }
+      })
+  }
 
     render() 
     {
         let admin;
         if (localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ) {
-          admin = <Card.Header>  <Button variant="info"> <FontAwesomeIcon icon={faEdit}/></Button> <Button variant="danger"> <FontAwesomeIcon icon={faTrash}/></Button> </Card.Header> 
+          admin = <Card.Header>  <Button variant="info"> <FontAwesomeIcon icon={faEdit}/></Button> <Button variant="danger" onClick={this.deleteProduct}> <FontAwesomeIcon icon={faTrash}/></Button> </Card.Header> 
         } 
         return (
             

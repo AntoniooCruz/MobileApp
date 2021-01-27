@@ -8,6 +8,8 @@ const Joi = require('joi');
 const verify = require('../middleware/verifyToken');
 const { userSchema } = require('../schemas/users');
 const verifyToken = require('../middleware/verifyToken');
+const fs = require('fs');
+
 
 
 router.get('/:user_id', async(req,res)=> {
