@@ -9,7 +9,7 @@ const verify = require('../middleware/verifyToken');
 const multer  = require('multer');
 const upload = multer({dest: `${process.env.UPLOADED_FILES_FOLDER}`});
 const emptyFolder = require('empty-folder');
-const fs = require('fs')
+const fs = require('fs');
 
 
 router.get('/:company_id', async (req,res)=> {
