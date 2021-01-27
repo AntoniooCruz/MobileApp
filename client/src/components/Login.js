@@ -16,6 +16,7 @@ export default class Login extends Component
             username:"",
             password:"",
             errorNoValid: false,
+            errorWrongPassword: false,
             errorServer: false,
             isLoggedIn: false
         }
@@ -74,9 +75,13 @@ export default class Login extends Component
                 console.log("Login failed")
             }
         }).catch((error) => {
+            console.log(error.response.status)
             switch(error.response.status){
                 case 400:
                     this.setState({errorNoValid: true})
+                    break
+                case 401:
+                    this.setState({errorWrongPassword: true})
                     break
                 default:
                     this.setState({errorServer: true})
@@ -154,7 +159,10 @@ export default class Login extends Component
                         />
                     </div>
 
-                    {this.state.errorServer ? <p className="error-message" >Server Fail</p> : this.state.errorNoValid ? <p className="error-message" >User or password no valid</p> : null}
+                    {this.state.errorServer ? <p className="error-message" >Server Fail</p> :
+                     this.state.errorNoValid ? <p className="error-message" >Username doesn´t exist</p> :
+                     this.state.errorWrongPassword ? <p className="error-message" >Password incorrect</p>
+                     :null}
                            
                     <LinkInClass value="Log In" className="blue-button" onClick={this.handleSubmit} /> 
                             

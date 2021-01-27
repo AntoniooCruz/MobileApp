@@ -104,6 +104,10 @@ export default class SignIn extends Component
 
         this.validate();
 
+        this.setState({errorNoValid: false})
+        this.setState({errorUserUsed: false})
+        this.setState({errorServer: false})
+
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
@@ -173,9 +177,7 @@ export default class SignIn extends Component
 
     render() 
     {     
-        this.setState({errorNoValid: false})
-        this.setState({errorUserUsed: false})
-        this.setState({errorServer: false})
+        
 
         let usernameCheck = "";
         let nameCheck = "";
