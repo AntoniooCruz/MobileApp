@@ -21,6 +21,9 @@ export default class SignIn extends Component
             price:"",
             selectedFile:null,
 
+            errorNoValid: false,
+            errorServer: false,
+
             alreadyAdded:false
         }
     }
@@ -70,6 +73,9 @@ export default class SignIn extends Component
     handleSubmit = (e) =>
     {
         e.preventDefault();
+        
+        this.setState({errorNoValid: false});
+        this.setState({errorServer: false});
 
         this.validate();
 
@@ -113,7 +119,19 @@ export default class SignIn extends Component
                 {
                     console.log("Record not added")
                 }
-            })
+            }).catch((error) => {
+                console.log(error)
+                switch(error.response.status){
+                    case 400:
+                        this.setState({errorNoValid: true})
+                        break
+                    default:
+                        this.setState({errorServer: true})
+                }
+            }
+            )
+        }else{
+            this.setState({errorNoValid: true})
         }
     }
 
@@ -183,6 +201,11 @@ export default class SignIn extends Component
                                 onChange = {this.handleFileChange}
                             />
                     </div>
+
+                    {this.state.errorServer ? <p className="error-message" >Server Fail</p> : 
+                    this.state.errorNoValid ? <p className="error-message" >Check the data form</p> :
+                    null}
+                           
 
                     <LinkInClass value="Add new product" className="blue-button" onClick={this.handleSubmit} />
                     <Link className="dark-blue-button" to={"/ProductsCompany/"}>Cancel</Link> 

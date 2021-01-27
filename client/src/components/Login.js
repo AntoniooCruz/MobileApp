@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {Redirect, Link} from "react-router-dom"
-
+import LinkInClass from "./LinkInClass"
 import axios from "axios"
 
 import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_COMPANY, ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST,OP_PENDING_ORDERS} from "../config/global_constants"
@@ -15,6 +15,8 @@ export default class Login extends Component
         this.state = {
             username:"",
             password:"",
+            errorNoValid: false,
+            errorServer: false,
             isLoggedIn: false
         }
     }
@@ -32,6 +34,10 @@ export default class Login extends Component
 
     handleSubmit = (e) => 
     {
+
+        this.setState({errorNoValid: false})
+        this.setState({errorServer: false})
+
         const userObject = {
             username: this.state.username,
             password: this.state.password
@@ -53,7 +59,9 @@ export default class Login extends Component
                     localStorage.username = res.data.username
                     localStorage.accessLevel = res.data.access_level
                     localStorage.token = res.data.token
-                    console.log(res.data);;
+                    
+                    this.setState({errorNoValid: false})
+                    this.setState({errorServer: false})
 
 
                     //console.log(localStorage.accessLevel)
@@ -65,7 +73,15 @@ export default class Login extends Component
             {
                 console.log("Login failed")
             }
-        })                
+        }).catch((error) => {
+            switch(error.response.status){
+                case 400:
+                    this.setState({errorNoValid: true})
+                    break
+                default:
+                    this.setState({errorServer: true})
+            }
+        })               
     }
 
     oneKeyPressFunction = (e) =>
@@ -137,8 +153,10 @@ export default class Login extends Component
                             onKeyPress = {this.oneKeyPressFunction}
                         />
                     </div>
-                        
-                    <Link className="blue-button" onClick={this.handleSubmit}>Log In</Link>       
+
+                    {this.state.errorServer ? <p className="error-message" >Server Fail</p> : this.state.errorNoValid ? <p className="error-message" >User or password no valid</p> : null}
+                           
+                    <LinkInClass value="Log In" className="blue-button" onClick={this.handleSubmit} /> 
                             
                     <Link className="light-blue-button" to={"/SignIn"}>Sign In</Link>
                     <Link className="dark-blue-button" to={"/DisplayAllCompanies"}>Display All Companies</Link>

@@ -78,3 +78,8 @@ tr{
 .forgot-password a {
   color: #167bff;
 }
+
+.error-message {
+  color: red;
+  text-align:center;
+}

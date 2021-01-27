@@ -23,6 +23,10 @@ export default class SignIn extends Component
             password:"",
             passwordConfirmation:"",
 
+            errorNoValid: false,
+            errorServer: false,
+            errorUserUsed: false,
+            
             alreadyRegistered:false
         }
     }
@@ -140,7 +144,22 @@ export default class SignIn extends Component
                 {
                     console.log("Record not added")
                 }
-            })
+            }).catch((error) => {
+                console.log(error)
+                switch(error.response.status){
+                    case 400:
+                        this.setState({errorNoValid: true})
+                        break
+                    case 401:
+                        this.setState({errorUserUsed: true})
+                        break
+                    default:
+                        this.setState({errorServer: true})
+                }
+            }
+            )
+        }else{
+            this.setState({errorNoValid: true})
         }
     }
 
@@ -154,8 +173,9 @@ export default class SignIn extends Component
 
     render() 
     {     
-        //const formInputsState = this.validate();
-        //const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
+        this.setState({errorNoValid: false})
+        this.setState({errorUserUsed: false})
+        this.setState({errorServer: false})
 
         let usernameCheck = "";
         let nameCheck = "";
@@ -257,6 +277,12 @@ export default class SignIn extends Component
                             onKeyPress = {this.oneKeyPressFunction}
                         />
                     </div>
+
+                    {this.state.errorServer ? <p className="error-message" >Server Fail</p> : 
+                    this.state.errorNoValid ? <p className="error-message" >Check the data form</p> :
+                    this.state.errorUserUsed ? <p className="error-message" >Username no valid</p> :
+                    null}
+                           
 
                     <LinkInClass value="Sign In" className="blue-button" onClick={this.handleSubmit} />
                     <Link className="dark-blue-button" to={"/Login"}>Cancel</Link> 
