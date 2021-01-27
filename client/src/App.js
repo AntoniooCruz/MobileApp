@@ -50,7 +50,7 @@ export default class App extends Component
                     <Route exact path="/DisplayAllCompanies" component={DisplayAllCompanies}/>
                     <PrivateRoute exact path="/PersonalProfile" component={PersonalProfile}/>
                     <PrivateRoute exact path="/Orders/:option" component={Orders}/>
-                    <PrivateRoute exact path="/DisplayAllProducts/:companyId" component={DisplayAllProducts}/>
+                    <Route exact path="/DisplayAllProducts/:companyId" component={DisplayAllProducts}/>
 
                     <Route exact path="/SignInCompany" component={SignInCompany} />
                     <PrivateRoute exact path="/OrdersCompany/:option" component={OrdersCompany} />
