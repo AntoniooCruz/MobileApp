@@ -52,7 +52,7 @@ export default class SignIn extends Component
 
     validateName()
     {    
-        if(this.state.name.length>0){
+        if(this.state.name.length>0 && this.state.name.length <= 20){
             return true;
         }
         return false;
@@ -61,7 +61,7 @@ export default class SignIn extends Component
 
     validateUsername()
     {    
-        if(this.state.username.length>3){
+        if(this.state.username.length>3 && this.state.name.length <= 20){
             return true;
         }
         return false;
@@ -69,14 +69,14 @@ export default class SignIn extends Component
 
 
     validatePassword(){
-        if(this.state.password.length>=8){
+        if(this.state.password.length>=6){
             return true;
         }
         return false;
     }
 
     validatePhone_number(){
-        if(this.state.phone_number.length>=3 && this.state.phone_number.match(/^[0-9]+$/)){
+        if(this.state.phone_number.length>0 && this.state.phone_number.match(/^[0-9]+$/) && this.state.phone_number.length <= 13){
             return true;
         }
         return false;

@@ -58,7 +58,7 @@ export default class SignInCompany extends Component
 
     validateName()
     {    
-        if(this.state.name.length>0){
+        if(this.state.name.length>0 && this.state.name.length<=20){
             return true;
         }
         return false;
@@ -75,7 +75,7 @@ export default class SignInCompany extends Component
 
     validateUsername()
     {    
-        if(this.state.username.length>3){
+        if(this.state.username.length>3 && this.state.username.lenght <= 20){
             return true;
         }
         return false;
@@ -83,25 +83,20 @@ export default class SignInCompany extends Component
 
 
     validatePassword(){
-        if(this.state.password.length>=8){
+        if(this.state.password.length>=6){
             return true;
         }
         return false;
     }
 
     validatePhone_number(){
-        if(this.state.phone_number.length>=3 && this.state.phone_number.match(/^[0-9]+$/)){
+        if(this.state.phone_number.length>=3 && this.state.phone_number.match(/^[0-9]+$/) && this.state.phone_number.length <= 13){
             return true;
         }
         return false;
     }
 
     validate(){
-        /*const username = this.state.username;
-        const name = this.state.name;
-        const phone_number = this.state.phone_number;
-        const password = this.state.password;
-        const selectedFile = this.state.selectedFile;*/
 
         return{
             username: this.validateUsername(),
