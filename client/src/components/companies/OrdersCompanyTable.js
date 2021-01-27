@@ -6,6 +6,7 @@ export default class OrdersCompanyTable extends Component
 {
     render() 
     {
+        
         return (
             <table>
                 <thead>
@@ -17,9 +18,8 @@ export default class OrdersCompanyTable extends Component
                         <th>Status</th>
                     </tr>
                 </thead>
-                  
                 <tbody>
-                    {this.props.orders.map((order) => <OrdersCompanyTableRow key={order._id} params={order}/>)}
+                    {this.props.orders.map((order) => <OrdersCompanyTableRow key={order._id} order={order}/>)}
                 </tbody>
             </table>      
         )

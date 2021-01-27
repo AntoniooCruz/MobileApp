@@ -22,6 +22,8 @@ export default class Orders extends Component
 
     componentDidMount() 
     {
+        const ordersAux = []
+        const option = this.props.match.params.option
         const user_id = localStorage._id
         axios.get(`${SERVER_HOST}/api/order/user/${user_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
@@ -34,9 +36,18 @@ export default class Orders extends Component
                 }
                 else
                 {           
-                    console.log(res.data)
-                    console.log("Records read")   
-                    this.setState({orders: res.data}) 
+                    console.log("Records read") 
+                    if(option == "Pending"){
+                        for(let i = 0; i < res.data.length; i++){
+                            if(!res.data[i].is_fulfilled){
+                                ordersAux.push(res.data[i])
+                            }
+                        }
+
+                        this.setState({orders: ordersAux})
+                    }else{
+                        this.setState({orders:res.data})
+                    }
                 }   
             }
             else
@@ -56,9 +67,8 @@ export default class Orders extends Component
             <div>
                 <Menu/>
                 <div className="form-container">
-                    {option == OP_ALL_ORDERS ? <h3>All Orderes</h3> : <h3>Pending Orders</h3>}
+                    {option == "All" ? <h3>All Orders</h3> : <h3>Pending Orders</h3>}
                     <div className="table-container">
-                        {console.log(this.state.orders)}
                         <OrdersTable orders={this.state.orders}/> 
                     </div>
                 </div> 

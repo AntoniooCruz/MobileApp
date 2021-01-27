@@ -8,12 +8,12 @@ export default class OrdersTable extends Component
     render() 
     {
 
-        let statusColumn = null
+        let statusColumn = <th>Status</th>//null
         let action = ""
 
-        if(this.props.option === OP_ALL_ORDERS){
+        /*if(this.props.option === OP_ALL_ORDERS){
             statusColumn = <th>Status</th>
-        }
+        }*/
 
         return (
             <table>
@@ -23,12 +23,12 @@ export default class OrdersTable extends Component
                         <th>Product</th>
                         <th>Message</th>
                         <th>Price</th>
-                        {statusColumn}
+                        <th>Status</th>
                     </tr>
                 </thead>
                   
                 <tbody>
-                    {this.props.orders.map((order) => <OrdersTableRow key={order._id} params={order}/>)}
+                    {this.props.orders.map((order) => <OrdersTableRow key={order._id} order={order}/>)}
                 </tbody>
             </table>      
         )

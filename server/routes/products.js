@@ -36,8 +36,6 @@ router.get('/:product_id', async(req,res)=> {
 
 //Add a product
 router.post('/',  upload.single("selectedFile"),async (req,res) => {
-    console.log("REQBODY: ")
-    console.log(req.body.name)
     const result = productSchema.validate(req.body);
     if (result.error) {
         res.status(400).send(result.error.details[0].message);

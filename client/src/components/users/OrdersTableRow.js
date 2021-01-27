@@ -1,7 +1,8 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCheckSquare,faClock} from '@fortawesome/free-solid-svg-icons';
+import {faCheck,faClock} from '@fortawesome/free-solid-svg-icons';
+
 import { SERVER_HOST, OP_PENDING_ORDERS, OP_ALL_ORDERS  } from "../../config/global_constants";
 import axios from "axios"
 
@@ -12,11 +13,9 @@ export default class OrdersTableRow extends Component
         super(props)
         
         this.state = {
-            company:"",
+            company_name:"",
             product:"",
-            message:"",
-            price:null,
-            is_fullfilled:null
+            price:""
         }
     }
 
@@ -24,17 +23,13 @@ export default class OrdersTableRow extends Component
 
     componentDidMount() 
     {     
-        this.setState({company:this.getCompanyName()})
-        this.setState({product:this.getProductName()})
-        this.setState({message:this.props.order.message})
-        this.setState({price:this.props.order.price})
-        this.setState({is_fullfilled:this.props.order.status})
+        this.getCompanyName();
+        this.getProductInfo();
     }
 
 
     getCompanyName(){
-        const company_id = this.props.order.company
-        let company_name = ""
+        const company_id = this.props.order.company_id
         axios.get(`${SERVER_HOST}/api/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
@@ -47,7 +42,7 @@ export default class OrdersTableRow extends Component
                 else
                 {           
                     console.log("Records read")   
-                    company_name = res.data.name
+                    this.setState({company_name: res.data.name}) 
                 }   
             }
             else
@@ -55,14 +50,11 @@ export default class OrdersTableRow extends Component
                 console.log("Record not found")
             }
         })
-
-        return company_name
     }
     
 
-    getProductName(){
-        const product_id = this.props.order.product
-        let product_name = ""
+    getProductInfo(){
+        const product_id = this.props.order.product_id
         axios.get(`${SERVER_HOST}/api/products/${product_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
@@ -75,7 +67,8 @@ export default class OrdersTableRow extends Component
                 else
                 {           
                     console.log("Records read")   
-                    product_name = res.data.name
+                    this.setState({price: res.data.price})
+                    this.setState({product_name: res.data.name})
                 }   
             }
             else
@@ -83,39 +76,21 @@ export default class OrdersTableRow extends Component
                 console.log("Record not found")
             }
         })
-
-        return product_name
     }
 
     
 
     render() 
     {
-
-        const option = this.props.match.params.option
-
-        let iconFullFilled = ""
-        if(this.state.is_fullfilled && option == OP_ALL_ORDERS){
-            iconFullFilled = <FontAwesomeIcon style="color:green"icon={faCheckSquare}/>
-        }
-        else{
-            iconFullFilled = <FontAwesomeIcon style="color:red" icon={faClock}/>
-        }
+        console.log(this.props.order)
         return (
-            <div>
-                {option == OP_ALL_ORDERS ? <h3>All Orders</h3> : <h3>Pending Orders</h3>}
-
-                {!this.state.is_fullfilled || option==OP_ALL_ORDERS ?
-                    <tr>
-                        <td>{this.state.company}</td>
-                        <td>{this.state.product}</td>
-                        <td>{this.state.message}</td>
-                        <td>{this.state.price}</td>
-                        {option == OP_ALL_ORDERS ? <td>{iconFullFilled}</td> : null}
-                    </tr>
-                    : null
-                }
-            </div>
+                <tr>
+                    <td>{this.state.company_name}</td>
+                    <td>{this.state.product_name}</td>
+                    <td>{this.props.order.message}</td>
+                    <td>{this.state.price} &nbsp; zl</td>
+                    <td>{this.props.order.is_fulfilled ? <FontAwesomeIcon className="green-icon" icon={faCheck}/> : <FontAwesomeIcon  className="red-icon" icon={faClock}/> }</td>
+                </tr>
         )
     }
 }

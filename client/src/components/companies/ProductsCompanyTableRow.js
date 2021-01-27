@@ -17,6 +17,7 @@ export default class ProductsCompanyTableRow extends Component
             company_id: localStorage._id,
             price: this.props.product.price,
             name: this.props.product.name,
+            img: this.props.product.img,
             is_available: !this.props.product.is_available
         }
 
@@ -33,6 +34,7 @@ export default class ProductsCompanyTableRow extends Component
                     else
                     {           
                         console.log("Record update")
+                        window.location.href = window.location.href;
                     }   
                 }
                 else
@@ -56,6 +58,7 @@ export default class ProductsCompanyTableRow extends Component
                 else // success
                 { 
                     console.log("Record deleted")
+                    window.location.href = window.location.href;
                 }
             }
             else 
@@ -80,7 +83,7 @@ export default class ProductsCompanyTableRow extends Component
                         Availability:   &nbsp; {this.props.product.is_available ? <FontAwesomeIcon className="green-icon" icon={faCheck}/> :  <FontAwesomeIcon className="red-icon" icon={faTimes}/>}
                     </Card.Text>
                     <Card.Text>
-                        <LinkInClass value={this.props.product.is_available ? "to Disable" : "to Enable"} className={this.props.product.is_available ? "red-button" : "green-button"} onClick={this.modifyAvailabilityProduct}/>
+                        <LinkInClass value={this.props.product.is_available ? "Disable" : "Enable"} className={this.props.product.is_available ? "red-button" : "green-button"} onClick={this.modifyAvailabilityProduct}/>
                         <LinkInClass value="Delete" className="red-button" onClick={this.deleteProduct} />
                     </Card.Text>
                 </Card.Body>

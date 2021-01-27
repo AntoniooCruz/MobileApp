@@ -22,6 +22,9 @@ export default class OrdersCompany extends Component
     
     componentDidMount() 
     {
+        const option = this.props.match.params.option
+        console.log(option)
+        let ordersAux = [];
         const company_id = localStorage._id
         axios.get(`${SERVER_HOST}/api/order/company/${company_id}`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
@@ -35,7 +38,18 @@ export default class OrdersCompany extends Component
                 else
                 {           
                     console.log("Records read")   
-                    this.setState({orders: res.data}) 
+
+                    if(option == "Pending"){
+
+                        for(let i = 0; i < res.data.length; i++){
+                            if(!res.data[i].is_fulfilled){
+                                ordersAux.push(res.data[i])
+                            }
+                        }
+                        this.setState({orders: ordersAux})
+                    }else{
+                        this.setState({orders:res.data})
+                    }                   
                 }   
             }
             else
@@ -49,14 +63,14 @@ export default class OrdersCompany extends Component
     render() 
     {   
         const option = this.props.match.params.option
-
+        console.log(option)
         return (      
             <div>
                 <MenuCompany/>
                 <div className="form-container">
-                    {option == OP_ALL_ORDERS ? <h3>All Orderes</h3> : <h3>Pending Orders</h3>}
+                    {option == "All" ? <h3>All Orders</h3> : <h3>Pending Orders</h3>}
                     <div className="table-container">
-                        <OrdersCompanyTable orders={this.state.orders}/> 
+                        <OrdersCompanyTable orders={this.state.orders} option={option}/> 
                     </div>
                 </div> 
             </div>    
