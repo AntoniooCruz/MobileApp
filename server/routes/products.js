@@ -6,6 +6,8 @@ const Product = require('../models/Product');
 const { productSchema } = require('../schemas/products');
 const multer  = require('multer');
 const upload = multer({dest: `${process.env.UPLOADED_FILES_FOLDER}`});
+const fs = require('fs');
+
 
 
 //Get a company products
@@ -41,20 +43,35 @@ router.post('/',  upload.single("selectedFile"),async (req,res) => {
         res.status(400).send(result.error.details[0].message);
     return;
     }
-    const product = new Product({
-        company_id: req.body.company_id,
-        name: req.body.name,
-        price: req.body.price,
-        is_available: req.body.is_available
-    })
+    if(!req.file)
+    {
+        res.json({errorMessage:`No file was selected to be uploaded`})
+    }
+    else if(req.file.mimetype !== "image/png" && req.file.mimetype !== "image/jpg" && req.file.mimetype !== "image/jpeg")
+    {
+        fs.unlink(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, (error) => {res.json({errorMessage:`Only .png, .jpg and .jpeg format accepted`})})             
+    }
+    else // uploaded file is valid
+    { 
+        fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, 'base64', (err, fileData) => 
+        {  img = fileData 
+            const product = new Product({
+                company_id: req.body.company_id,
+                name: req.body.name,
+                price: req.body.price,
+                is_available: req.body.is_available,
+                img: fileData
+            })
 
-    product.save()
-    .then(data =>{
-        res.json(data);
-    })
-    .catch(err => {
-        res.json({message: err});
-    });
+            product.save()
+            .then(data =>{
+                res.json(data);
+            })
+            .catch(err => {
+                res.json({message: err});
+            });
+        });
+    }
 });
 
 //Update a product
