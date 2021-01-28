@@ -162,7 +162,7 @@ export default class SignIn extends Component
                         errorMessageList.push("Inserted data no valid")
                         break
                     case 401:
-                        errorMessageList.push("Username introduced is used")
+                        errorMessageList.push("Username introduced already exists")
                         break
                     default:
                         errorMessageList.push("Server error")

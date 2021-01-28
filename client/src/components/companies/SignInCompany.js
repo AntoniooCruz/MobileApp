@@ -26,9 +26,7 @@ export default class SignInCompany extends Component
             passwordConfirmation:"",
             selectedFile:null,
 
-            errorNoValid: false,
-            errorUserUsed: false,
-            errorServer: false,
+            errorMessageList : [],
 
             alreadyRegistered:false
         }
@@ -114,9 +112,8 @@ export default class SignInCompany extends Component
     {
         e.preventDefault();
 
-        this.setState({errorNoValid: false})
-        this.setState({errorUserUsed: false})
-        this.setState({errorServer: false})
+        let errorMessageList = []
+
 
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
@@ -161,18 +158,46 @@ export default class SignInCompany extends Component
             }).catch((error) => {
                 switch(error.response.status){
                     case 400:
-                        this.setState({errorNoValid: true})
+                        errorMessageList.push("Inserted data no valid")
                         break
                     case 409:
-                        this.setState({errorUserUsed: true})
+                        errorMessageList.push("Username introduced already exists")
                         break
                     default:
-                        this.setState({errorServer: true})
+                        errorMessageList.push("Server error")
                 }
             })
         }else{
-            this.setState({errorNoValid: true})
+            if(this.state.name.length<=0){
+                errorMessageList.push("Name field empty")
+            }
+            if(this.state.name.length>20){
+                errorMessageList.push("Name max size: 20 char.")
+            }
+            if(this.state.username.length<=3){
+                errorMessageList.push("Username min size: 4 char.")
+            }
+            if(this.state.username.length>20){
+                errorMessageList.push("Username max size: 20 char.")
+            }
+            if(this.state.phone_number.length<=0){
+                errorMessageList.push("Phone Number field empty")
+            }
+            if(!this.state.phone_number.match(/^[0-9]+$/)){
+                errorMessageList.push("Phone number no valid")
+            }
+            if(this.state.password.length<6){
+                errorMessageList.push("Password min size: 6 char.")
+            }
+            if(this.state.phone_number.length>13){
+                errorMessageList.push("Phone Number max size: 13 char.")
+            }
+            if(this.state.passwordConfirmation === this.state.password){
+                errorMessageList.push("Passwords don´t match")
+            }
         }
+
+        this.setState({errorMessageList: errorMessageList})
     }
 
     
@@ -308,10 +333,7 @@ export default class SignInCompany extends Component
                         />
                     </div>
 
-                    {this.state.errorServer ? <p className="error-message" >Server Fail</p> : 
-                    this.state.errorNoValid ? <p className="error-message" >Check the data form</p> :
-                    this.state.errorUserUsed ? <p className="error-message" >Username no valid</p> :
-                    null}
+                    {this.state.errorMessageList.map((errorMessage) => <p className="error-message" >{errorMessage}</p>)}
 
                     <LinkInClass value="Sign In" className="blue-button" onClick={this.handleSubmit} />
                     <Link className="dark-blue-button" to={"/Login"}>Cancel</Link> 
