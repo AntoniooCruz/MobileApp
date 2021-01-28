@@ -58,7 +58,7 @@ export default class SignIn extends Component
 
     validateUsername()
     {    
-        if(this.state.username.length>3 && this.state.name.length <= 20){
+        if(this.state.username.length>3 && this.state.username.length <= 20){
             return true;
         }
         return false;

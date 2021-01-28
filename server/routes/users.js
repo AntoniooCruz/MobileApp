@@ -57,7 +57,7 @@ router.post('/', async (req,res)=> {
 });
 
 //Update a user
-router.put('/:user_id',verify,(req,res) => {
+router.put('/:user_id',(req,res) => {
 
     const result = userSchema.validate(req.body);
     if (result.error) {

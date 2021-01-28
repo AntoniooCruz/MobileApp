@@ -13,7 +13,7 @@ export default class DisplayAllCompaniesTableRow extends Component
     render() 
     {
       let admin;
-      if (localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ) {
+      if (localStorage.accessLevel == ACCESS_LEVEL_ADMIN ) {
         admin = <Card.Header>  <Button variant="info"> <FontAwesomeIcon icon={faEdit}/></Button> <Button variant="danger"> <FontAwesomeIcon icon={faTrash}/></Button> </Card.Header> 
       } 
 

@@ -25,7 +25,7 @@ export default class PersonalProfile extends Component
             username:"",
             password:"",
             phone_number:"",
-            newPassword: "",
+            oldPassword: "",
             newPasswordConfirmation:"",
 
             passwordChange:false,
@@ -78,26 +78,26 @@ export default class PersonalProfile extends Component
     }
     validateConfirmPassword()
     {    
-        return (this.state.newPassword === this.state.newPasswordConfirmation || !this.state.passwordChange); 
+        return (this.state.newPasswordConfirmation.length >= 6 || !this.state.passwordChange); 
     }
 
     validateName()
     {    
-        if(this.state.name.length>0){
+        if(this.state.name.length>3 && this.state.name.length<20){
             return true;
         }
         return false;
     }
 
     validatePassword(){
-        if(this.state.newPassword.length>=8){
+        if(this.state.oldPassword.length>=6 || !this.state.passwordChange){
             return true;
         }
         return false;
     }
 
     validatePhone_number(){
-        if(this.state.phone_number.length>=3){
+        if(this.state.phone_number.length>0 && this.state.phone_number.match(/^[0-9]+$/) && this.state.phone_number.length <= 13){
             return true;
         }
         return false;
@@ -107,7 +107,7 @@ export default class PersonalProfile extends Component
         const username = this.state.username;
         const name = this.state.name;
         const phone_number = this.state.phone_number;
-        const newPassword = this.state.newPassword;
+        const oldPassword = this.state.oldPassword;
         const newPasswordConfirmation = this.state.newPasswordConfirmation;
 
         return{
@@ -132,45 +132,73 @@ export default class PersonalProfile extends Component
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
-        let passwordAux = "";
-
-        if(this.state.passwordChange){
-            passwordAux = this.state.newPassword;
-        }else{
-            passwordAux = this.state.password;
-        }
-
         const userModel = {
             id: this.state.id,
             username: this.state.username,
             name: this.state.name,
-            password: passwordAux,
+            password: this.state.password,
             phone_number: this.state.phone_number
         }
 
         if(inputsAreAllValid){
+            console.log("test");
 
-            axios.put(`${SERVER_HOST}/api/user`, userModel)
-            .then(res => 
-            {  
-                if(res.data)
-                {
-                    if (res.data.errorMessage)
+            if(!this.state.passwordChange){
+                axios.put(`${SERVER_HOST}/api/user/${localStorage._id}`, userModel)
+                .then(res => 
+                {  
+                    if(res.data)
                     {
-                        console.log(res.data.errorMessage)    
+                        if (res.data.errorMessage)
+                        {
+                            console.log(res.data.errorMessage)    
+                        }
+                        else
+                        {           
+                            console.log("Record update")
+                            localStorage.username = res.data.username
+                            this.setState({hasBeenChanged: true})
+                        }   
                     }
                     else
-                    {           
-                        console.log("Record update")
-                        localStorage.username = res.data.username
-                        this.setState({hasBeenChanged: true})
-                    }   
+                    {
+                        console.log("Error")
+                    }
+                }) 
+            } else {
+                const changePassword = {
+                    id: this.state.id,
+                    username: this.state.username,
+                    name: this.state.name,
+                    old_password: this.state.oldPassword,
+                    new_password: this.state.newPasswordConfirmation,
+                    phone_number: this.state.phone_number
                 }
-                else
-                {
-                    console.log("Error")
-                }
-            }) 
+
+                axios.put(`${SERVER_HOST}/api/user/changePassword`, changePassword)
+                .then(res => 
+                {  
+                    if(res.data)
+                    {
+                        if (res.data.errorMessage)
+                        {
+                            console.log(res.data.errorMessage)    
+                        }
+                        else
+                        {           
+                            console.log("Record update")
+                            localStorage.username = res.data.username
+                            this.setState({hasBeenChanged: true})
+                        }   
+                    }
+                    else
+                    {
+                        console.log("Error")
+                    }
+                }) 
+            }
+           
+            
         }
     }
 
@@ -180,7 +208,7 @@ export default class PersonalProfile extends Component
         
         let usernameCheck = "";
         let nameCheck = "";
-        let newPasswordCheck = "";
+        let oldPasswordCheck = "";
         let newPasswordConfirmationCheck = "";
         let phone_numberCheck = "";
         let usernameErrorMessage = "";
@@ -194,7 +222,7 @@ export default class PersonalProfile extends Component
         }
 
         if(this.validatePassword()){
-            newPasswordCheck = <FontAwesomeIcon icon={faCheck}/>
+            oldPasswordCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
         if(this.validateConfirmPassword()){
@@ -227,7 +255,7 @@ export default class PersonalProfile extends Component
                             ref = {input => this.inputToFocus = input}
                         />
                     </div>
-
+                    <fieldset disabled>
                     <div className="form-group">
                         <label className="label-form">Username{usernameCheck}</label>  
                         <input  className = "form-control"
@@ -239,6 +267,7 @@ export default class PersonalProfile extends Component
                             onChange = {this.handleChange}
                         />
                     </div>
+                    </fieldset>
                     
                     <div className="form-group">
                         <label className="label-form">Phone Number {phone_numberCheck}</label>  
@@ -258,21 +287,21 @@ export default class PersonalProfile extends Component
 
                         <div>
                             <div className="form-group">
-                                <label  className="label-form">Password {newPasswordCheck}</label> 
+                                <label  className="label-form">Old Password {oldPasswordCheck}</label> 
                                 <input  className = "form-control"
-                                    name = "newPassword"           
+                                    name = "oldPassword"           
                                     type = "password"
                                     placeholder = "•••••••••••"
-                                    autoComplete="newPassword"
-                                    title = "Password must be at least ten-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*)"
-                                    value = {this.state.newPassword}
+                                    autoComplete="oldPassword"
+                                    title = "Password must be at least 6 digits long"
+                                    value = {this.state.oldPassword}
                                     onChange = {this.handleChange}
                                 />
                             </div>  
                             
 
                             <div className="form-group">
-                                <label className="label-form">Password Again {newPasswordConfirmationCheck}</label> 
+                                <label className="label-form">New Password {newPasswordConfirmationCheck}</label> 
                                 <input className = "form-control"  
                                     name = "newPasswordConfirmation"    
                                     type = "password"
