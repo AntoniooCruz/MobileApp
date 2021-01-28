@@ -22,11 +22,8 @@ export default class SignIn extends Component
             phone_number:"",
             password:"",
             passwordConfirmation:"",
+            errorMessageList: [],
 
-            errorNoValid: false,
-            errorServer: false,
-            errorUserUsed: false,
-            
             alreadyRegistered:false
         }
     }
@@ -96,6 +93,18 @@ export default class SignIn extends Component
         return  this.state.isRegistered;
     }
 
+    cleanErrorMessages(){
+        this.setState({errorMessageList: []})
+    }
+
+
+    errorCheck(){
+
+        console.log("EOOOOOO")
+        
+
+        console.log(this.state.errorMessageList)
+    }
 
 
     handleSubmit = (e) =>
@@ -104,13 +113,11 @@ export default class SignIn extends Component
 
         this.validate();
 
-        this.setState({errorNoValid: false})
-        this.setState({errorUserUsed: false})
-        this.setState({errorServer: false})
+        let errorMessageList = [];
 
         const formInputsState = this.validate();
-        const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
-
+        const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);         
+        
         if(inputsAreAllValid){
 
             const userObject = {
@@ -152,19 +159,47 @@ export default class SignIn extends Component
                 console.log(error)
                 switch(error.response.status){
                     case 400:
-                        this.setState({errorNoValid: true})
+                        errorMessageList.push("Inserted data no valid")
                         break
                     case 401:
-                        this.setState({errorUserUsed: true})
+                        errorMessageList.push("Username introduced is used")
                         break
                     default:
-                        this.setState({errorServer: true})
+                        errorMessageList.push("Server error")
                 }
             }
             )
         }else{
-            this.setState({errorNoValid: true})
+            if(this.state.name.length<=0){
+                errorMessageList.push("Name field empty")
+            }
+            if(this.state.name.length>20){
+                errorMessageList.push("Name max size: 20 char.")
+            }
+            if(this.state.username.length<=3){
+                errorMessageList.push("Username min size: 4 char.")
+            }
+            if(this.state.username.length>20){
+                errorMessageList.push("Username max size: 20 char.")
+            }
+            if(this.state.phone_number.length<=0){
+                errorMessageList.push("Phone Number field empty")
+            }
+            if(!this.state.phone_number.match(/^[0-9]+$/)){
+                errorMessageList.push("Phone number no valid")
+            }
+            if(this.state.password.length<6){
+                errorMessageList.push("Password min size: 6 char.")
+            }
+            if(this.state.phone_number.length>13){
+                errorMessageList.push("Phone Number max size: 13 char.")
+            }
+            if(this.state.passwordConfirmation === this.state.password){
+                errorMessageList.push("Passwords don´t match")
+            }
         }
+
+        this.setState({errorMessageList: errorMessageList})
     }
 
     oneKeyPressFunction = (e) =>
@@ -187,23 +222,23 @@ export default class SignIn extends Component
 
 
         if(this.validateUsername()){
-            usernameCheck = <FontAwesomeIcon icon={faCheck}/>
+            usernameCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateName()){
-            nameCheck = <FontAwesomeIcon icon={faCheck}/>
+            nameCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePassword()){
-            passwordCheck = <FontAwesomeIcon icon={faCheck}/>
+            passwordCheck = <FontAwesomeIcon className="green-icon"  icon={faCheck}/>
         }
 
         if(this.validateConfirmPassword()){
-            passwordConfirmationCheck = <FontAwesomeIcon icon={faCheck}/>
+            passwordConfirmationCheck = <FontAwesomeIcon className="green-icon"  icon={faCheck}/>
         }
 
         if(this.validatePhone_number()){
-            phone_numberCheck = <FontAwesomeIcon icon={faCheck}/>
+            phone_numberCheck = <FontAwesomeIcon className="green-icon"  icon={faCheck}/>
         }
 
         return (
@@ -280,11 +315,7 @@ export default class SignIn extends Component
                         />
                     </div>
 
-                    {this.state.errorServer ? <p className="error-message" >Server Fail</p> : 
-                    this.state.errorNoValid ? <p className="error-message" >Check the data form</p> :
-                    this.state.errorUserUsed ? <p className="error-message" >Username no valid</p> :
-                    null}
-                           
+                    {this.state.errorMessageList.map((errorMessage) => <p className="error-message" >{errorMessage}</p>)}
 
                     <LinkInClass value="Sign In" className="blue-button" onClick={this.handleSubmit} />
                     <Link className="dark-blue-button" to={"/Login"}>Cancel</Link> 
