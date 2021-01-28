@@ -133,7 +133,7 @@ export default class PersonalProfile extends Component
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
         const userModel = {
-            id: this.state.id,
+            id: localStorage._id,
             username: this.state.username,
             name: this.state.name,
             password: this.state.password,
@@ -167,7 +167,7 @@ export default class PersonalProfile extends Component
                 }) 
             } else {
                 const changePassword = {
-                    id: this.state.id,
+                    id: localStorage._id,
                     username: this.state.username,
                     name: this.state.name,
                     old_password: this.state.oldPassword,
@@ -175,7 +175,7 @@ export default class PersonalProfile extends Component
                     phone_number: this.state.phone_number
                 }
 
-                axios.put(`${SERVER_HOST}/api/user/changePassword`, changePassword)
+                axios.put(`${SERVER_HOST}/api/user/changePassword/${localStorage._id}`, changePassword)
                 .then(res => 
                 {  
                     if(res.data)

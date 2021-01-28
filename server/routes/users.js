@@ -7,6 +7,7 @@ const Company = require('../models/Company');
 const Joi = require('joi');
 const verify = require('../middleware/verifyToken');
 const { userSchema } = require('../schemas/users');
+const { updatePasswordSchema } = require('../schemas/updatePassword');
 const verifyToken = require('../middleware/verifyToken');
 const fs = require('fs');
 
@@ -55,7 +56,41 @@ router.post('/', async (req,res)=> {
 
     
 });
+//Update a user's password
+router.put('/changePassword/:user_id', async (req,res) => {
+    const result = updatePasswordSchema.validate(req.body);
+    if (result.error) {
+        res.status(400).send(result.error.details[0].message);
+    return;
+    }
 
+    const user = await User.findOne({username: req.body.username});
+    if(!user) return res.status(400).send('User not found');
+
+    const valid_password = await bcrypt.compare(req.body.old_password, user.password);
+    if(!valid_password) return res.status(401).send('Invalid Password');
+
+    const hashed_password = await bcrypt.hash(req.body.new_password,10);
+
+    const newuser =  {
+        _id: req.body.id,
+        username: req.body.username,
+        password: hashed_password,
+        name: req.body.name,
+        phone_number: req.body.phone_number,
+        is_admin: false
+    }
+
+    User.findByIdAndUpdate({_id: req.body.id},newuser).then(function(){
+        User.findOne({_id: req.body.id}).then(function(user){
+            res.send(user);
+        });
+    });
+
+
+        
+
+});
 //Update a user
 router.put('/:user_id',(req,res) => {
 
