@@ -18,6 +18,17 @@ router.get('/:user_id', async(req,res)=> {
     res.send(user);
 });
 
+router.get('/all/users', (req,res)=> {
+    User.find({}, function(err, docs) {
+        if (!err) { 
+           res.send(docs);
+        }
+        else {
+            res.status(400).send(err);
+        }
+    });
+});
+
 router.post('/', async (req,res)=> {
     const result = userSchema.validate(req.body);
     if (result.error) {
@@ -134,13 +145,13 @@ router.post('/login', async(req,res) => {
         const valid_password = await bcrypt.compare(req.body.password, user.password);
         if(!valid_password) return res.status(401).send('Invalid Password');
         const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-        let acess_level  = (user.is_admin) ? (3) : (1); 
-        let acessToken  = (user.is_admin) ? (token) : (null); 
+        let access_level  = (user.is_admin) ? (3) : (1); 
+        let accessToken  = (user.is_admin) ? (token) : (null); 
         res.header('auth-token', token).json({
         id: user._id,
         username: user.username,
-        token: acessToken,
-        access_level: acess_level
+        token: accessToken,
+        access_level: access_level
     });
     }
     if(company){
