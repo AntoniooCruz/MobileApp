@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import {Link, Redirect} from "react-router-dom"
 
 import axios from "axios"
-import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS,ACCESS_LEVEL_GUEST,ACCESS_LEVEL_NORMAL_USER} from "../../config/global_constants";
+import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS,ACCESS_LEVEL_GUEST,ACCESS_LEVEL_NORMAL_USER, ACCESS_LEVEL_ADMIN} from "../../config/global_constants";
 
 import DisplayAllCompanies from "../users/DisplayAllCompanies"
 
@@ -10,7 +10,7 @@ import DisplayAllCompanies from "../users/DisplayAllCompanies"
 import * as ReactBootStrap from "react-bootstrap";
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faHome,faIdCard,faShippingFast,faBoxes, faSignOutAlt, faSignInAlt} from '@fortawesome/free-solid-svg-icons';
+import {faHome,faIdCard,faShippingFast,faBoxes, faSignOutAlt, faSignInAlt,faUsersCog} from '@fortawesome/free-solid-svg-icons';
 import { Navbar } from "react-bootstrap"
 import PersonalProfile from "./PersonalProfile"
 import Orders from "./Orders.js"
@@ -46,6 +46,10 @@ export default class Menu extends Component
                                     <FontAwesomeIcon icon={faBoxes}/>
                                 </ReactBootStrap.NavDropdown.Item>
                             </ReactBootStrap.NavDropdown>
+                            <ReactBootStrap.Nav.Link href={localStorage.accessLevel == ACCESS_LEVEL_ADMIN ? "/DisplayAllUsers" : "/Login"}>
+                                Admin Users &nbsp;
+                                <FontAwesomeIcon icon={faUsersCog}/>
+                            </ReactBootStrap.Nav.Link>
                             
                         </ReactBootStrap.Nav>
                         {
