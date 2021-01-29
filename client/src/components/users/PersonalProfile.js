@@ -141,7 +141,6 @@ export default class PersonalProfile extends Component
         }
 
         if(inputsAreAllValid){
-            console.log("test");
 
             if(!this.state.passwordChange){
                 axios.put(`${SERVER_HOST}/api/user/${localStorage._id}`, userModel)

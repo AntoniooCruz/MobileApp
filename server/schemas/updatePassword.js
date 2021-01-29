@@ -8,6 +8,8 @@ const updatePasswordSchema = Joi.object().keys({
     new_password: Joi.string().required().min(6),
     name: Joi.string().required().max(20),
     phone_number: Joi.string().max(13),
+    description: Joi.any(),
+    img: Joi.any()
 
   });
 

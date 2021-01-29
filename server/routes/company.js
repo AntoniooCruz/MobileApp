@@ -105,12 +105,20 @@ router.post('/',upload.single("selectedFile"), async (req,res)=> {
 });
 
 //Update a company
-router.put('/:company_id',verify,(req,res) => {
-    const result = companySchema.validate(req.body);
+router.put('/:company_id',upload.single("img"),(req,res) => {
+    console.log(req.body);
+    const result = companySchema.validate({
+        username: req.body.username,
+        name: req.body.name,
+        password: req.body.password,
+        phone_number: req.body.phone_number,
+        description: req.body.description
+    });
     if (result.error) {
         res.status(400).send(result.error.details[0].message);
     return;
     }
+
     Company.findOne({_id: req.params.company_id}, function (err, user) {
         if(err) {
             res.status(500).send(err.message);
@@ -119,13 +127,42 @@ router.put('/:company_id',verify,(req,res) => {
         }
     });
 
-    
-
-    Company.findByIdAndUpdate({_id: req.params.company_id},req.body).then(function(){
-        Company.findOne({_id: req.params.company_id}).then(function(company){
-            res.send(company);
+    if(!req.file)
+    {
+        Company.findByIdAndUpdate({_id: req.params.company_id},req.body).then(function(){
+            Company.findOne({_id: req.params.company_id}).then(function(company){
+                res.send(company);
+            });
         });
+    }
+    else if(req.file.mimetype !== "image/png" && req.file.mimetype !== "image/jpg" && req.file.mimetype !== "image/jpeg")
+    {
+        fs.unlink(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, (error) => {res.json({errorMessage:`Only .png, .jpg and .jpeg format accepted`})})             
+    }
+    else // uploaded file is valid
+    { 
+
+        fs.readFile(`${process.env.UPLOADED_FILES_FOLDER}/${req.file.filename}`, 'base64', (err, fileData) => 
+        {  img = fileData 
+
+        const company = {
+            username: req.body.username,
+            password: req.body.password,
+            name: req.body.name,
+            phone_number: req.body.phone_number,
+            description: req.body.description,
+            img: fileData         
+        }
+
+        Company.findByIdAndUpdate({_id: req.params.company_id},company).then(function(){
+            Company.findOne({_id: req.params.company_id}).then(function(company){
+                res.send(company);
+            });
+        });
+    
     });
+
+    }
 });
 
 //Delete a company
