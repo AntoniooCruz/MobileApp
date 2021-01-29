@@ -51,7 +51,7 @@ export default class DisplayAllCompanies extends Component
     {   
         return (      
             <div>
-                {localStorage.accessLevel == ACCESS_LEVEL_ADMIN || localStorage.accessLevel == ACCESS_LEVEL_COMPANY  ? <Redirect to={"/Login"}/> : null}
+                {localStorage.accessLevel == ACCESS_LEVEL_COMPANY  ? <Redirect to={"/Login"}/> : null}
                 <Menu/>
                 <div className="form-container">
                     <h3>Companies</h3>

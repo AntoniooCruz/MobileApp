@@ -114,7 +114,7 @@ export default class Login extends Component
                 redirectAction = <Redirect to={"/OrdersCompany/Pending"} />
                 break;
             case (ACCESS_LEVEL_ADMIN):
-                //edirectAction = <Redirect to "/MainAdmin"/>
+                redirectAction = <Redirect to={"/DisplayAllCompanies"}/>
                 break;
             case (ACCESS_LEVEL_GUEST):
             default:
