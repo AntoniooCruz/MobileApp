@@ -28,6 +28,8 @@ export default class PersonalProfileCompany extends Component
             newPassword: "",
             newPasswordConfirmation:"",
 
+            errorMessageList: [],
+
             selectedFile: null,
 
             passwordChange:false
@@ -144,6 +146,8 @@ export default class PersonalProfileCompany extends Component
 
         let passwordAux = "";
 
+        let errorMessageList = "";
+
         if(this.state.passwordChange){
             passwordAux = this.state.newPassword;
         }else{
@@ -151,7 +155,6 @@ export default class PersonalProfileCompany extends Component
         }
 
         const companyModel = {
-            id: this.state.id,
             username: this.state.username,
             name: this.state.name,
             password: passwordAux,
@@ -161,7 +164,7 @@ export default class PersonalProfileCompany extends Component
 
         if(inputsAreAllValid){
 
-            axios.put(`${SERVER_HOST}/api/company`, companyModel)
+            axios.put(`${SERVER_HOST}/api/company/${this.state.id}`, companyModel,{headers: {"auth-token": localStorage.token}})
             .then(res => 
             {  
                 if(res.data)
@@ -180,8 +183,34 @@ export default class PersonalProfileCompany extends Component
                 {
                     console.log("Error")
                 }
-            }) 
+            }).catch((error) => {
+                errorMessageList.push("Server error")
+            })
+        }else{
+            if(this.state.name.length<=0){
+                errorMessageList.push("Name field empty")
+            }
+            if(this.state.name.length>20){
+                errorMessageList.push("Name max size: 20 char.")
+            }
+            if(this.state.phone_number.length<=0){
+                errorMessageList.push("Phone Number field empty")
+            }
+            if(!this.state.phone_number.match(/^[0-9]+$/)){
+                errorMessageList.push("Phone number no valid")
+            }
+            if(this.state.phone_number.length>13){
+                errorMessageList.push("Phone Number max size: 13 char.")
+            }
+            if(this.state.password.length<6){
+                errorMessageList.push("Password min size: 6 char.")
+            }
+            if(this.state.passwordConfirmation === this.state.password){
+                errorMessageList.push("Passwords don´t match")
+            }
         }
+
+        this.setState({errorMessageList:errorMessageList});
     }
 
     
@@ -241,6 +270,7 @@ export default class PersonalProfileCompany extends Component
                         />
                     </div>
 
+                    <fieldset disabled>
                     <div className="form-group">
                         <label className="label-form">Username{usernameCheck}</label>  
                         <input  className = "form-control"
@@ -253,6 +283,7 @@ export default class PersonalProfileCompany extends Component
                             disable= {true}
                         />
                     </div>
+                    </fieldset>
                     
                     <div className="form-group">
                         <label className="label-form">Phone Number {phone_numberCheck}</label>  
@@ -301,6 +332,9 @@ export default class PersonalProfileCompany extends Component
                     : null
 
                     }
+
+
+                    {this.state.errorMessageList.map((errorMessage) => <p className="error-message" >{errorMessage}</p>)}
 
                     <LinkInClass value="Update" className="blue-button" onClick={this.handleSubmit} />
                       
