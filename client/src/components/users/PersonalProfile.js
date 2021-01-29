@@ -30,6 +30,8 @@ export default class PersonalProfile extends Component
 
             passwordChange:false,
 
+            errorMessageList: [],
+
             hasBeenChanged : false
         }
     }
@@ -132,8 +134,9 @@ export default class PersonalProfile extends Component
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
+        let errorMessageList = []
+
         const userModel = {
-            id: localStorage._id,
             username: this.state.username,
             name: this.state.name,
             password: this.state.password,
@@ -193,13 +196,37 @@ export default class PersonalProfile extends Component
                     }
                     else
                     {
-                        console.log("Error")
+                        console.log("Error");
                     }
+                }).catch((error) => {
+                    errorMessageList.push("Server error");
                 }) 
             }
-           
-            
+        }else{
+            if(this.state.name.length<=0){
+                errorMessageList.push("Name field empty")
+            }
+            if(this.state.name.length>20){
+                errorMessageList.push("Name max size: 20 char.")
+            }
+            if(this.state.phone_number.length<=0){
+                errorMessageList.push("Phone Number field empty")
+            }
+            if(!this.state.phone_number.match(/^[0-9]+$/)){
+                errorMessageList.push("Phone number no valid")
+            }
+            if(this.state.phone_number.length>13){
+                errorMessageList.push("Phone Number max size: 13 char.")
+            }
+            if(this.state.password.length<6){
+                errorMessageList.push("Password min size: 6 char.")
+            }
+            if(this.state.passwordConfirmation === this.state.password){
+                errorMessageList.push("Passwords don´t match")
+            }
         }
+
+        this.setState({errorMessageList: errorMessageList})
     }
 
     
@@ -316,6 +343,9 @@ export default class PersonalProfile extends Component
                     : null
 
                     }
+
+                    {this.state.errorMessageList.map((errorMessage) => <p className="error-message" >{errorMessage}</p>)}
+
 
                     <LinkInClass value="Update" className="blue-button" onClick={this.handleSubmit} />
                     {this.state.hasBeenChanged ? <p align="center">Changes done successfully</p> : null}
