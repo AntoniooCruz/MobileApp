@@ -50,7 +50,7 @@ router.post('/', async (req,res)=> {
             password: hashed_password,
             name: req.body.name,
             phone_number: req.body.phone_number,
-            is_admin: false
+            is_admin: req.body.is_admin,
         })
 
         user.save()
@@ -89,19 +89,18 @@ router.put('/changePassword/:user_id', async (req,res) => {
         password: hashed_password,
         name: req.body.name,
         phone_number: req.body.phone_number,
-        is_admin: false
+        is_admin: req.body.is_admin
     }
 
     User.findByIdAndUpdate({_id: req.body.id},newuser).then(function(){
         User.findOne({_id: req.body.id}).then(function(user){
             res.send(user);
         });
-    });
-
-
-        
+    }); 
 
 });
+
+
 //Update a user
 router.put('/:user_id',(req,res) => {
 
@@ -137,6 +136,7 @@ router.delete('/:user_id',verifyToken,(req,res) => {
 
 
 router.post('/login', async(req,res) => {
+    console.log(req.body)
     const user = await User.findOne({username: req.body.username});
     const company = await Company.findOne({username: req.body.username});
 

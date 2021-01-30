@@ -27,6 +27,7 @@ export default class PersonalProfile extends Component
             phone_number:"",
             oldPassword: "",
             newPasswordConfirmation:"",
+            access_level: null,
 
             passwordChange:false,
 
@@ -57,6 +58,7 @@ export default class PersonalProfile extends Component
                         this.setState({name: res.data.name}) 
                         this.setState({phone_number: res.data.phone_number}) 
                         this.setState({password: res.data.password}) 
+                        this.setState({is_admin: res.data.is_admin})
                     }   
                 }
                 else
@@ -140,7 +142,8 @@ export default class PersonalProfile extends Component
             username: this.state.username,
             name: this.state.name,
             password: this.state.password,
-            phone_number: this.state.phone_number
+            phone_number: this.state.phone_number,
+            is_admin: this.state.is_admin
         }
 
         if(inputsAreAllValid){
@@ -175,7 +178,8 @@ export default class PersonalProfile extends Component
                     name: this.state.name,
                     old_password: this.state.oldPassword,
                     new_password: this.state.newPasswordConfirmation,
-                    phone_number: this.state.phone_number
+                    phone_number: this.state.phone_number,
+                    is_admin: this.state.is_admin
                 }
 
                 axios.put(`${SERVER_HOST}/api/user/changePassword/${localStorage._id}`, changePassword)

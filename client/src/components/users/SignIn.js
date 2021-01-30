@@ -124,7 +124,8 @@ export default class SignIn extends Component
                 name: this.state.name,
                 username: this.state.username,
                 phone_number: this.state.phone_number,
-                password: this.state.password
+                password: this.state.password,
+                is_admin: false
             }
 
             axios.post(`${SERVER_HOST}/api/user`, userObject)
