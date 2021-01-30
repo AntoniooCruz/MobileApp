@@ -20,6 +20,7 @@ export default class Menu extends Component
 {
     render() 
     {   
+        let admin;
         return (      
             <div>
                 <ReactBootStrap.Navbar bg="light" expand="lg">
@@ -46,10 +47,15 @@ export default class Menu extends Component
                                     <FontAwesomeIcon icon={faBoxes}/>
                                 </ReactBootStrap.NavDropdown.Item>
                             </ReactBootStrap.NavDropdown>
+                            {
+                            localStorage.accessLevel == ACCESS_LEVEL_ADMIN ? 
                             <ReactBootStrap.Nav.Link href={localStorage.accessLevel == ACCESS_LEVEL_ADMIN || localStorage.accessLevel == ACCESS_LEVEL_ADMIN  ? "/DisplayAllUsers" : "/Login"}>
                                 Admin Users &nbsp;
                                 <FontAwesomeIcon icon={faUsersCog}/>
                             </ReactBootStrap.Nav.Link>
+                            :
+                                admin
+                            }
                             
                         </ReactBootStrap.Nav>
                         {
