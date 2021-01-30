@@ -3,12 +3,13 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {SERVER_HOST} from "../../config/global_constants"
+import {ACCESS_LEVEL_COMPANY, SERVER_HOST} from "../../config/global_constants"
 
 import LinkInClass from "../LinkInClass"
 
 import {faCheck} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
 
 export default class SignIn extends Component 
 {
@@ -72,9 +73,6 @@ export default class SignIn extends Component
     handleSubmit = (e) =>
     {
         e.preventDefault();
-        
-        this.setState({errorNoValid: false});
-        this.setState({errorServer: false});
 
         this.validate();
 
@@ -163,15 +161,16 @@ export default class SignIn extends Component
         let priceCheck = "";
 
         if(this.validateName()){
-            nameCheck = <FontAwesomeIcon icon={faCheck}/>
+            nameCheck = <FontAwesomeIcon className="green-icon" icon={faCheck} />
         }
 
         if(this.validatePrice()){
-            priceCheck = <FontAwesomeIcon icon={faCheck}/>
+            priceCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         return (
             <div> 
+                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_COMPANY  ? null : <Redirect to={"/Login"}/>}
                 {this.state.alreadyAdded ? <Redirect to="/ProductsCompany"/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 

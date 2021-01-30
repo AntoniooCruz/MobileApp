@@ -1,11 +1,11 @@
 import React, {Component} from "react"
-import {Link} from "react-router-dom"
+import {Link,Redirect} from "react-router-dom"
 
 import axios from "axios"
 
 import ProductTable from "../users/ProductTable"
 
-import {SERVER_HOST} from "../../config/global_constants"
+import {SERVER_HOST,ACCESS_LEVEL_COMPANY} from "../../config/global_constants"
 import Menu from "./Menu.js"
 
 export default class DisplayAllProducts extends Component 
@@ -52,13 +52,12 @@ export default class DisplayAllProducts extends Component
     {   
         return (      
             <div>
+                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_COMPANY  ? <Redirect to={"/Login"}/> : null}
                 <Menu/>
                 <div className="form-container">
                     <div className="table-container">
                         <ProductTable products={this.state.products} /> 
                     </div>
-
-                    
                 </div> 
             </div>    
         )

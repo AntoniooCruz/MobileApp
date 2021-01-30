@@ -88,19 +88,6 @@ export default class ProductsCompanyTableRow extends Component
                     </Card.Text>
                 </Card.Body>
             </Card>
-/*
-            <tr>
-                <td>{this.props.product.name}</td>
-                <td>{this.props.product.img}</td>
-                <td>{this.props.product.price}</td>
-                <td>{this.props.product.is_available ? <FontAwesomeIcon className="green-icon" icon={faCheck}/> :  <FontAwesomeIcon className="red-icon" icon={faTimes}/>}</td>
-                <td>
-                    <div class="row">
-                    <LinkInClass value={this.props.product.is_available ? "to Disable" : "to Enable"} className={this.props.product.is_available ? "red-button" : "green-button"} onClick={this.modifyAvailabilityProduct}/>
-                    <LinkInClass value="Delete" className="red-button" onClick={this.deleteProduct} />
-                    </div>
-                </td>
-            </tr>*/
         )
     }
 }

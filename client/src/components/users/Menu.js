@@ -31,22 +31,22 @@ export default class Menu extends Component
                                 Home &nbsp;
                                 <FontAwesomeIcon icon={faHome}/>
                             </ReactBootStrap.Nav.Link>
-                            <ReactBootStrap.Nav.Link href={localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ? "/PersonalProfile" : "/Login"}>
+                            <ReactBootStrap.Nav.Link href={localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER || localStorage.accessLevel == ACCESS_LEVEL_ADMIN ? "/PersonalProfile" : "/Login"}>
                                 Personal Profile &nbsp;
                                 <FontAwesomeIcon icon={faIdCard}/>
                             </ReactBootStrap.Nav.Link>
                             <ReactBootStrap.NavDropdown title="Orders" id="basic-nav-dropdown">
-                                <ReactBootStrap.NavDropdown.Item href={localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ? "/Orders/Pending" : "/Login"}>
+                                <ReactBootStrap.NavDropdown.Item href={localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER || localStorage.accessLevel == ACCESS_LEVEL_ADMIN  ? "/Orders/Pending" : "/Login"}>
                                     Pending Orders &nbsp;
                                     <FontAwesomeIcon icon={faShippingFast}/>
                                 </ReactBootStrap.NavDropdown.Item>
                                 <ReactBootStrap.NavDropdown.Divider />
-                                <ReactBootStrap.NavDropdown.Item href={localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ? "/Orders/All" : "/Login"}>
+                                <ReactBootStrap.NavDropdown.Item href={localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER || localStorage.accessLevel == ACCESS_LEVEL_ADMIN  ? "/Orders/All" : "/Login"}>
                                     All Orders &nbsp;
                                     <FontAwesomeIcon icon={faBoxes}/>
                                 </ReactBootStrap.NavDropdown.Item>
                             </ReactBootStrap.NavDropdown>
-                            <ReactBootStrap.Nav.Link href={localStorage.accessLevel == ACCESS_LEVEL_ADMIN ? "/DisplayAllUsers" : "/Login"}>
+                            <ReactBootStrap.Nav.Link href={localStorage.accessLevel == ACCESS_LEVEL_ADMIN || localStorage.accessLevel == ACCESS_LEVEL_ADMIN  ? "/DisplayAllUsers" : "/Login"}>
                                 Admin Users &nbsp;
                                 <FontAwesomeIcon icon={faUsersCog}/>
                             </ReactBootStrap.Nav.Link>

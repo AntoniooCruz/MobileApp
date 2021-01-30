@@ -23,6 +23,7 @@ import PersonalProfileCompany from "./components/companies/PersonalProfileCompan
 import AddProduct from "./components/companies/AddProduct.js"
 import MakeAnOrder from "./components/users/MakeAnOrder.js"
 import DisplayAllUsers from "./components/users/DisplayAllUsers.js"
+import EditCompany from "./components/users/EditCompany.js"
 
 
 import {ACCESS_LEVEL_GUEST} from "./config/global_constants"
@@ -47,19 +48,23 @@ export default class App extends Component
                     <Route exact path="/Login" component={Login} />
                     <PrivateRoute exact path="/Logout" component={Logout}/>
 
+
                     <Route exact path="/SignIn" component={SignIn} />
                     <Route exact path="/DisplayAllCompanies" component={DisplayAllCompanies}/>
                     <PrivateRoute exact path="/PersonalProfile" component={PersonalProfile}/>
                     <PrivateRoute exact path="/Orders/:option" component={Orders}/>
-                    <PrivateRoute exact path="/DisplayAllUsers" component={DisplayAllUsers}/>
                     <Route exact path="/DisplayAllProducts/:companyId" component={DisplayAllProducts}/>
-
+                    <PrivateRoute exact path="/MakeAnOrder/:companyId/:productId" component={MakeAnOrder}/>
+                    
                     <Route exact path="/SignInCompany" component={SignInCompany} />
                     <PrivateRoute exact path="/OrdersCompany/:option" component={OrdersCompany} />
                     <PrivateRoute exact path="/ProductsCompany" component={ProductsCompany}/>
                     <PrivateRoute exact path="/PersonalProfileCompany" component={PersonalProfileCompany}/>
                     <PrivateRoute exact path="/AddProduct" component={AddProduct}/>
-                    <PrivateRoute exact path="/MakeAnOrder/:companyId/:productId" component={MakeAnOrder}/>
+
+                    <PrivateRoute exact path="/EditCompany/:companyId" component={EditCompany}/>
+                    <PrivateRoute exact path="/DisplayAllUsers" component={DisplayAllUsers}/>
+                    
                     
                     <Route path="*" component={DisplayAllCompanies}/>                            
                 </Switch>

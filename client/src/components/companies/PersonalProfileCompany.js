@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form"
 
 import axios from "axios"
 
-import {SERVER_HOST} from "../../config/global_constants";
+import {SERVER_HOST,ACCESS_LEVEL_COMPANY} from "../../config/global_constants";
 
 import LinkInClass from "../LinkInClass"
 
@@ -28,11 +28,16 @@ export default class PersonalProfileCompany extends Component
             newPassword: "",
             newPasswordConfirmation:"",
 
+            description: "",
+
             errorMessageList: [],
 
             selectedFile: null,
 
-            passwordChange:false
+            passwordChange:false,
+
+            hasBeenChanged : false
+
         }
     }
 
@@ -52,12 +57,13 @@ export default class PersonalProfileCompany extends Component
                     else
                     {           
                         console.log("Records read")   
-                        this.setState({id: res.data.id}) 
+                        this.setState({id: res.data._id}) 
                         this.setState({username: res.data.username}) 
                         this.setState({name: res.data.name}) 
                         this.setState({phone_number: res.data.phone_number}) 
                         this.setState({password: res.data.password}) 
                         this.setState({selectedFile: res.data.img})
+                        this.setState({description: res.data.description})
                     }   
                 }
                 else
@@ -114,12 +120,6 @@ export default class PersonalProfileCompany extends Component
     }
 
     validate(){
-        const username = this.state.username;
-        const name = this.state.name;
-        const phone_number = this.state.phone_number;
-        const newPassword = this.state.newPassword;
-        const newPasswordConfirmation = this.state.newPasswordConfirmation;
-        const selectedFile = this.state.selectedFile;
 
         return{
             username: this.validateUsername(),
@@ -146,7 +146,7 @@ export default class PersonalProfileCompany extends Component
 
         let passwordAux = "";
 
-        let errorMessageList = "";
+        let errorMessageList = [];
 
         if(this.state.passwordChange){
             passwordAux = this.state.newPassword;
@@ -159,7 +159,8 @@ export default class PersonalProfileCompany extends Component
             name: this.state.name,
             password: passwordAux,
             phone_number: this.state.phone_number,
-            img: this.state.selectedFile
+            img: this.state.selectedFile,
+            description: this.state.description
         }
 
         if(inputsAreAllValid){
@@ -177,6 +178,7 @@ export default class PersonalProfileCompany extends Component
                     {           
                         console.log("Record update")
                         localStorage.username = res.data.username
+                        this.setState({hasBeenChanged: true})
                     }   
                 }
                 else
@@ -216,38 +218,32 @@ export default class PersonalProfileCompany extends Component
     
     render() 
     {     
-        //const formInputsState = this.validate();
-        //const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
-
-        let usernameCheck = "";
         let nameCheck = "";
         let newPasswordCheck = "";
         let newPasswordConfirmationCheck = "";
         let phone_numberCheck = "";
-        let usernameErrorMessage = "";
 
-        if(this.validateUsername()){
-            usernameCheck = <FontAwesomeIcon icon={faCheck}/>
-        }
 
         if(this.validateName()){
-            nameCheck = <FontAwesomeIcon icon={faCheck}/>
+            nameCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePassword()){
-            newPasswordCheck = <FontAwesomeIcon icon={faCheck}/>
+            newPasswordCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateConfirmPassword()){
-            newPasswordConfirmationCheck = <FontAwesomeIcon icon={faCheck}/>
+            newPasswordConfirmationCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePhone_number()){
-            phone_numberCheck = <FontAwesomeIcon icon={faCheck}/>
+            phone_numberCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         return (
             <div> 
+
+                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_COMPANY  ? null : <Redirect to={"/Login"}/>}
                 <MenuCompany/>
 
                 <img className="img-logo" src="logo.png" alt=""/>
@@ -272,7 +268,7 @@ export default class PersonalProfileCompany extends Component
 
                     <fieldset disabled>
                     <div className="form-group">
-                        <label className="label-form">Username{usernameCheck}</label>  
+                        <label className="label-form">Username</label>  
                         <input  className = "form-control"
                             name = "username"              
                             type = "username"
@@ -293,6 +289,18 @@ export default class PersonalProfileCompany extends Component
                             placeholder = "123456789"
                             autoComplete="phone_number"
                             value = {this.state.phone_number}
+                            onChange = {this.handleChange}
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="label-form">Description <FontAwesomeIcon className="green-icon" icon={faCheck}/></label>  
+                        <input  className = "form-control"
+                            name = "description"              
+                            type = "description"
+                            placeholder = "Insert description"
+                            autoComplete="description"
+                            value = {this.state.description}
                             onChange = {this.handleChange}
                         />
                     </div>
@@ -337,6 +345,8 @@ export default class PersonalProfileCompany extends Component
                     {this.state.errorMessageList.map((errorMessage) => <p className="error-message" >{errorMessage}</p>)}
 
                     <LinkInClass value="Update" className="blue-button" onClick={this.handleSubmit} />
+
+                    {this.state.hasBeenChanged ? <p align="center">Changes done successfully</p> : null}
                       
                 </form>
 

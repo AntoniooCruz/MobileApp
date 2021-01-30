@@ -4,7 +4,7 @@ import axios from "axios"
 
 import ProductsCompanyTable from "./ProductsCompanyTable"
 
-import {SERVER_HOST} from "../../config/global_constants"
+import {SERVER_HOST,ACCESS_LEVEL_COMPANY} from "../../config/global_constants"
 import MenuCompany from "./MenuCompany"
 
 
@@ -50,6 +50,7 @@ export default class ProductsCompany extends Component
     {   
         return (      
             <div>
+                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_COMPANY  ? null : <Redirect to={"/Login"}/>}
                 <MenuCompany/>
                 <div className="form-container">
                     <h3>Products</h3>

@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form"
 
 import axios from "axios"
 
-import {SERVER_HOST} from "../../config/global_constants"
+import {ACCESS_LEVEL_COMPANY, SERVER_HOST} from "../../config/global_constants"
 
 import LinkInClass from "../LinkInClass"
 
@@ -53,12 +53,13 @@ export default class PersonalProfile extends Component
                     else
                     {           
                         console.log("Records read")   
-                        this.setState({id: res.data.id}) 
+                        this.setState({id: res.data._id}) 
                         this.setState({username: res.data.username}) 
                         this.setState({name: res.data.name}) 
                         this.setState({phone_number: res.data.phone_number}) 
                         this.setState({password: res.data.password}) 
                         this.setState({is_admin: res.data.is_admin})
+
                     }   
                 }
                 else
@@ -116,7 +117,7 @@ export default class PersonalProfile extends Component
 
         return{
             username: this.validateUsername(),
-            name: this.validatePassword(),
+            name: this.validateName(),
             phone_number: this.validatePhone_number(),
             password: this.validatePassword(),
             passwordConfirmation: this.validateConfirmPassword()
@@ -242,22 +243,21 @@ export default class PersonalProfile extends Component
         let oldPasswordCheck = "";
         let newPasswordConfirmationCheck = "";
         let phone_numberCheck = "";
-        let usernameErrorMessage = "";
 
         if(this.validateUsername()){
-            usernameCheck = <FontAwesomeIcon icon={faCheck}/>
+            usernameCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateName()){
-            nameCheck = <FontAwesomeIcon icon={faCheck}/>
+            nameCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePassword()){
-            oldPasswordCheck = <FontAwesomeIcon icon={faCheck}/>
+            oldPasswordCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateConfirmPassword()){
-            newPasswordConfirmationCheck = <FontAwesomeIcon icon={faCheck}/>
+            newPasswordConfirmationCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePhone_number()){
@@ -266,6 +266,7 @@ export default class PersonalProfile extends Component
 
         return (
             <div> 
+                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_COMPANY ? <Redirect to={"/Login"}/> : null}
                 <Menu/>
                 <img className="img-logo" src="logo.png" alt=""/>
 

@@ -1,9 +1,9 @@
 import React, {Component} from "react"
-import {Link} from "react-router-dom"
+import {Link,Redirect} from "react-router-dom"
 
 import axios from "axios"
 
-import {SERVER_HOST,OP_ALL_ORDERS,OP_PENDING_ORDERS,NOT_FULL_FILLED,FULL_FILLED} from "../../config/global_constants"
+import {SERVER_HOST,ACCESS_LEVEL_COMPANY} from "../../config/global_constants"
 
 import OrdersCompanyTable from "../companies/OrdersCompanyTable.js"
 import MenuCompany from "./MenuCompany"
@@ -66,6 +66,7 @@ export default class OrdersCompany extends Component
         console.log(option)
         return (      
             <div>
+                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_COMPANY  ? null : <Redirect to={"/Login"}/>}
                 <MenuCompany/>
                 <div className="form-container">
                     {option == "All" ? <h3>All Orders</h3> : <h3>Pending Orders</h3>}

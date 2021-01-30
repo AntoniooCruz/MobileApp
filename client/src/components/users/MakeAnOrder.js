@@ -3,7 +3,7 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
+import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
 
 import LinkInClass from "../LinkInClass"
 
@@ -163,17 +163,18 @@ export default class SignIn extends Component
         let locationCheck = "";
 
         if(this.validateMessage()){
-            messageCheck = <FontAwesomeIcon icon={faCheck}/>
+            messageCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateLocation()){
-            locationCheck = <FontAwesomeIcon icon={faCheck}/>
+            locationCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         return (
             <div>
+                {(parseInt(localStorage.accessLevel) === ACCESS_LEVEL_NORMAL_USER || parseInt(localStorage.accessLevel) === ACCESS_LEVEL_ADMIN) ? null : <Redirect to={"/Login"}/>}
                 <Menu/> 
-                {localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ? null : <Redirect to={"/Login"}/>}
+                
                 {this.state.alreadyOrdered ? <Redirect to={"/DisplayAllProducts/" + this.state.company_id}/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 
