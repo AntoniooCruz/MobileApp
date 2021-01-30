@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import {ACCESS_LEVEL_NORMAL_USER,ACCESS_LEVEL_ADMIN, SERVER_HOST} from "../../config/global_constants"
 import axios from 'axios'
+import LinkInClass from "../LinkInClass"
 
 
 
@@ -35,11 +36,48 @@ export default class ProductTableRow extends Component
       })
   }
 
+  disableProduct = (e) =>
+    {
+        console.log(this.props)
+        const productModel = {
+            company_id: this.props.company_id,
+            price: this.props.product.price,
+            name: this.props.product.name,
+            img: this.props.product.img,
+            is_available: false
+        }
+
+        
+        axios.put(`${SERVER_HOST}/api/products/${this.props.product._id}`, productModel,{headers: {"auth-token": localStorage.token}})
+            .then(res => 
+            {  
+                if(res.data)
+                {
+                    if (res.data.errorMessage)
+                    {
+                        console.log(res.data.errorMessage)    
+                    }
+                    else
+                    {           
+                        console.log("Record update")
+                        window.location.href = window.location.href;
+                    }   
+                }
+                else
+                {
+                    console.log("Error")
+                }
+            })
+    }
+
     render() 
     {
         let admin;
         if (localStorage.accessLevel == ACCESS_LEVEL_ADMIN ) {
-          admin = <Card.Header>  <Button variant="info"> <FontAwesomeIcon icon={faEdit}/></Button> <Button variant="danger" onClick={this.deleteProduct}> <FontAwesomeIcon icon={faTrash}/></Button> </Card.Header> 
+            admin = <Card.Header> 
+                        <LinkInClass value="Disable" className="red-button" onClick={this.disableProduct}/>
+                        <LinkInClass value="Delete" className="red-button" onClick={this.deleteProduct}/>
+                    </Card.Header>
         } 
         return (
             
@@ -55,18 +93,5 @@ export default class ProductTableRow extends Component
           </Card>
 
         )
-        /*
-        return (
-                    <tr>
-                        <td>{this.props.product.name}</td>
-                        <td>{this.props.product.price}</td>
-                        <td>  
-                        <Link className="dark-blue-button" to={"/MakeAnOrder/" + this.props.product.company_id + "/" + this.props.product._id}>
-                            Buy &nbsp;<FontAwesomeIcon icon={faCashRegister}/>
-                        </Link>
-                        </td>
-                    </tr>
-        )
-        */
     }
 }
