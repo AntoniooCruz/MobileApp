@@ -35,6 +35,40 @@ export default class ProductTableRow extends Component
           }
       })
   }
+  modifyAvailabilityProduct = (e) =>
+  {
+      console.log(this.props)
+      const productModel = {
+          company_id: this.props.product.company_id,
+          price: this.props.product.price,
+          name: this.props.product.name,
+          img: this.props.product.img,
+          is_available: !this.props.product.is_available
+      }
+
+      
+      axios.put(`${SERVER_HOST}/api/products/${this.props.product._id}`, productModel,{headers: {"auth-token": localStorage.token}})
+          .then(res => 
+          {  
+              if(res.data)
+              {
+                  if (res.data.errorMessage)
+                  {
+                      console.log(res.data.errorMessage)    
+                  }
+                  else
+                  {           
+                      console.log("Record update")
+                      window.location.href = window.location.href;
+                  }   
+              }
+              else
+              {
+                  console.log("Error")
+              }
+          })
+  }
+
 
   disableProduct = (e) =>
     {
@@ -75,7 +109,7 @@ export default class ProductTableRow extends Component
         let admin;
         if (localStorage.accessLevel == ACCESS_LEVEL_ADMIN ) {
             admin = <Card.Header> 
-                        <LinkInClass value="Disable" className="red-button" onClick={this.disableProduct}/>
+                        <LinkInClass value={this.props.product.is_available ? "Disable" : "Enable"} className={this.props.product.is_available ? "red-button" : "green-button"} onClick={this.modifyAvailabilityProduct}/>
                         <LinkInClass value="Delete" className="red-button" onClick={this.deleteProduct}/>
                     </Card.Header>
         } 
@@ -87,7 +121,13 @@ export default class ProductTableRow extends Component
             <Card.Img variant="top"src={`data:;base64,${this.props.product.img}`}/>
             <Card.Body>
               <Link  to={"/MakeAnOrder/" + this.props.product.company_id + "/" + this.props.product._id}>
-              <Button variant="primary">Buy {this.props.product.price} zl  &nbsp;<FontAwesomeIcon icon={faCashRegister}/> </Button>
+              {
+                            this.props.product.is_available ? 
+                            <Button variant="primary">Buy {this.props.product.price} zl  &nbsp;<FontAwesomeIcon icon={faCashRegister}/> </Button>
+                            :
+                            <Button variant="primary" disabled>Out of stock  &nbsp;<FontAwesomeIcon icon={faCashRegister} /> </Button>
+
+                }
             </Link> 
             </Card.Body>
           </Card>
