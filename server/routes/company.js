@@ -146,6 +146,7 @@ router.put('/:company_id',upload.single("img"),(req,res) => {
         {  img = fileData 
 
         const company = {
+            _id: req.body.company_id,
             username: req.body.username,
             password: req.body.password,
             name: req.body.name,
