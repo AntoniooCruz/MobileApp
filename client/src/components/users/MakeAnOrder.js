@@ -213,7 +213,6 @@ export default class SignIn extends Component
                         />
                     </div>
 
-                    <LinkInClass value="Finish and Pay" className="blue-button" onClick={this.handleSubmit} />
                     <LinkInClass value="Finish and Pay on Delivery" className="blue-button" onClick={this.handleSubmit} />
                     <Link className="dark-blue-button" to={"/DisplayAllProducts/" + this.props.match.params.companyId}>Cancel</Link> 
                     
