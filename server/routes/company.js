@@ -87,7 +87,7 @@ router.post('/',upload.single("selectedFile"), async (req,res)=> {
             .then(data =>{
                 res.json({
                     username: data.username,
-                    acess_level: 2,
+                    access_level: 2,
                     logoPhoto: fileData
                 });
             })

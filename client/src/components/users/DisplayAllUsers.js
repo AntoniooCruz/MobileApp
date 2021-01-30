@@ -1,31 +1,30 @@
 import React, {Component} from "react"
-import {Link,Redirect} from "react-router-dom"
+
+import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import ProductTable from "../users/ProductTable"
+import DisplayAllUsersTable from "./DisplayAllUsersTable"
 
-import {SERVER_HOST,ACCESS_LEVEL_COMPANY} from "../../config/global_constants"
-import Menu from "./Menu.js"
+import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_COMPANY, ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
 
-export default class DisplayAllProducts extends Component 
+import Menu from "../users/Menu"
+
+export default class DisplayAllUsers extends Component 
 {
     constructor(props) 
     {
         super(props)
         
         this.state = {
-            products:[]
+            users:[]
         }
     }
     
     
     componentDidMount() 
     {
-
-        const company_id = this.props.match.params.companyId
-
-        axios.get(`${SERVER_HOST}/api/products/company/${company_id}`)
+        axios.get(`${SERVER_HOST}/api/user/all/users`,{headers: {"auth-token": localStorage.token}})
         .then(res => 
         {
             if(res.data)
@@ -37,7 +36,7 @@ export default class DisplayAllProducts extends Component
                 else
                 {           
                     console.log("Records read")   
-                    this.setState({products: res.data}) 
+                    this.setState({users: res.data}) 
                 }   
             }
             else
@@ -52,11 +51,12 @@ export default class DisplayAllProducts extends Component
     {   
         return (      
             <div>
-                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_COMPANY  ? <Redirect to={"/Login"}/> : null}
+                {localStorage.accessLevel != ACCESS_LEVEL_ADMIN ? <Redirect to={"/Login"}/> : null}
                 <Menu/>
-                <div className="form-container">
+                <div className="form-container-big" width="2000px">
+                    <h3>Users</h3>
                     <div className="table-container">
-                        <ProductTable products={this.state.products} /> 
+                        <DisplayAllUsersTable users={this.state.users} /> 
                     </div>
                 </div> 
             </div>    

@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form"
 
 import axios from "axios"
 
-import {SERVER_HOST} from "../../config/global_constants"
+import {ACCESS_LEVEL_COMPANY, SERVER_HOST} from "../../config/global_constants"
 
 import LinkInClass from "../LinkInClass"
 
@@ -27,8 +27,11 @@ export default class PersonalProfile extends Component
             phone_number:"",
             oldPassword: "",
             newPasswordConfirmation:"",
+            access_level: null,
 
             passwordChange:false,
+
+            errorMessageList: [],
 
             hasBeenChanged : false
         }
@@ -50,11 +53,13 @@ export default class PersonalProfile extends Component
                     else
                     {           
                         console.log("Records read")   
-                        this.setState({id: res.data.id}) 
+                        this.setState({id: res.data._id}) 
                         this.setState({username: res.data.username}) 
                         this.setState({name: res.data.name}) 
                         this.setState({phone_number: res.data.phone_number}) 
                         this.setState({password: res.data.password}) 
+                        this.setState({is_admin: res.data.is_admin})
+
                     }   
                 }
                 else
@@ -112,7 +117,7 @@ export default class PersonalProfile extends Component
 
         return{
             username: this.validateUsername(),
-            name: this.validatePassword(),
+            name: this.validateName(),
             phone_number: this.validatePhone_number(),
             password: this.validatePassword(),
             passwordConfirmation: this.validateConfirmPassword()
@@ -132,12 +137,14 @@ export default class PersonalProfile extends Component
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
+        let errorMessageList = []
+
         const userModel = {
-            id: localStorage._id,
             username: this.state.username,
             name: this.state.name,
             password: this.state.password,
-            phone_number: this.state.phone_number
+            phone_number: this.state.phone_number,
+            is_admin: this.state.is_admin
         }
 
         if(inputsAreAllValid){
@@ -171,7 +178,8 @@ export default class PersonalProfile extends Component
                     name: this.state.name,
                     old_password: this.state.oldPassword,
                     new_password: this.state.newPasswordConfirmation,
-                    phone_number: this.state.phone_number
+                    phone_number: this.state.phone_number,
+                    is_admin: this.state.is_admin
                 }
 
                 axios.put(`${SERVER_HOST}/api/user/changePassword/${localStorage._id}`, changePassword)
@@ -192,13 +200,37 @@ export default class PersonalProfile extends Component
                     }
                     else
                     {
-                        console.log("Error")
+                        console.log("Error");
                     }
+                }).catch((error) => {
+                    errorMessageList.push("Server error");
                 }) 
             }
-           
-            
+        }else{
+            if(this.state.name.length<=0){
+                errorMessageList.push("Name field empty")
+            }
+            if(this.state.name.length>20){
+                errorMessageList.push("Name max size: 20 char.")
+            }
+            if(this.state.phone_number.length<=0){
+                errorMessageList.push("Phone Number field empty")
+            }
+            if(!this.state.phone_number.match(/^[0-9]+$/)){
+                errorMessageList.push("Phone number no valid")
+            }
+            if(this.state.phone_number.length>13){
+                errorMessageList.push("Phone Number max size: 13 char.")
+            }
+            if(this.state.password.length<6){
+                errorMessageList.push("Password min size: 6 char.")
+            }
+            if(this.state.passwordConfirmation === this.state.password){
+                errorMessageList.push("Passwords don´t match")
+            }
         }
+
+        this.setState({errorMessageList: errorMessageList})
     }
 
     
@@ -210,22 +242,21 @@ export default class PersonalProfile extends Component
         let oldPasswordCheck = "";
         let newPasswordConfirmationCheck = "";
         let phone_numberCheck = "";
-        let usernameErrorMessage = "";
 
         if(this.validateUsername()){
-            usernameCheck = <FontAwesomeIcon icon={faCheck}/>
+            usernameCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateName()){
-            nameCheck = <FontAwesomeIcon icon={faCheck}/>
+            nameCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePassword()){
-            oldPasswordCheck = <FontAwesomeIcon icon={faCheck}/>
+            oldPasswordCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateConfirmPassword()){
-            newPasswordConfirmationCheck = <FontAwesomeIcon icon={faCheck}/>
+            newPasswordConfirmationCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePhone_number()){
@@ -234,6 +265,7 @@ export default class PersonalProfile extends Component
 
         return (
             <div> 
+                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_COMPANY ? <Redirect to={"/Login"}/> : null}
                 <Menu/>
                 <img className="img-logo" src="logo.png" alt=""/>
 
@@ -315,6 +347,9 @@ export default class PersonalProfile extends Component
                     : null
 
                     }
+
+                    {this.state.errorMessageList.map((errorMessage) => <p className="error-message" >{errorMessage}</p>)}
+
 
                     <LinkInClass value="Update" className="blue-button" onClick={this.handleSubmit} />
                     {this.state.hasBeenChanged ? <p align="center">Changes done successfully</p> : null}

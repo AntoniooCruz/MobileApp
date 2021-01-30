@@ -3,7 +3,7 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
+import {ACCESS_LEVEL_GUEST, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
 
 import LinkInClass from "../LinkInClass"
 
@@ -124,7 +124,8 @@ export default class SignIn extends Component
                 name: this.state.name,
                 username: this.state.username,
                 phone_number: this.state.phone_number,
-                password: this.state.password
+                password: this.state.password,
+                is_admin: false
             }
 
             axios.post(`${SERVER_HOST}/api/user`, userObject)
@@ -140,7 +141,7 @@ export default class SignIn extends Component
                     {   
                         console.log("User registered and logged in")
 
-                        localStorage._id = res.data.id
+                        localStorage._id = res.data._id
                         localStorage.username = res.data.username
                         localStorage.accessLevel = ACCESS_LEVEL_NORMAL_USER//res.data.access_level                    
                         localStorage.token = res.data.token
@@ -243,6 +244,7 @@ export default class SignIn extends Component
 
         return (
             <div> 
+                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_GUEST  ? null : <Redirect to={"/Login"}/>}
                 {this.state.alreadyRegistered ? <Redirect to="/DisplayAllCompanies"/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 

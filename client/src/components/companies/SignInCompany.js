@@ -73,7 +73,7 @@ export default class SignInCompany extends Component
 
     validateUsername()
     {    
-        if(this.state.username.length>3 && this.state.username.lenght <= 20){
+        if(this.state.username.length>3 && this.state.username.length <= 20){
             return true;
         }
         return false;
@@ -119,7 +119,7 @@ export default class SignInCompany extends Component
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
         let formData = new FormData()
         formData.append("selectedFile",this.state.selectedFile)
-
+        console.log(formInputsState)
         if(inputsAreAllValid){
 
             formData.append("username", this.state.username);
@@ -139,9 +139,8 @@ export default class SignInCompany extends Component
                         //If there´s error 400, then this.setState({alreadyRegistered:true})
                     }else
                     {   
-                        console.log("User registered and logged in")
-                        console.log(res.data)
-                        localStorage._id = res.data.id
+                        
+                        localStorage._id = res.data._id
                         localStorage.username = res.data.username
                         localStorage.accessLevel = res.data.access_level                    
                         localStorage.token = res.data.token
@@ -192,7 +191,8 @@ export default class SignInCompany extends Component
             if(this.state.phone_number.length>13){
                 errorMessageList.push("Phone Number max size: 13 char.")
             }
-            if(this.state.passwordConfirmation === this.state.password){
+            if(!(this.state.passwordConfirmation === this.state.password)){
+                console.log(this.state)
                 errorMessageList.push("Passwords don´t match")
             }
         }
@@ -213,30 +213,31 @@ export default class SignInCompany extends Component
 
 
         if(this.validateUsername()){
-            usernameCheck = <FontAwesomeIcon icon={faCheck}/>
+            usernameCheck = <FontAwesomeIcon  className="green-icon" icon={faCheck}/>
         }
         if(this.validateDescription()){
-            descriptionCheck = <FontAwesomeIcon icon={faCheck}/>
+            descriptionCheck = <FontAwesomeIcon  className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateName()){
-            nameCheck = <FontAwesomeIcon icon={faCheck}/>
+            nameCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePassword()){
-            passwordCheck = <FontAwesomeIcon icon={faCheck}/>
+            passwordCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateConfirmPassword()){
-            passwordConfirmationCheck = <FontAwesomeIcon icon={faCheck}/>
+            passwordConfirmationCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePhone_number()){
-            phone_numberCheck = <FontAwesomeIcon icon={faCheck}/>
+            phone_numberCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         return (
             <div>
+                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_GUEST ?  null : <Redirect to={"/Login"}/>}
                 {this.state.alreadyRegistered ? <Redirect to={"/OrdersCompany/" + OP_PENDING_ORDERS}/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 

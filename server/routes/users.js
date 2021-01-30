@@ -18,6 +18,17 @@ router.get('/:user_id', async(req,res)=> {
     res.send(user);
 });
 
+router.get('/all/users', (req,res)=> {
+    User.find({}, function(err, docs) {
+        if (!err) { 
+           res.send(docs);
+        }
+        else {
+            res.status(400).send(err);
+        }
+    });
+});
+
 router.post('/', async (req,res)=> {
     const result = userSchema.validate(req.body);
     if (result.error) {
@@ -39,7 +50,7 @@ router.post('/', async (req,res)=> {
             password: hashed_password,
             name: req.body.name,
             phone_number: req.body.phone_number,
-            is_admin: false
+            is_admin: req.body.is_admin,
         })
 
         user.save()
@@ -78,19 +89,18 @@ router.put('/changePassword/:user_id', async (req,res) => {
         password: hashed_password,
         name: req.body.name,
         phone_number: req.body.phone_number,
-        is_admin: false
+        is_admin: req.body.is_admin
     }
 
     User.findByIdAndUpdate({_id: req.body.id},newuser).then(function(){
         User.findOne({_id: req.body.id}).then(function(user){
             res.send(user);
         });
-    });
-
-
-        
+    }); 
 
 });
+
+
 //Update a user
 router.put('/:user_id',(req,res) => {
 
@@ -126,6 +136,7 @@ router.delete('/:user_id',verifyToken,(req,res) => {
 
 
 router.post('/login', async(req,res) => {
+    console.log(req.body)
     const user = await User.findOne({username: req.body.username});
     const company = await Company.findOne({username: req.body.username});
 
@@ -134,13 +145,13 @@ router.post('/login', async(req,res) => {
         const valid_password = await bcrypt.compare(req.body.password, user.password);
         if(!valid_password) return res.status(401).send('Invalid Password');
         const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-        let acess_level  = (user.is_admin) ? (3) : (1); 
-        let acessToken  = (user.is_admin) ? (token) : (null); 
+        let access_level  = (user.is_admin) ? (3) : (1); 
+        let accessToken  = (user.is_admin) ? (token) : (null); 
         res.header('auth-token', token).json({
         id: user._id,
         username: user.username,
-        token: acessToken,
-        access_level: acess_level
+        token: accessToken,
+        access_level: access_level
     });
     }
     if(company){

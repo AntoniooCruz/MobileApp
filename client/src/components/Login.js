@@ -24,7 +24,7 @@ export default class Login extends Component
     
     componentDidMount()
     {
-        //this.setState({isLoggedIn:(localStorage.accessLevel === ACCESS_LEVEL_GUEST) ? false: true})
+        this.setState({isLoggedIn:(parseInt(localStorage.accessLevel) === ACCESS_LEVEL_GUEST) ? false: true})
     }
 
     handleChange = (e) => 
@@ -68,6 +68,7 @@ export default class Login extends Component
                     //console.log(localStorage.accessLevel)
                     
                     this.setState({isLoggedIn:true})
+
                 }        
             }
             else
@@ -104,8 +105,9 @@ export default class Login extends Component
 
         let redirectAction = ""
 
-        
-        switch(parseInt(localStorage.accessLevel)){
+        console.log("ACCESS LEVEL: " + parseInt(localStorage.accessLevel))
+
+        switch(parseInt(localStorage.accessLevel)){            
             case (ACCESS_LEVEL_NORMAL_USER):
                 console.log("It works")
                 redirectAction = <Redirect to="/DisplayAllCompanies"/>
@@ -114,7 +116,7 @@ export default class Login extends Component
                 redirectAction = <Redirect to={"/OrdersCompany/Pending"} />
                 break;
             case (ACCESS_LEVEL_ADMIN):
-                //edirectAction = <Redirect to "/MainAdmin"/>
+                redirectAction = <Redirect to={"/DisplayAllCompanies"}/>
                 break;
             case (ACCESS_LEVEL_GUEST):
             default:

@@ -3,12 +3,14 @@ import {Redirect, Link} from "react-router-dom"
 
 import axios from "axios"
 
-import {ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
+import {ACCESS_LEVEL_ADMIN, ACCESS_LEVEL_NORMAL_USER, SERVER_HOST} from "../../config/global_constants"
 
 import LinkInClass from "../LinkInClass"
 
 import {faBoxTissue, faCheck} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
+import Menu from './Menu'
 
 export default class SignIn extends Component 
 {
@@ -17,12 +19,12 @@ export default class SignIn extends Component
         super(props)
         
         this.state = {
-            company_id:"",
-            client_id:"",
-            product_id: "",
             is_fullfilled: false,
             message: "",
             location: "",
+
+            product_name: "",
+            product_price: 0,
 
             alreadyOrdered:false
         }
@@ -32,9 +34,7 @@ export default class SignIn extends Component
     componentDidMount() 
     {     
         this.inputToFocus.focus()  
-        this.setState({company_id: this.props.match.params.companyId})      
-        this.setState({client_id: localStorage._id})
-        this.setState({product_id: this.props.match.params.productId})
+        this.getInfoProduct();
 
     }
 
@@ -66,29 +66,63 @@ export default class SignIn extends Component
         };
     }
 
+    getInfoProduct(){
+
+        
+        axios.get(`${SERVER_HOST}/api/products/${this.props.match.params.productId}`,{headers: {"auth-token": localStorage.token}})
+        .then(res => 
+        {
+            if(res.data)
+            {
+                if (res.data.errorMessage)
+                {
+                    console.log(res.data.errorMessage)    
+                }
+                else
+                {           
+                    console.log("Records read")   
+
+                    console.log(res.data)
+                    
+                    this.setState({product_name: res.data.name})
+                    this.setState({product_price: res.data.price})
+                }   
+            }
+            else
+            {
+                console.log("Record not found")
+            }
+        })
+        
+    }
+
 
 
     handleSubmit = (e) =>
     {
         e.preventDefault();
 
+        
+
         this.validate();
 
         const formInputsState = this.validate();
         const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
 
+
+        
         if(inputsAreAllValid){
 
             const orderObject = {
-                company_id: this.state.company_id,
-                client_id: this.state.client_id,
-                product_id: this.state.product_id,
+                company_id: this.props.match.params.companyId,
+                client_id: localStorage._id,
+                product_id: this.props.match.params.productId,
                 is_fulfilled: this.state.is_fullfilled,
                 message: this.state.message,
                 location: this.state.location
             }
 
-            axios.post(`${SERVER_HOST}/api/order`, orderObject)
+            axios.post(`${SERVER_HOST}/api/order`, orderObject,{headers: {"auth-token": localStorage.token}})
             .then(res => 
             {   
                 if(res.data)
@@ -123,20 +157,24 @@ export default class SignIn extends Component
     render() 
     {     
 
+        
+
         let messageCheck = "";
         let locationCheck = "";
 
         if(this.validateMessage()){
-            messageCheck = <FontAwesomeIcon icon={faCheck}/>
+            messageCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateLocation()){
-            locationCheck = <FontAwesomeIcon icon={faCheck}/>
+            locationCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         return (
-            <div> 
-                {localStorage.accessLevel == ACCESS_LEVEL_NORMAL_USER ? null : <Redirect to={"/Login"}/>}
+            <div>
+                {(parseInt(localStorage.accessLevel) === ACCESS_LEVEL_NORMAL_USER || parseInt(localStorage.accessLevel) === ACCESS_LEVEL_ADMIN) ? null : <Redirect to={"/Login"}/>}
+                <Menu/> 
+                
                 {this.state.alreadyOrdered ? <Redirect to={"/DisplayAllProducts/" + this.state.company_id}/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 
@@ -145,8 +183,8 @@ export default class SignIn extends Component
                     <h3 className="form-tittle">Order Confirmation</h3>
 
                     <dl>
-                        <dt>INSERT PRODUCT NAME</dt>
-                        <dd>Insert Price</dd>
+                        <dt>Product: {this.state.product_name}</dt>
+                        <dd>Price: {this.state.product_price}   zl</dd>
                     </dl>
                     
                     <div className="form-group">
@@ -177,7 +215,7 @@ export default class SignIn extends Component
 
                     <LinkInClass value="Finish and Pay" className="blue-button" onClick={this.handleSubmit} />
                     <LinkInClass value="Finish and Pay on Delivery" className="blue-button" onClick={this.handleSubmit} />
-                    <Link className="dark-blue-button" to={"/DisplayAllProducts/" + this.state.company_id}>Cancel</Link> 
+                    <Link className="dark-blue-button" to={"/DisplayAllProducts/" + this.props.match.params.companyId}>Cancel</Link> 
                     
                 </form>
 

@@ -3,9 +3,10 @@
 }
 
 .form-container,
-.table-container 
+.table-container,
+.form-container-big 
 {
-  max-width: 700px;
+  max-width: 900px;
   margin: 50px auto;
 }
 
@@ -18,7 +19,17 @@
     border-radius: 0%;
     background: #e1f0fc;
     width: 500px;
+}
 
+.form-container-big
+{
+    border:thin solid rgb(25, 25, 51);
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0%;
+    background: #e1f0fc;
+    width: 600px;
 }
 
 
@@ -146,7 +157,7 @@ color:pink;
 {
     background-color: #aaa;
     color:#fff;
-    text-align: left;
+    text-align: center;
     text-transform: capitalize;
 }
 
@@ -158,6 +169,7 @@ color:pink;
 .table-container thead th,
 .table-container tbody td
 {
+    
     padding:5px;
 }
 .table-container tbody tr:nth-child(odd) 

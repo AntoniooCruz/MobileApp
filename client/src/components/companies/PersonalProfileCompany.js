@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form"
 
 import axios from "axios"
 
-import {SERVER_HOST} from "../../config/global_constants";
+import {SERVER_HOST,ACCESS_LEVEL_COMPANY} from "../../config/global_constants";
 
 import LinkInClass from "../LinkInClass"
 
@@ -28,6 +28,10 @@ export default class PersonalProfileCompany extends Component
             oldPassword: "",
             newPasswordConfirmation:"",
             description:"",
+
+            description: "",
+
+            errorMessageList: [],
 
             selectedFile: null,
 
@@ -53,7 +57,7 @@ export default class PersonalProfileCompany extends Component
                     else
                     {           
                         console.log("Records read")   
-                        this.setState({id: res.data.id}) 
+                        this.setState({id: res.data._id}) 
                         this.setState({username: res.data.username}) 
                         this.setState({name: res.data.name}) 
                         this.setState({phone_number: res.data.phone_number}) 
@@ -132,12 +136,6 @@ export default class PersonalProfileCompany extends Component
     }
 
     validate(){
-        const username = this.state.username;
-        const name = this.state.name;
-        const phone_number = this.state.phone_number;
-        const newPassword = this.state.newPassword;
-        const newPasswordConfirmation = this.state.newPasswordConfirmation;
-        const selectedFile = this.state.selectedFile;
 
         return{
             username: this.validateUsername(),
@@ -209,6 +207,7 @@ export default class PersonalProfileCompany extends Component
                     {           
                         console.log("Record update")
                         localStorage.username = res.data.username
+                        this.setState({hasBeenChanged: true})
                     }   
                 }
                 else
@@ -223,10 +222,6 @@ export default class PersonalProfileCompany extends Component
     
     render() 
     {     
-        //const formInputsState = this.validate();
-        //const inputsAreAllValid = Object.keys(formInputsState).every(index => formInputsState[index]);
-
-        let usernameCheck = "";
         let nameCheck = "";
         let oldPasswordCheck = "";
         let newPasswordConfirmationCheck = "";
@@ -234,16 +229,13 @@ export default class PersonalProfileCompany extends Component
         let usernameErrorMessage = "";
         let descriptionCheck = "";
 
-        if(this.validateUsername()){
-            usernameCheck = <FontAwesomeIcon icon={faCheck}/>
-        }
 
         if(this.validateDescription()){
             descriptionCheck = <FontAwesomeIcon icon={faCheck}/>
         }
 
         if(this.validateName()){
-            nameCheck = <FontAwesomeIcon icon={faCheck}/>
+            nameCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePassword()){
@@ -251,15 +243,17 @@ export default class PersonalProfileCompany extends Component
         }
 
         if(this.validateConfirmPassword()){
-            newPasswordConfirmationCheck = <FontAwesomeIcon icon={faCheck}/>
+            newPasswordConfirmationCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validatePhone_number()){
-            phone_numberCheck = <FontAwesomeIcon icon={faCheck}/>
+            phone_numberCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         return (
             <div> 
+
+                {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_COMPANY  ? null : <Redirect to={"/Login"}/>}
                 <MenuCompany/>
 
                 <img className="img-logo" src="logo.png" alt=""/>
@@ -283,7 +277,7 @@ export default class PersonalProfileCompany extends Component
                     </div>
                     <fieldset disabled>
                     <div className="form-group">
-                        <label className="label-form">Username{usernameCheck}</label>  
+                        <label className="label-form">Username</label>  
                         <input  className = "form-control"
                             name = "username"              
                             type = "username"
@@ -367,6 +361,8 @@ export default class PersonalProfileCompany extends Component
                     }
                     {this.state.hasBeenChanged ? <p align="center">Changes done successfully</p> : null}
                     <LinkInClass value="Update" className="blue-button" onClick={this.handleSubmit} />
+
+                    {this.state.hasBeenChanged ? <p align="center">Changes done successfully</p> : null}
                       
                 </form>
 
