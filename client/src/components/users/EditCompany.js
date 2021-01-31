@@ -71,6 +71,7 @@ export default class EditCompany extends Component
 
     handleChange = (e) => 
     {
+        this.setState({hasBeenChanged: false})
         this.setState({[e.target.name]: e.target.value})
     }
 

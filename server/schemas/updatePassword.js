@@ -9,7 +9,8 @@ const updatePasswordSchema = Joi.object().keys({
     name: Joi.string().required().max(20),
     phone_number: Joi.string().max(13),
     description: Joi.any(),
-    img: Joi.any()
+    img: Joi.any(),
+    is_admin: Joi.boolean().required()
 
   });
 
