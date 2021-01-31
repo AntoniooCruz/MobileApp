@@ -225,7 +225,7 @@ export default class PersonalProfile extends Component
             if(this.state.password.length<6){
                 errorMessageList.push("Password min size: 6 char.")
             }
-            if(this.state.passwordConfirmation === this.state.password){
+            if(!(this.state.passwordConfirmation === this.state.password)){
                 errorMessageList.push("Passwords don´t match")
             }
         }

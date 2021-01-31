@@ -195,7 +195,7 @@ export default class SignIn extends Component
             if(this.state.phone_number.length>13){
                 errorMessageList.push("Phone Number max size: 13 char.")
             }
-            if(this.state.passwordConfirmation === this.state.password){
+            if(!(this.state.passwordConfirmation === this.state.password)){
                 errorMessageList.push("Passwords don´t match")
             }
         }
@@ -297,7 +297,7 @@ export default class SignIn extends Component
                             type = "password"
                             placeholder = "•••••••••••"
                             autoComplete="password"
-                            title = "Password must be at least ten-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*)"
+                            title = "Password must be at least 6 long"
                             value = {this.state.password}
                             onChange = {this.handleChange}
                         />

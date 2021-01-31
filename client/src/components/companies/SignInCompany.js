@@ -139,7 +139,7 @@ export default class SignInCompany extends Component
                         //If there´s error 400, then this.setState({alreadyRegistered:true})
                     }else
                     {   
-                        
+                        console.log(res.data)
                         localStorage._id = res.data._id
                         localStorage.username = res.data.username
                         localStorage.accessLevel = res.data.access_level                    
@@ -315,7 +315,7 @@ export default class SignInCompany extends Component
                             type = "password"
                             placeholder = "•••••••••••"
                             autoComplete="password"
-                            title = "Password must be at least ten-digits long and contains at least one lowercase letter, one uppercase letter, one digit and one of the following characters (£!#€$%^&*)"
+                            title = "Password must be at least 6 digits long"
                             value = {this.state.password}
                             onChange = {this.handleChange}
                         />

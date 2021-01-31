@@ -55,6 +55,7 @@ export default class DisplayAllProducts extends Component
                 {parseInt(localStorage.accessLevel) === ACCESS_LEVEL_COMPANY  ? <Redirect to={"/Login"}/> : null}
                 <Menu/>
                 <div className="form-container">
+                    <h3>Products</h3>
                     <div className="table-container">
                         <ProductTable products={this.state.products} /> 
                     </div>

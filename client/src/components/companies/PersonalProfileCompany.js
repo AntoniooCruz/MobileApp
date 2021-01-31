@@ -56,6 +56,7 @@ export default class PersonalProfileCompany extends Component
                     }
                     else
                     {           
+                        console.log(res.data)
                         console.log("Records read")   
                         this.setState({id: res.data._id}) 
                         this.setState({username: res.data.username}) 
@@ -76,11 +77,13 @@ export default class PersonalProfileCompany extends Component
 
     handleChange = (e) => 
     {
+        this.setState({hasBeenChanged : false})
         this.setState({[e.target.name]: e.target.value})
     }
 
     handleFileChange = (e) => 
     {
+        this.setState({hasBeenChanged : false})
         this.setState({selectedFile: e.target.files[0]})
         console.log(e.target.files[0])
     }
@@ -170,9 +173,10 @@ export default class PersonalProfileCompany extends Component
         if(inputsAreAllValid){
             if(!this.state.passwordChange){
                 formData.append("password", this.state.password);
-                axios.put(`${SERVER_HOST}/api/company/${localStorage._id}`, formData)
+                axios.put(`${SERVER_HOST}/api/company/${localStorage._id}`, formData,{headers: {"auth-token": localStorage.token}})
                 .then(res => 
                 {  
+                    console.log(res.data)
                     if(res.data)
                     {
                         if (res.data.errorMessage)
@@ -231,7 +235,7 @@ export default class PersonalProfileCompany extends Component
 
 
         if(this.validateDescription()){
-            descriptionCheck = <FontAwesomeIcon icon={faCheck}/>
+            descriptionCheck = <FontAwesomeIcon className="green-icon" icon={faCheck}/>
         }
 
         if(this.validateName()){
@@ -336,7 +340,7 @@ export default class PersonalProfileCompany extends Component
                                     type = "password"
                                     placeholder = "•••••••••••"
                                     autoComplete="newPassword"
-                                    title = "Password must be at least 6 digits"
+                                    title = "Password must be at least 6 digits long"
                                     value = {this.state.oldPassword}
                                     onChange = {this.handleChange}
                                 />

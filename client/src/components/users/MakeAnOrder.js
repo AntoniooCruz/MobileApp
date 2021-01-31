@@ -175,7 +175,7 @@ export default class SignIn extends Component
                 {(parseInt(localStorage.accessLevel) === ACCESS_LEVEL_NORMAL_USER || parseInt(localStorage.accessLevel) === ACCESS_LEVEL_ADMIN) ? null : <Redirect to={"/Login"}/>}
                 <Menu/> 
                 
-                {this.state.alreadyOrdered ? <Redirect to={"/DisplayAllProducts/" + this.state.company_id}/> : null} 
+                {this.state.alreadyOrdered ? <Redirect to={"/Orders/Pending"}/> : null} 
                 <img className="img-logo" src="logo.png" alt=""/>
 
                 <form className="form-container" noValidate = {true} id = "loginOrRegistrationForm">
